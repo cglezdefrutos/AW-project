@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Contacto</h1>
+        <form action="mailto:contacto@ejemplo.com" method="post">
+            <fieldset>
+                <legend>Información de contacto</legend><br>
+
+                <label>Nombre:</label>
+                <input type="text" name="nombre" required><br><br>
+                
+                <label>Dirección de email:</label>
+                <input type="email" name="email" required><br><br>
+                
+                <label>Motivo de la consulta:</label><br>
+                <input type="radio" name="motivo" value="evaluacion" required>Evaluación<br>
+                
+                <input type="radio" name="motivo" value="sugerencias" required>Sugerencias<br>
+                
+                <input type="radio" name="motivo" value="criticas" required>Críticas<br><br>
+                
+                <input type="checkbox" name="terminos" required>Marque esta casilla para verificar que ha leído nuestros términos y condiciones del servicio<br><br>
+                
+                <label>Escriba su consulta:</label><br>
+                <textarea name="consulta" rows="5" cols="50" required></textarea><br><br>
+                
+                <input type="submit" value="Enviar"> <input type="reset" value="Borrar formulario">
+            </fieldset>
+        </form>
+    </div>
+</body>
+</html>
