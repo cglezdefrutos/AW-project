@@ -6,113 +6,131 @@
     <title>Planificación del Proyecto</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
-        h1, h2 { color: #333; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        h1 { text-align: center; font-weight: bold; color: #333; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 6px; text-align: left; }
         th { background-color: #f4f4f4; }
-        .gantt { width: 100%; height: 200px; background: #f9f9f9; position: relative; }
-        .task { position: absolute; height: 30px; background: #4CAF50; color: white; text-align: center; line-height: 30px; border-radius: 5px; }
+
+        /* Ajuste de anchos */
+        td:first-child { width: 22%; } /* Etapa */
+        td:nth-child(2) { width: 20%; } /* Tarea */
+        td:nth-child(3) { width: 30%; } /* Descripción */
+        td:nth-child(4) { width: 18%; } /* Fechas */
+        td:nth-child(5) { width: 10%; } /* Duración */
+        
     </style>
 </head>
 <body>
     <h1>Planificación del Proyecto</h1>
-    <p>Esta página describe la planificación del equipo para el desarrollo del proyecto, detallando las tareas, distribución del trabajo y los plazos establecidos.</p>
-    
-    <h2>Hitos del Proyecto</h2>
     <table>
         <tr>
-            <th>Hito</th>
+            <th>Etapa</th>
+            <th>Tarea</th>
             <th>Descripción</th>
-            <th>Fecha de Entrega</th>
+            <th>Fechas</th>
+            <th>Duración (días)</th>
         </tr>
         <tr>
-            <td>Sales Pitch</td>
-            <td>Propuesta inicial del proyecto en PDF</td>
-            <td>01/02/2025</td>
+            <td rowspan="3">Etapa 0: Formación del Grupo y Propuesta Inicial (Sales Pitch)</td>
+            <td>Tarea 1: Reunión inicial</td>
+            <td>Definir roles y responsabilidades</td>
+            <td>01/02/2025 - 01/02/2025</td>
+            <td>1</td>
         </tr>
         <tr>
-            <td>Práctica 1</td>
-            <td>Descripción detallada del proyecto en una página web</td>
-            <td>18/02/2025</td>
+            <td>Tarea 2: Investigación y lluvia de ideas</td>
+            <td>Recopilar ideas y realizar investigación inicial</td>
+            <td>02/02/2025 - 02/02/2025</td>
+            <td>1</td>
         </tr>
         <tr>
-            <td>Práctica 2</td>
-            <td>Diseño HTML y prototipo funcional</td>
-            <td>05/03/2025</td>
+            <td>Tarea 3: Redacción y revisión del Sales Pitch</td>
+            <td>Elaborar y revisar la propuesta inicial del proyecto</td>
+            <td>03/02/2025 - 03/02/2025</td>
+            <td>1</td>
         </tr>
         <tr>
-            <td>Práctica 3</td>
-            <td>Aplicación con estilos CSS y 50% de funcionalidad</td>
-            <td>22/03/2025</td>
+            <td rowspan="4">Práctica 1: Descripción Detallada del Proyecto</td>
+            <td>Tarea 4: Reunión con el tutor</td>
+            <td>Discutir el alcance y características del proyecto</td>
+            <td>04/02/2025 - 04/02/2025</td>
+            <td>1</td>
         </tr>
         <tr>
-            <td>Entrega Final</td>
-            <td>Aplicación Web completa y funcional</td>
-            <td>02/05/2025</td>
+            <td>Tarea 5: Creación de la estructura básica de la página web</td>
+            <td>Desarrollar la estructura básica del sitio web</td>
+            <td>05/02/2025 - 07/02/2025</td>
+            <td>3</td>
+        </tr>
+        <tr>
+            <td>Tarea 6: Redacción de los documentos descriptivos</td>
+            <td>Elaborar la documentación detallada del proyecto</td>
+            <td>08/02/2025 - 14/02/2025</td>
+            <td>7</td>
+        </tr>
+        <tr>
+            <td>Tarea 7: Revisión y ajustes finales</td>
+            <td>Revisar y corregir la documentación y la estructura</td>
+            <td>15/02/2025 - 20/02/2025</td>
+            <td>6</td>
+        </tr>
+        <tr>
+            <td rowspan="3">Práctica 2: Diseño de la Aplicación y Prototipo Funcional</td>
+            <td>Tarea 8: Diseño de la arquitectura del lado del servidor</td>
+            <td>Planificar y diseñar la arquitectura del servidor</td>
+            <td>21/02/2025 - 25/02/2025</td>
+            <td>5</td>
+        </tr>
+        <tr>
+            <td>Tarea 9: Desarrollo del prototipo funcional</td>
+            <td>Implementar un prototipo funcional de la aplicación</td>
+            <td>26/02/2025 - 03/03/2025</td>
+            <td>6</td>
+        </tr>
+        <tr>
+            <td>Tarea 10: Pruebas y correcciones del prototipo</td>
+            <td>Realizar pruebas y corregir errores en el prototipo</td>
+            <td>04/03/2025 - 06/03/2025</td>
+            <td>3</td>
+        </tr>
+        <tr>
+            <td rowspan="3">Práctica 3: Diseño de la Apariencia y Aumento de Funcionalidad</td>
+            <td>Tarea 11: Diseño de la interfaz de usuario y aplicación de estilos CSS</td>
+            <td>Diseñar la interfaz y aplicar estilos visuales</td>
+            <td>07/03/2025 - 14/03/2025</td>
+            <td>8</td>
+        </tr>
+        <tr>
+            <td>Tarea 12: Implementación de nuevas funcionalidades</td>
+            <td>Agregar nuevas funcionalidades a la aplicación</td>
+            <td>15/03/2025 - 22/03/2025</td>
+            <td>8</td>
+        </tr>
+        <tr>
+            <td>Tarea 13: Pruebas de usabilidad y ajustes</td>
+            <td>Realizar pruebas de usabilidad y ajustar la aplicación</td>
+            <td>23/03/2025 - 27/03/2025</td>
+            <td>5</td>
+        </tr>
+        <tr>
+            <td rowspan="3">Entrega Final: Aplicación Web Completa y Funcional</td>
+            <td>Tarea 14: Integración de todas las funcionalidades</td>
+            <td>Integrar todas las funcionalidades en la aplicación</td>
+            <td>28/03/2025 - 15/04/2025</td>
+            <td>19</td>
+        </tr>
+        <tr>
+            <td>Tarea 15: Pruebas exhaustivas y corrección de errores</td>
+            <td>Realizar pruebas finales y corregir errores</td>
+            <td>16/04/2025 - 25/04/2025</td>
+            <td>10</td>
+        </tr>
+        <tr>
+            <td>Tarea 16: Documentación final y preparación para la entrega</td>
+            <td>Elaborar la documentación final y preparar la entrega</td>
+            <td>26/04/2025 - 08/05/2025</td>
+            <td>13</td>
         </tr>
     </table>
-
-    <h2>Diagrama de Gantt</h2>
-    <table>
-        <tr>
-            <th>Hito</th>
-            <th>Fecha de Inicio</th>
-            <th>Fecha de Fin</th>
-            <th>Duración</th>
-        </tr>
-        <tr>
-            <td>Sales Pitch</td>
-            <td>01/02/2025</td>
-            <td>01/02/2025</td>
-            <td>1 día</td>
-        </tr>
-        <tr>
-            <td>Práctica 1</td>
-            <td>18/02/2025</td>
-            <td>21/02/2025</td>
-            <td>3 días</td>
-        </tr>
-        <tr>
-            <td>Práctica 2</td>
-            <td>05/03/2025</td>
-            <td>07/03/2025</td>
-            <td>2 días</td>
-        </tr>
-        <tr>
-            <td>Práctica 3</td>
-            <td>22/03/2025</td>
-            <td>28/03/2025</td>
-            <td>6 días</td>
-        </tr>
-        <tr>
-            <td>Entrega Final</td>
-            <td>02/05/2025</td>
-            <td>09/05/2025</td>
-            <td>7 días</td>
-        </tr>
-    </table>
-
-    <h2>Representación Gráfica del Proyecto</h2>
-    <svg width="100%" height="250" viewBox="0 0 600 250">
-        <!-- Sales Pitch -->
-        <rect x="50" y="30" width="30" height="30" fill="#4CAF50" />
-        <text x="55" y="50" fill="white">Sales Pitch</text>
-        
-        <!-- Práctica 1 -->
-        <rect x="160" y="70" width="60" height="30" fill="#2196F3" />
-        <text x="165" y="90" fill="white">Práctica 1</text>
-        
-        <!-- Práctica 2 -->
-        <rect x="290" y="110" width="60" height="30" fill="#FF9800" />
-        <text x="295" y="130" fill="white">Práctica 2</text>
-        
-        <!-- Práctica 3 -->
-        <rect x="430" y="150" width="80" height="30" fill="#9C27B0" />
-        <text x="435" y="170" fill="white">Práctica 3</text>
-        
-        <!-- Entrega Final -->
-        <rect x="580" y="190" width="80" height="30" fill="#F44336" />
-        <text x="585" y="210" fill="white">Entrega Final</text>
-    </svg>
 </body>
 </html>
