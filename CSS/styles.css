@@ -61,6 +61,62 @@ nav ul li a:hover {
     margin-top: 20px;
 }
 
+/* Estilos de la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 6px;
+    text-align: left;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+/* Ajuste de anchos */
+td:first-child {
+    width: 22%;
+} /* Etapa */
+
+td:nth-child(2) {
+    width: 20%;
+} /* Tarea */
+
+td:nth-child(3) {
+    width: 30%;
+} /* Descripción */
+
+td:nth-child(4) {
+    width: 18%;
+} /* Fechas */
+
+td:nth-child(5) {
+    width: 10%;
+} /* Duración */
+
+/* Contenedor para la tabla y el iframe */
+.contenedor-tabla-gantt {
+    width: 80%; /* Mismo ancho que la tabla */
+    margin: 0 auto; /* Centrar el contenedor */
+}
+
+/* Espacio entre la tabla y el iframe */
+.espacio-gantt {
+    height: 20px; /* Espacio de 20px entre la tabla y el iframe */
+}
+
+/* Ajuste del iframe */
+iframe {
+    width: 100%; /* Mismo ancho que la tabla */
+    margin-top: 20px; /* Espacio adicional si es necesario */
+}
+
 /* Pie de página */
 footer {
     background-color: #222;
