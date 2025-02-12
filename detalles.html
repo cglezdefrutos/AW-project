@@ -3,53 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalles de la Aplicación</title>
+    <title>Detalles de The Balance</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
             line-height: 1.6;
-            margin: 20px;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-        .container {
-            max-width: 800px;
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1, h2 {
+            margin: 0;
+            padding: 0;
+            background-color: #eef1f5;
             color: #333;
         }
-        ul {
-            list-style-type: square;
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #0077b6;
+            text-align: center;
+        }
+        h2 {
+            color: #023e8a;
+            border-bottom: 2px solid #0077b6;
+            padding-bottom: 5px;
+        }
+        ul, ol {
             margin-left: 20px;
+        }
+        ul li, ol li {
+            margin-bottom: 8px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .highlight {
+            background: #0077b6;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Detalles de la Aplicación</h1>
-        
-        <h2>Introducción</h2>
-        <p>Nuestra aplicación ofrece una plataforma innovadora que permite a los usuarios gestionar sus tareas de manera eficiente. Se distingue por su interfaz intuitiva, integración con múltiples dispositivos y características avanzadas de personalización.</p>
-        
-        <h2>Tipos de Usuarios</h2>
-        <ul>
-            <li><strong>Usuarios estándar:</strong> Pueden crear, editar y eliminar tareas, así como personalizar su panel de control.</li>
-            <li><strong>Usuarios premium:</strong> Acceden a funcionalidades avanzadas como recordatorios inteligentes y sincronización con otras aplicaciones.</li>
-            <li><strong>Administradores:</strong> Gestionan a los usuarios, supervisan estadísticas y configuran permisos.</li>
-        </ul>
-        
-        <h2>Funcionalidades</h2>
-        <ul>
-            <li><strong>Creación de tareas:</strong> Permite a todos los usuarios añadir nuevas tareas fácilmente.</li>
-            <li><strong>Edición y eliminación:</strong> Modificar o eliminar tareas según las necesidades del usuario.</li>
-            <li><strong>Recordatorios inteligentes:</strong> Disponible para usuarios premium, ayuda a recordar tareas importantes.</li>
-            <li><strong>Sincronización en la nube:</strong> Los usuarios premium pueden sincronizar sus datos entre dispositivos.</li>
-            <li><strong>Panel de administración:</strong> Permite a los administradores gestionar usuarios y estadísticas de uso.</li>
-        </ul>
+        <h1>Detalles de <span class="highlight">The Balance</span></h1>
+
+        <div class="section">
+            <h2>Introducción</h2>
+            <p><strong>The Balance</strong> es una innovadora plataforma web que combina e-commerce de productos deportivos con servicios personalizados para entusiastas del fitness. Los usuarios pueden comprar suplementos y equipamiento, inscribirse en eventos deportivos y acceder a planes de entrenamiento diseñados por expertos en nutrición y entrenamiento.</p>
+            <p>Más que una simple tienda online, <strong>The Balance</strong> ofrece un ecosistema donde clientes y marcas pueden interactuar, participar en eventos y compartir experiencias. La plataforma integra salud, deporte y tecnología en un solo lugar, permitiendo que los usuarios alcancen sus objetivos con respaldo profesional.</p>
+        </div>
+
+        <div class="section">
+            <h2>Tipos de Usuarios</h2>
+            <h3>Usuarios sin registrar</h3>
+            <ul>
+                <li>Explorar y comprar productos deportivos.</li>
+                <li>Ver los eventos disponibles sin posibilidad de inscripción.</li>
+            </ul>
+            
+            <h3>Usuarios registrados</h3>
+            <ul>
+                <li>Explorar y comprar productos deportivos.</li>
+                <li>Inscribirse en eventos deportivos.</li>
+                <li>Contratar y seguir planes de entrenamiento personalizados.</li>
+                <li>Subir fotos y comentar en los eventos en los que han participado.</li>
+            </ul>
+            
+            <h3>Administradores</h3>
+            <ul>
+                <li>Gestionar catálogo de productos, eventos y usuarios.</li>
+                <li>Supervisar incidencias y atención al cliente.</li>
+            </ul>
+            
+            <h3>Nutricionistas</h3>
+            <ul>
+                <li>Crear y asignar planes de entrenamiento personalizados.</li>
+                <li>Realizar seguimiento del progreso de los clientes.</li>
+                <li>Comunicar recomendaciones y ajustes en los planes.</li>
+            </ul>
+            
+            <h3>Proveedores</h3>
+            <ul>
+                <li>Promocionar eventos deportivos dentro de la plataforma.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Funcionalidades</h2>
+            <ul>
+                <li><strong>Comprar productos deportivos:</strong> Los usuarios pueden adquirir suplementos y equipamiento deportivo de diversas marcas a través de la plataforma. (Disponible para usuarios registrados y no registrados).</li>
+                <li><strong>Apuntarse a un evento:</strong> Los usuarios registrados pueden inscribirse en eventos deportivos organizados dentro de la plataforma y recibir confirmación de su participación.</li>
+                <li><strong>Contratar un plan de entrenamiento:</strong> Los usuarios registrados pueden seleccionar y contratar planes de entrenamiento personalizados creados por nutricionistas y entrenadores.</li>
+                <li><strong>Subir fotos y comentar en eventos:</strong> Después de asistir a un evento, los usuarios pueden compartir sus experiencias mediante fotos y comentarios. (Disponible solo para usuarios registrados).</li>
+                <li><strong>Gestionar catálogo de productos y eventos:</strong> Los administradores tienen control sobre la publicación, edición y eliminación de productos y eventos dentro de la plataforma.</li>
+                <li><strong>Supervisar incidencias y atención al cliente:</strong> Los administradores pueden atender solicitudes, resolver problemas y gestionar la comunicación con los usuarios.</li>
+                <li><strong>Crear y asignar planes de entrenamiento:</strong> Los nutricionistas pueden diseñar y asignar planes personalizados según los objetivos y necesidades de cada usuario.</li>
+                <li><strong>Realizar seguimiento del progreso de los clientes:</strong> Los nutricionistas pueden monitorear métricas de desempeño y ofrecer ajustes en los planes según el progreso del usuario.</li>
+                <li><strong>Promocionar eventos deportivos:</strong> Los proveedores pueden publicar y gestionar eventos deportivos en la plataforma, estableciendo detalles como ubicación, aforo, precio y actividades.</li>
+            </ul>
+        </div>
     </div>
 </body>
 </html>
