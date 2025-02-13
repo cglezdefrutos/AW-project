@@ -7,7 +7,43 @@ body {
     text-align: center;
 }
 
-/* Estilos del encabezado */
+/* Contenedores reutilizables */
+.container {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Estilos específicos para la lista de miembros */
+.container ul {
+    list-style-type: none; /* Quita las viñetas */
+    padding: 0;
+    text-align: center; /* Centra los enlaces */
+}
+
+.container ul li {
+    display: inline-block; /* Muestra los elementos en línea */
+    margin: 15px 8px; /* Espacio entre los elementos */
+}
+
+.container ul li a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.container ul li a:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Encabezado y navegación */
 header {
     background-color: #222;
     color: white;
@@ -15,24 +51,23 @@ header {
 }
 
 header h1 {
-    margin: 0;
+    margin-bottom: 30px;
 }
 
-/* Menú de navegación */
-nav ul {
+header nav ul {
     list-style: none;
-    padding: 0;
+    padding: 10px;
     margin: 10px 0;
     background-color: #333;
     display: flex;
     justify-content: center;
 }
 
-nav ul li {
-    margin: 0 15px;
+header nav ul li {
+    margin: 0 10px;
 }
 
-nav ul li a {
+header nav ul li a {
     text-decoration: none;
     color: white;
     font-weight: bold;
@@ -40,7 +75,7 @@ nav ul li a {
     transition: 0.3s;
 }
 
-nav ul li a:hover {
+header nav ul li a:hover {
     background-color: #ff8800;
     border-radius: 5px;
 }
@@ -49,8 +84,8 @@ nav ul li a:hover {
 .contenido {
     max-width: 800px;
     margin: 40px auto;
-    background: white;
     padding: 20px;
+    background: white;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
@@ -61,101 +96,48 @@ nav ul li a:hover {
     margin-top: 20px;
 }
 
-/* Estilos de la tabla */
-table {
+/* Tabla de planificación */
+.contenedor-tabla-gantt {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.contenedor-tabla-gantt table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
     font-size: 14px;
 }
 
-th, td {
+.contenedor-tabla-gantt th, 
+.contenedor-tabla-gantt td {
     border: 1px solid #ddd;
     padding: 6px;
     text-align: left;
 }
 
-th {
+.contenedor-tabla-gantt th {
     background-color: #f4f4f4;
 }
 
-/* Ajuste de anchos */
-td:first-child {
-    width: 22%;
-} /* Etapa */
-
-td:nth-child(2) {
-    width: 20%;
-} /* Tarea */
-
-td:nth-child(3) {
-    width: 30%;
-} /* Descripción */
-
-td:nth-child(4) {
-    width: 18%;
-} /* Fechas */
-
-td:nth-child(5) {
-    width: 10%;
-} /* Duración */
-
-/* Contenedor para la tabla y el iframe */
-.contenedor-tabla-gantt {
-    width: 80%; /* Mismo ancho que la tabla */
-    margin: 0 auto; /* Centrar el contenedor */
-}
-
-/* Espacio entre la tabla y el iframe */
-.espacio-gantt {
-    height: 20px; /* Espacio de 20px entre la tabla y el iframe */
-}
+.contenedor-tabla-gantt td:nth-child(1) { width: 22%; } /* Etapa */
+.contenedor-tabla-gantt td:nth-child(2) { width: 20%; } /* Tarea */
+.contenedor-tabla-gantt td:nth-child(3) { width: 30%; } /* Descripción */
+.contenedor-tabla-gantt td:nth-child(4) { width: 18%; } /* Fechas */
+.contenedor-tabla-gantt td:nth-child(5) { width: 10%; } /* Duración */
 
 /* Ajuste del iframe */
-iframe {
+.contenedor-tabla-gantt iframe {
     width: 100%; /* Mismo ancho que la tabla */
     margin-top: 20px; /* Espacio adicional si es necesario */
 }
 
-/* Pie de página */
-footer {
-    background-color: #222;
-    color: white;
-    padding: 15px;
-    margin-top: 20px;
+/* Espacio entre la tabla y el iframe */
+.espacio-gantt {
+    height: 30px; /* Espacio de 20px entre la tabla y el iframe */
 }
 
-/* clase container */
-.container {
-    width: 80%;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: white;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-}
-
-.container ul {
-    list-style-type: none;
-    padding: 0;
-    text-align: center;
-}
-
-.container ul li {
-    display: inline;
-    margin: 0 10px;
-}
-
-.container ul li a {
-    text-decoration: none;
-    color: #007bff;
-    font-weight: bold;
-}
-
-.container ul li a:hover {
-    text-decoration: underline;
-}
-
+/* Estilos para la página de miembros */
 .member {
     text-align: center;
     margin-top: 20px;
@@ -170,7 +152,7 @@ footer {
     margin-bottom: 10px;
 }
 
-.member h2 {
+.member h3 {
     color: #444;
 }
 
@@ -201,7 +183,9 @@ label {
     margin-top: 10px;
 }
 
-input[type="text"], input[type="email"], textarea {
+input[type="text"], 
+input[type="email"], 
+textarea {
     width: 90%;
     padding: 8px;
     margin-top: 5px;
@@ -209,13 +193,12 @@ input[type="text"], input[type="email"], textarea {
     border-radius: 4px;
 }
 
-
 textarea {
-    width: 90%;
     resize: vertical;
 }
 
-input[type="submit"], input[type="reset"] {
+input[type="submit"], 
+input[type="reset"] {
     background-color: #007bff;
     color: white;
     border: none;
@@ -229,17 +212,27 @@ input[type="reset"] {
     background-color: #dc3545;
 }
 
-input[type="submit"]:hover, input[type="reset"]:hover {
+input[type="submit"]:hover, 
+input[type="reset"]:hover {
     opacity: 0.8;
 }
-.container_detalles{
-	list-style: square;
-	list-style-position: inside;
-	text-align: left;
-	width: 80%;
+
+/* Página de detalles */
+.container_detalles {
+    list-style: square inside;
+    text-align: left;
+    width: 80%;
     margin: 20px auto;
     padding: 50px;
     background-color: white;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+}
+
+/* Pie de página */
+footer {
+    background-color: #222;
+    color: #4aa7e4;
+    padding: 15px;
+    margin-top: 20px;
 }
