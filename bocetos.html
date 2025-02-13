@@ -4,55 +4,141 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bocetos de la Web</title>
+    <link rel="stylesheet" href="/CSS/styles.css"> <!-- Enlace al archivo CSS -->
 </head>
 <body>
-    <h1>Bocetos de la Web</h1>
-    <p>Este documento describe la apariencia de la web mediante bocetos en papel para las distintas páginas intermedias que verán los usuarios. Estos bocetos han sido escaneados o fotografiados tras ser dibujados a mano y representan la navegación entre las diferentes secciones del sitio web.</p>
+    <!-- Encabezado con el titulo -->
+    <header>
+        <h1>The Balance</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="detalles.html">Detalles</a></li>
+                <li><a href="bocetos.html">Bocetos</a></li>
+                <li><a href="miembros.html">Miembros</a></li>
+                <li><a href="planificacion.html">Planificación</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    <h2>Página Principal (Homepage)</h2>
-    <img src="img/bocetos/homepage.png" alt="Boceto de la página principal">
-    <img src="img/bocetos/6_homepage.png" alt="Boceto de la página principal">
-    <p>La página principal contiene un menú de navegación con botones principales que permiten acceder a distintas secciones. Una vez que el usuario inicia sesión, aparece un icono de perfil en la parte superior, desde donde puede acceder a su cuenta.</p>
+    <main>
+        <section class="container">
 
-    <h1>Funcionalidad de login</h1>
-    <img src="img/bocetos/5_homepage.png" alt="Boceto de la página principal">
-    <img src="img/bocetos/5_login.png" alt="Boceto de la página de login">
-    <img src="img/bocetos/sign_up.png" alt="Boceto de la página de registro">
-    <p>Desde la página principal, al pulsar el botón "Login", el usuario es redirigido a la página de inicio de sesión. Si el usuario no tiene una cuenta, puede pulsar el botón "Sign Up" para acceder a la página de registro y crear una nueva cuenta.</p>
+            <h2>Bocetos de la Web</h2>
+            <p>
+                Este documento describe la apariencia de la web mediante bocetos en papel para las distintas páginas intermedias que 
+                verán los usuarios. Estos bocetos han sido escaneados tras ser dibujados a mano y representan la navegación 
+                entre las diferentes secciones del sitio web, aunque pueden variar según vaya evolucionando el proyecto.
+            </p>
 
-    <h1>Funcionalidad my account</h1>
-    <img src="img/bocetos/6_1_homepage.png" alt="Boceto de la página principal tras iniciar sesión">
-    <img src="img/bocetos/my_account_admin.png" alt="Boceto de la cuenta de administrador">
-    <img src="img/bocetos/my_account_client.png" alt="Boceto de la cuenta de cliente">
-    <img src="img/bocetos/my_Account_proveedor.png" alt="Boceto de la cuenta de proveedor">
-    <img src="img/bocetos/my_account_trainer.png" alt="Boceto de la cuenta de entrenador">
-    <p>Una vez que el usuario ha iniciado sesión, aparece un icono de perfil en la página principal. Al pulsar sobre él, se accede a la página "My Account", cuya interfaz varía en función del rol del usuario (administrador, cliente, proveedor o entrenador).</p>
+            <!-- Página Principal -->
+            <article class="boceto">
+                <h3>Página Principal (Homepage)</h3>
+                <div class="boceto-container">
+                    <img src="img/bocetos/homepage.png" alt="Boceto de la página principal">
+                    <img src="img/bocetos/6_homepage.png" alt="Boceto de la página principal">
+                </div>
+                <p>
+                    La página principal contiene un menú de navegación con botones principales que permiten acceder a distintas secciones. Una vez que el usuario inicia sesión, aparece un icono de perfil en la parte superior, desde donde puede acceder a su cuenta.
+                    Además, contiene un slider deslizante donde aparecerán las últimas novedades de The Balance, una sección con los productos más vendidos, entre otras cosas.
+                </p>
+            </article>
 
-    <h1>Funcionalidad comprar producto</h1>
-    <img src="img/bocetos/1_homepage.png" alt="Boceto de la página principal">
-    <img src="img/bocetos/1_search_product.png" alt="Boceto de la búsqueda de productos">
-    <img src="img/bocetos/1_product_page.png" alt="Boceto de la página del producto">
-    <p>Desde la página principal, al pulsar el botón "Shop", el usuario es dirigido a la página de búsqueda de productos. Allí puede seleccionar un producto específico, lo que lo llevará a una página con información detallada sobre el mismo.</p>
+            <!-- Funcionalidad de login -->
+            <article class="boceto">
+                <h3>Funcionalidad de login</h3>
+                <div class="boceto-container">
+                    <img src="img/bocetos/5_homepage.png" alt="Boceto de la página principal">
+                    <img src="img/bocetos/5_login.png" alt="Boceto de la página de login">
+                    <img src="img/bocetos/sign_up.png" alt="Boceto de la página de registro">
+                </div>
+                <p>Desde la página principal, al pulsar el botón "Login", el usuario es redirigido a la página de inicio de sesión. Si el usuario no tiene una cuenta, puede pulsar el botón "Sign Up" para acceder a la página de registro y crear una nueva cuenta como cliente.</p>
+            </article>
 
-    <h1>Funcionalidad apuntarse a un evento</h1>
-    <img src="img/bocetos/3_homepage.png" alt="Boceto de la página principal">
-    <img src="img/bocetos/3_search_event.png" alt="Boceto de la búsqueda de eventos">
-    <img src="img/bocetos/join_an_event.png" alt="Boceto de la inscripción en un evento">
-    <p>Desde la página principal, al pulsar el botón "Events", el usuario accede a una lista de eventos disponibles. Al seleccionar un evento, se le muestra una página con más detalles y la opción de inscribirse en él.</p>
+            <!-- Funcionalidad de my account -->            
+            <article class="boceto">
+                <h3>Funcionalidad my account</h3>
+                <div class="boceto-container">
+                    <img src="img/bocetos/6_1_homepage.png" alt="Boceto de la página principal tras iniciar sesión">
+                    <img src="img/bocetos/my_account_admin.png" alt="Boceto de la cuenta de administrador">
+                    <img src="img/bocetos/my_account_client.png" alt="Boceto de la cuenta de cliente">
+                    <img src="img/bocetos/my_Account_proveedor.png" alt="Boceto de la cuenta de proveedor">
+                    <img src="img/bocetos/my_account_trainer.png" alt="Boceto de la cuenta de entrenador">
+                </div>
+                <p>
+                    Una vez que el usuario ha iniciado sesión, aparece un icono de perfil en la página principal. Al pulsar sobre él, se accede a la página "My Account", cuya interfaz varía en función del rol del usuario (administrador, cliente, proveedor o entrenador). <br>
+                    La primera imágen del my account sería la del administrador, que le permite gestionar los productos, eventos, planes de entrenamiento o usuarios que hay disponibles en The Balance en ese momento. <br>
+                    La segunda imágen pertenece del my account pertenece a la del cliente, que puede ver sus pedidos realizados o en curso, su lista de productos favoritos o editar sus datos personales. <br>
+                    La tercera imágen del my account corresponde a la del proveedor, que puede gestionar los productos que está ofertando a The Balance en ese momento o realizar nuevas ofertas y lo mismo con los eventos. <br>
+                    La última imágen del my account sería la del nutricionista, que solo tiene como funcionalidad administrar los planes de entrenamiento que tiene asignados en ese momento o poder ofertar nuevos planes a los clientes.
+                </p>            
+            </article>
+
+            <!-- Funcionalidad de comprar producto -->  
+            <article class="boceto">
+                <h3>Funcionalidad comprar producto</h3>
+                <div class="boceto-container">
+                    <img src="img/bocetos/1_homepage.png" alt="Boceto de la página principal">
+                    <img src="img/bocetos/1_search_product.png" alt="Boceto de la búsqueda de productos">
+                    <img src="img/bocetos/1_product_page.png" alt="Boceto de la página del producto">
+                    <img src="img/bocetos/cart_page.png" alt="Boceto de la página del carrito">
+                </div>
+                <p>
+                    Desde la página principal, al pulsar el botón "Shop", el usuario es dirigido a la página de búsqueda de productos. Allí puede seleccionar un producto específico, lo que lo llevará a una página con información detallada sobre el mismo.
+                    Si el usuario pulsa "Add cart", añadirá su producto al carrito, dándole la opción de ir hasta el carrito para finalizar la compra como se ve en la última imagen.
+                </p>            
+            </article>
+
+            <!-- Funcionalidad de apuntarse a un evento -->  
+            <article class="boceto">
+                <h3>Funcionalidad apuntarse a un evento</h3>
+                <div class="boceto-container">
+                    <img src="img/bocetos/3_homepage.png" alt="Boceto de la página principal">
+                    <img src="img/bocetos/3_search_event.png" alt="Boceto de la búsqueda de eventos">
+                    <img src="img/bocetos/join_an_event.png" alt="Boceto de la inscripción en un evento">
+                    <img src="img/bocetos/cart_page.png" alt="Boceto de la página del carrito">
+                </div>
+                <p>
+                    Desde la página principal, al pulsar el botón "Events", el usuario accede a una lista de eventos disponibles. Al seleccionar un evento, se le muestra una página con más detalles y la opción de inscribirse en él.
+                    Si pulsa en buy tickets, de nuevo se le mostrará la opción de poder ir al carrito y alí finalizar su compra.
+                </p>            
+            </article>
+
+            <!-- Funcionalidad de comprar plan de entrenamiento -->  
+            <article class="boceto">
+                <h3>Funcionalidad comprar plan de entrenamiento</h3>
+                <div class="boceto-container">
+                    <img src="img/bocetos/2_homepage.png" alt="Boceto de la página principal">
+                    <img src="img/bocetos/2_search_tp.png" alt="Boceto de la búsqueda de planes de entrenamiento">
+                    <img src="img/bocetos/buy_tp.png" alt="Boceto de la compra de plan de entrenamiento">
+                    <img src="img/bocetos/cart_page.png" alt="Boceto de la página del carrito">
+                </div>
+                <p>
+                    Desde la página principal, al pulsar el botón "Training Plans", el usuario accede a una página con una lista de planes de entrenamiento disponibles. Al seleccionar uno, se abre una página con más detalles y la opción de adquirirlo.
+                    Si pulsa en buy, de nuevo se le mostrará la opción de poder ir al carrito y alí finalizar su compra.
+                </p>            
+            </article>
+
+            <article class="boceto">
+                <h3>Funcionalidad trabaja con nosotros</h3>
+                <div class="boceto-container">
+                    <img src="img/bocetos/4_homepage.png" alt="Boceto de la página principal">
+                    <img src="img/bocetos/work_with_us.png" alt="Boceto de la página Trabaja con Nosotros">
+                </div>
+                <p>
+                    Desde la página principal, al pulsar el botón "Work With Us", el usuario es redirigido a una página donde podrá rellenar un formulario para aplicar a trabajar con The Balance en función del rol que solicite (proveedor, nutricionista o empleado).
+                </p>            
+            </article>
+
+        </section>
+
+
+    </main>
+
     
-    <h1>Funcionalidad comprar plan de entrenamiento</h1>
-    <img src="img/bocetos/2_homepage.png" alt="Boceto de la página principal">
-    <img src="img/bocetos/2_search_tp.png" alt="Boceto de la búsqueda de planes de entrenamiento">
-    <img src="img/bocetos/buy_tp.png" alt="Boceto de la compra de plan de entrenamiento">
-    <p>Desde la página principal, al pulsar el botón "Training Plans", el usuario accede a una página con una lista de planes de entrenamiento disponibles. Al seleccionar uno, se abre una página con más detalles y la opción de adquirirlo.</p>
-
-    <h1>Funcionalidad trabaja con nosotros</h1>
-    <img src="img/bocetos/4_homepage.png" alt="Boceto de la página principal">
-    <img src="img/bocetos/work_with_us.png" alt="Boceto de la página Trabaja con Nosotros">
-    <p>Desde la página principal, al pulsar el botón "Work With Us", el usuario es redirigido a una página con información sobre oportunidades laborales, incluyendo detalles sobre cómo aplicar a una vacante dentro de la empresa.</p>
-
-    <footer>
-        <p>Estos bocetos representan el esquema de navegación y diseño de la web, aunque pueden evolucionar según avance el proyecto.</p>
+    <footer lang="en">
+        <p>The future of fitness starts here</p>
     </footer>
 </body>
 </html>

@@ -229,6 +229,39 @@ input[type="reset"]:hover {
     border-radius: 8px;
 }
 
+/* Estilos para bocetos.html */
+.boceto {
+    margin-bottom: 30px;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+    
+.boceto h3 {
+    color: #222;
+    margin-bottom: 10px;
+}
+    
+.boceto-container {
+    display: flex;
+    flex-wrap: wrap;  /* Permite que las imágenes se acomoden en varias filas si es necesario */
+    justify-content: center; /* Centra las imágenes */
+    gap: 15px; /* Espacio entre imágenes */
+}
+
+.boceto-container img {
+    max-width: 40%;  /* Reduce el tamaño de las imágenes */
+    height: auto;  /* Mantiene la proporción */
+    object-fit: contain;  /* Evita distorsión */
+    border-radius: 8px; /* Bordes redondeados para mejor apariencia */
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+    .boceto-container img {
+        max-width: 80%; /* Permite que ocupen más espacio en móviles */
+    }
+}
+
 /* Pie de página */
 footer {
     background-color: #222;
