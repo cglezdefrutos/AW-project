@@ -242,6 +242,7 @@ input[type="reset"]:hover {
 }
     
 .boceto-container {
+    padding: 20px;
     display: flex;
     flex-wrap: wrap;  /* Permite que las imágenes se acomoden en varias filas si es necesario */
     justify-content: center; /* Centra las imágenes */
