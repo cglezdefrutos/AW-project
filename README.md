@@ -14,4 +14,4 @@
 
 1. Clona este repositorio:
    ```bash
-   git clone https://github.com/tuusuario/AW-project.git
+   git clone https://github.com/cglezdefrutos/AW-project.git
