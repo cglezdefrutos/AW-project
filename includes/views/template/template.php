@@ -14,7 +14,7 @@
 
         <main>
             <article>
-                <?=$contenidoPrincipal?>
+                <?=$mainContent?>
             </article>
         </main>
 
