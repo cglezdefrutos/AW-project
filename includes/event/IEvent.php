@@ -1,3 +1,6 @@
 <?php
-// TODO
+    interface IEvent
+    {
+        public function getEvents($eventDTO);
+    }
 ?>
