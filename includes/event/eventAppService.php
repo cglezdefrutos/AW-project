@@ -1,4 +1,8 @@
 <?php
+    require_once("IEvent.php");
+    require_once("eventFactory.php");
+    require_once("eventDTO.php");
+
     class eventAppService
     {
         private static $instance;

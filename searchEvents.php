@@ -3,7 +3,7 @@
 
     include("includes/event/searchEventForm.php");
 
-    $titlePage = "Buscar eventos"
+    $titlePage = "Buscar eventos";
 
     $form = new searchEventForm();
 

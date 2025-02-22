@@ -51,13 +51,14 @@
         private function IsSent(&$params)
         {
             // Verifica si el formulario ha sido enviado
-            return isset($params['action']) && $params['action'] == $thid->formId;
+            return isset($params['action']) && $params['action'] == $this->formId;
         }
 
         private function Create($errors = array(), &$data = array())
         {
             // En caso de haber errores -> Genera los mensajes de errores
-            $html= $this->CreateErrors($errors);
+            // $html= $this->CreateErrors($errors);
+            $html = '';
 
             // Se genera el formulario
             $html .= '<form method="POST" action="'.$this->action.'" id="'.$this->formId.'" >';

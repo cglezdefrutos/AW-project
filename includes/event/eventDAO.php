@@ -1,7 +1,7 @@
 <?php
-    include __DIR__ . "/../config.php";
-    require("IEvent.php");
-    require("eventDTO.php");
+    //include __DIR__ . "/../config.php";
+    require_once("IEvent.php");
+    require_once("eventDTO.php");
 
     class eventDAO implements IEvent
     {

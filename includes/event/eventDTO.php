@@ -20,37 +20,37 @@
             $this->category = $category;
         }
 
-        public function id()
+        public function getId()
         {
             return $this->id;
         }
 
-        public function name()
+        public function getName()
         {
             return $this->name;
         }
 
-        public function desc()
+        public function getDesc()
         {
             return $this->desc;
         }
 
-        public function date()
+        public function getDate()
         {
             return $this->date;
         }
 
-        public function price()
+        public function getPrice()
         {
             return $this->price;
         }
 
-        public function location()
+        public function getLocation()
         {
             return $this->location;
         }
 
-        public function category()
+        public function getCategory()
         {
             return $this->category;
         }

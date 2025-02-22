@@ -17,35 +17,69 @@
                     <legend>Buscar eventos</legend>
 
                     <label for="name">Nombre del evento:</label>
-                    <input type="text" name="name" id="name" placeholder="Ej: Fitness" value="<?php echo htmlspecialchars($initialData['name'] ?? ''); ?>">
+                    <input type="text" name="name" id="name" placeholder="Ej: Fitness" value="
+EOF;
+            $html .= htmlspecialchars($initialData['name'] ?? '') . '">';
 
+            $html .= <<<EOF
                     <label for="start_date">Desde:</label>
-                    <input type="date" name="start_date" id="start_date" value="<?php echo htmlspecialchars($initialData['start_date'] ?? ''); ?>">
+                    <input type="date" name="start_date" id="start_date" value="
+EOF;
+            $html .= htmlspecialchars($initialData['start_date'] ?? '') . '">';
 
+            $html .= <<<EOF
                     <label for="end_date">Hasta:</label>
-                    <input type="date" name="end_date" id="end_date" value="<?php echo htmlspecialchars($initialData['end_date'] ?? ''); ?>">
+                    <input type="date" name="end_date" id="end_date" value="
+EOF;
+            $html .= htmlspecialchars($initialData['end_date'] ?? '') . '">';
 
+            $html .= <<<EOF
                     <label for="min_price">Precio mínimo (€):</label>
-                    <input type="number" name="min_price" id="min_price" step="0.01" placeholder="0" value="<?php echo htmlspecialchars($initialData['min_price'] ?? ''); ?>">
+                    <input type="number" name="min_price" id="min_price" step="0.01" placeholder="0" value="
+EOF;
+            $html .= htmlspecialchars($initialData['min_price'] ?? '') . '">';
 
+            $html .= <<<EOF
                     <label for="max_price">Precio máximo (€):</label>
-                    <input type="number" name="max_price" id="max_price" step="0.01" placeholder="1000" value="<?php echo htmlspecialchars($initialData['max_price'] ?? ''); ?>">
+                    <input type="number" name="max_price" id="max_price" step="0.01" placeholder="1000" value="
+EOF;
+            $html .= htmlspecialchars($initialData['max_price'] ?? '') . '">';
 
+            $html .= <<<EOF
                     <label for="location">Ubicación:</label>
-                    <input type="text" name="location" id="location" placeholder="Ej: Madrid" value="<?php echo htmlspecialchars($initialData['location'] ?? ''); ?>">
+                    <input type="text" name="location" id="location" placeholder="Ej: Madrid" value="
+EOF;
+            $html .= htmlspecialchars($initialData['location'] ?? '') . '">';
 
+            $html .= <<<EOF
                     <label for="category">Categoría:</label>
                     <select name="category" id="category">
                         <option value="">Todas</option>
-                        <option value="Futbol" <?php echo ($initialData['category'] ?? '') == 'Futbol' ? 'selected' : ''; ?>>Futbol</option>
-                        <option value="Baloncesto" <?php echo ($initialData['category'] ?? '') == 'Baloncesto' ? 'selected' : ''; ?>>Baloncesto</option>
-                        <option value="Fitness" <?php echo ($initialData['category'] ?? '') == 'Fitness' ? 'selected' : ''; ?>>Fitness</option>
-                        <option value="Conferencias" <?php echo ($initialData['category'] ?? '') == 'Conferencias' ? 'selected' : ''; ?>>Conferencias</option>
+                        <option value="Futbol" 
+EOF;
+            $html .= ($initialData['category'] ?? '') == 'Futbol' ? 'selected' : '' . '>Futbol</option>';
+
+            $html .= <<<EOF
+                        <option value="Baloncesto" 
+EOF;
+            $html .= ($initialData['category'] ?? '') == 'Baloncesto' ? 'selected' : '' . '>Baloncesto</option>';
+
+            $html .= <<<EOF
+                        <option value="Fitness" 
+EOF;
+            $html .= ($initialData['category'] ?? '') == 'Fitness' ? 'selected' : '' . '>Fitness</option>';
+
+            $html .= <<<EOF
+                        <option value="Conferencias" 
+EOF;
+            $html .= ($initialData['category'] ?? '') == 'Conferencias' ? 'selected' : '' . '>Conferencias</option>';
+
+            $html .= <<<EOF
                     </select>
 
                     <input type="submit" value="Buscar">
                 </fieldset>
-            EOF;
+EOF;
 
             return $html;
         }

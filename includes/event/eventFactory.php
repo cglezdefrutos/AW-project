@@ -1,6 +1,7 @@
 <?php
-    require("eventDAO.php");
-    require("eventMock.php");
+    require_once("IEvent.php");
+    require_once("eventDAO.php");
+    require_once("eventMock.php");
 
     class eventFactory
     {
