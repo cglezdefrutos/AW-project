@@ -1,11 +1,17 @@
 <?php
     session_start();
 
+    include("includes/event/searchEventForm.php");
+
     $titlePage = "Buscar eventos"
+
+    $form = new searchEventForm();
+
+    $htmlSearchEventForm = $form->Manage();
 
     $mainContent = <<<EOS
         <h1>Eventos disponibles</h1>
-        <p>Aqui estará el contenido de la página de eventos, con su formulario para filtrar<p>
+        $htmlSearchEventForm
     EOS;
 
     require("includes/views/template/template.php");
