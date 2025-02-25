@@ -1,7 +1,7 @@
 <?php
-    session_start();
+    require_once("includes/config.php");
 
-    include("includes/event/searchEventForm.php");
+    require_once("includes/event/searchEventForm.php");
 
     $titlePage = "Buscar eventos";
 

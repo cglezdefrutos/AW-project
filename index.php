@@ -1,5 +1,5 @@
 <?php
-    session_start();
+    require_once("includes/config.php");
 
     $titlePage = 'Inicio - The Balance';
 

@@ -1,7 +1,7 @@
 <?php
-    session_start();
+    require_once("includes/config.php");
 
-    include("includes/login/registerForm.php");
+    require_once("includes/login/registerForm.php");
 
     $titlePage = 'Registro en el sistema';
 

@@ -1,7 +1,7 @@
 <?php
-    session_start();
+    require_once("includes/config.php");
 
-    include("includes/login/loginForm.php");
+    require_once("includes/login/loginForm.php");
 
     $titlePage = 'Acceso al sistema';
 
