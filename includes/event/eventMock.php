@@ -11,7 +11,7 @@
         
         public function getEvents($filters = array() )
         {
-            // Creame un array de eventDTOs
+            // Array de eventDTOs
             $events = array();
             $events[] = new eventDTO(1, "Event 1", "Descripcion 1", "2023-10-01", 10, "Location 1", "Futbol");
             $events[] = new eventDTO(2, "Event 2", "Descripcion 2", "2023-10-05", 20, "Location 2", "Baloncesto");

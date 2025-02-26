@@ -8,5 +8,5 @@
         <p> Aquí está el contenido público, visible para todos los usuarios. </p>
     EOS;
 
-    require("includes/views/template/template.php");
+    require_once("includes/views/template/template.php");
 ?>

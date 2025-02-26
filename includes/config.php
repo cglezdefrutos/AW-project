@@ -23,14 +23,14 @@
 
         http_response_code(500);
 
-        $tittlePage = 'Error';
+        $titlePage = 'Error';
 
         $mainContent = <<<EOS
         <h1>Oops</h1>
         <p> Parece que ha habido un fallo.</p>
         EOS;
 
-        require("includes/common/template/template.php");
+        require_once("includes/views/template/template.php");
     }
 
     set_exception_handler('exceptionHandler');

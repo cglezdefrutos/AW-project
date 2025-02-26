@@ -1,5 +1,5 @@
 <?php
-    class eventDTO
+    class eventDTO implements JsonSerializable
     {
         private $id;
         private $name;
@@ -88,6 +88,11 @@
         public function setCategory($category)
         {
             $this->category = $category;
-        }              
+        }        
+        
+        public function jsonSerialize()
+        {
+            return get_object_vars($this);
+        }
     }
 ?>

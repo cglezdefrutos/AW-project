@@ -14,5 +14,5 @@
         $htmlFormRegistro
     EOS;
 
-    require("includes/views/template/template.php");
+    require_once("includes/views/template/template.php");
 ?>

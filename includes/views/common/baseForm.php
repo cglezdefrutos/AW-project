@@ -4,7 +4,6 @@
         private $formId;    // Identificador único para el formulario (identificarlo cuando se envíe y gestionar sus acciones)
         private $action;    // Define la acción del formulario (es decir, el destino de donde se enviarán los datos)
 
-
         public function __construct($formId, $options = array() )
         {
             $this->formId = $formId;
@@ -57,8 +56,7 @@
         private function Create($errors = array(), &$data = array())
         {
             // En caso de haber errores -> Genera los mensajes de errores
-            // $html= $this->CreateErrors($errors);
-            $html = '';
+            $html= $this->CreateErrors($errors);
 
             // Se genera el formulario
             $html .= '<form method="POST" action="'.$this->action.'" id="'.$this->formId.'" >';
@@ -69,6 +67,23 @@
             $html .= '</form>';
             
             // Se retorna todo el código HTML
+            return $html;
+        }
+
+        private function CreateErrors($errors)
+        {
+            $html='';
+            $numErrors = count($errors);
+            if (  $numErrors == 1 ) 
+            {
+                $html .= "<ul><li>".$errors[0]."</li></ul>";
+            } 
+            else if ( $numErrors > 1 ) 
+            {
+                $html .= "<ul><li>";
+                $html .= implode("</li><li>", $errors);
+                $html .= "</li></ul>";
+            }
             return $html;
         }
 

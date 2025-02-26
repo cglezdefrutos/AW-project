@@ -18,37 +18,43 @@
 
                     <label for="name">Nombre del evento:</label>
                     <input type="text" name="name" id="name" placeholder="Ej: Fitness" value="
-EOF;
+            EOF;
+            
             $html .= htmlspecialchars($initialData['name'] ?? '') . '">';
 
             $html .= <<<EOF
                     <label for="start_date">Desde:</label>
                     <input type="date" name="start_date" id="start_date" value="
-EOF;
+            EOF;
+            
             $html .= htmlspecialchars($initialData['start_date'] ?? '') . '">';
 
             $html .= <<<EOF
                     <label for="end_date">Hasta:</label>
                     <input type="date" name="end_date" id="end_date" value="
-EOF;
+            EOF;
+            
             $html .= htmlspecialchars($initialData['end_date'] ?? '') . '">';
 
             $html .= <<<EOF
                     <label for="min_price">Precio mínimo (€):</label>
                     <input type="number" name="min_price" id="min_price" step="0.01" placeholder="0" value="
-EOF;
+            EOF;
+            
             $html .= htmlspecialchars($initialData['min_price'] ?? '') . '">';
 
             $html .= <<<EOF
                     <label for="max_price">Precio máximo (€):</label>
                     <input type="number" name="max_price" id="max_price" step="0.01" placeholder="1000" value="
-EOF;
+            EOF;
+            
             $html .= htmlspecialchars($initialData['max_price'] ?? '') . '">';
 
             $html .= <<<EOF
                     <label for="location">Ubicación:</label>
                     <input type="text" name="location" id="location" placeholder="Ej: Madrid" value="
-EOF;
+            EOF;
+            
             $html .= htmlspecialchars($initialData['location'] ?? '') . '">';
 
             $html .= <<<EOF
@@ -56,30 +62,34 @@ EOF;
                     <select name="category" id="category">
                         <option value="">Todas</option>
                         <option value="Futbol" 
-EOF;
+            EOF;
+            
             $html .= ($initialData['category'] ?? '') == 'Futbol' ? 'selected' : '' . '>Futbol</option>';
 
             $html .= <<<EOF
                         <option value="Baloncesto" 
-EOF;
+            EOF;
+            
             $html .= ($initialData['category'] ?? '') == 'Baloncesto' ? 'selected' : '' . '>Baloncesto</option>';
 
             $html .= <<<EOF
                         <option value="Fitness" 
-EOF;
+            EOF;
+            
             $html .= ($initialData['category'] ?? '') == 'Fitness' ? 'selected' : '' . '>Fitness</option>';
 
             $html .= <<<EOF
                         <option value="Conferencias" 
-EOF;
+            EOF;
+            
             $html .= ($initialData['category'] ?? '') == 'Conferencias' ? 'selected' : '' . '>Conferencias</option>';
 
             $html .= <<<EOF
                     </select>
 
-                    <input type="submit" value="Buscar">
+                    <button type="submit" name="botonSearchEvents"">Buscar</button>
                 </fieldset>
-EOF;
+            EOF;
 
             return $html;
         }
@@ -121,22 +131,6 @@ EOF;
                 // Buscamos los eventos con los filtros seleccionados
                 $foundedEventsDTO = $eventAppService->search($filters);
 
-                // Mostramos cada uno de eventDTO encontrados por pantalla en una tabla
-                $html = '<table>';
-                $html .= '<tr><th>Nombre</th><th>Fecha</th><th>Precio</th><th>Ubicación</th><th>Categoría</th></tr>';
-                foreach($foundedEventsDTO as $eventDTO)
-                {
-                    $html .= '<tr>';
-                    $html .= '<td>' . $eventDTO->getName() . '</td>';
-                    $html .= '<td>' . $eventDTO->getDate() . '</td>';
-                    $html .= '<td>' . $eventDTO->getPrice() . '</td>';
-                    $html .= '<td>' . $eventDTO->getLocation() . '</td>';
-                    $html .= '<td>' . $eventDTO->getCategory() . '</td>';
-                    $html .= '</tr>';
-                }
-                $html .= '</table>';
-                echo $html;
-
                 // Manejamos el control de errores en función de lo que nos devuelva el SA
                 if(count($foundedEventsDTO) === 0)
                 {
@@ -144,6 +138,17 @@ EOF;
                 }
                 else
                 {
+                    $_SESSION["search"] = true;
+
+                    // Array de eventos en formato JSON
+                    $foundedEventsDTOJSON = array();
+
+                    // Convertir el array de objetos eventDTO a un solo JSON
+                    $foundedEventsDTOJSON = json_encode($foundedEventsDTO);
+
+                    // Almacenar el JSON en una variable de sesión
+                    $_SESSION["foundedEventsDTO"] = $foundedEventsDTOJSON;
+
                     $result = 'searchEvents.php';
                 }
             }
