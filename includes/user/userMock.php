@@ -1,16 +1,21 @@
 <?php
 
+require_once("IUser.php");
+require_once("userDTO.php");
+
 class userMock implements IUser
 {
     public function login($userDTO)
     {
-        return true;
+        // Simula que el usuario existe y devuelve un userDTO ficticio
+        return new userDTO(1, "Pablo", "Feo", 0); // 0 = Cliente
     }
 
     public function create($userDTO)
     {
-        return true;
+        // Simula que el usuario se ha registrado y devuelve un userDTO con un ID ficticio
+        return new userDTO(2, $userDTO->username, $userDTO->password, $userDTO->userType);
     }
-
 }
+
 ?>
