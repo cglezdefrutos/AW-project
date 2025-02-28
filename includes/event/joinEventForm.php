@@ -5,9 +5,12 @@
 
     class joinEventForm extends baseForm
     {
-        public function __construct()
+        private $eventId;
+
+        public function __construct($eventId)
         {
             parent:: __construct('searchEventForm');
+            $this->eventId = $eventId;
         }
 
         protected function CreateFields($initialData)
@@ -18,21 +21,21 @@
                     <legend>Apuntate al evento</legend>
 
                     <label for="name">Nombre:</label>
-                    <input type="text" id="name" name="name" required>
+                    <input type="text" id="name" name="name" required value="
             EOF;
 
             $html .= htmlspecialchars($initialData['name'] ?? '') . '">';
 
             $html .= <<<EOF
                     <label for="email">Correo Electrónico:</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" id="email" name="email" required value="
             EOF;
             
             $html .= htmlspecialchars($initialData['email'] ?? '') . '">';
 
             $html .= <<<EOF
                     <label for="phone">Teléfono:</label>
-                    <input type="tel" id="phone" name="phone" required>
+                    <input type="tel" id="phone" name="phone" required value="
             EOF;
             
             $html .= htmlspecialchars($initialData['phone'] ?? '') . '">';
@@ -42,6 +45,8 @@
                     <input type="submit" name="join_event" value="Apuntarse">
                 </form>
             EOF;
+
+            return $html;
         }
 
         protected function Process($data)
