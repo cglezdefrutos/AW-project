@@ -5,7 +5,15 @@
     $titlePage = "Apuntarse a un evento";
     $mainContent = "";
 
-    if(!isset($_SESSION["sentJoinEvent"]))
+    // Verificamos si el usuario está logueado
+    if (isset($_SESSION["user_id"])) {
+        $mainContent = <<<EOS
+            <p>Debes iniciar sesión para apuntarte a un evento</p>
+            <a href="login.php"><button>Iniciar sesión</button></a>
+        EOS;
+    }
+    // Si no se ha enviado el formulario todavía
+    else if(!isset($_SESSION["sentJoinEvent"]))
     {
         // Verificar si se ha pasado un ID de evento
         if (!isset($_GET['id']) || !is_numeric($_GET['id'])) 
@@ -24,6 +32,7 @@
             EOS;
         }
     }
+    // Si ya se ha enviado el formulario correctamente
     else
     {
         $mainContent = "<p>Te has apuntado al evento correctamente.</p>";

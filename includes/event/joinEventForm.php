@@ -51,6 +51,47 @@
 
         protected function Process($data)
         {
+            // Array de errores
+            $result = array();
+
+            // Filtrado y sanitización de los datos
+            $eventName =  trim($datos['name'] ?? '');
+            $eventName = filter_var($eventName, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+            $email = trim($datos['email'] ?? '');
+            $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+
+            $phone = trim($datos['phone'] ?? '');
+            $phone = filter_var($phone, FILTER_SANITIZE_NUMBER_INT);
+
+            $eventId = trim($datos['event_id'] ?? '');
+            $eventId = filter_var($eventId, FILTER_SANITIZE_NUMBER_INT);  
+
+            if(count($result) === 0)
+            {
+                $data = array(
+                    'user_id' => $_SESSION['user_id'],
+                    'username' => $name,
+                    'email' => $email,
+                    'phone' => $phone,
+                    'event_id' => $eventId
+                );
+
+                $eventAppService = eventAppService::GetSingleton();
+                $join = $eventAppService->joinEvent($data);
+
+                if($join)
+                {
+                    $_SESSION['sentJoinEvent'] = true;
+                    $result = "joinEvent.php";
+                }
+                else
+                {
+                    $result[] = "Error al apuntarse al evento";
+                }
+            }
+
+            return $result;
         }
     }
     

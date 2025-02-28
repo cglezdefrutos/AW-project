@@ -31,5 +31,16 @@
 
             return $foundedEventsDTO;
         }
+
+        public function joinEvent($data)
+        {
+            $IEventDAO = eventFactory::CreateEvent();
+
+            $joinEventDTO = new joinEventDTO($data['user_id'], $data['event_id'], $data['name'], $data['email'], $data['phone']);
+
+            $join = $IEventDAO->joinEvent($joinEventDTO);
+
+            return $join;
+        }
     }   
 ?>

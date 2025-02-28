@@ -19,6 +19,11 @@
             $events[] = new eventDTO(4, "Event 4", "Descripcion 4", "2023-10-15", 40, "Location 4", "Conferencias");
             return $events;
         }
+
+        public function joinEvent($joinEventDTO)
+        {
+            return true;
+        }
         
     }
 ?>

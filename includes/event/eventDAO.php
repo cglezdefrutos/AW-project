@@ -47,6 +47,26 @@
             return $events;
         }
 
+        public function joinEvent($joinEventDTO)
+        {
+            // Tomamos la conexion a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Implementar la logica de acceso a la base de datos para apuntar a un usuario a un evento
+            $stmt = $conn->prepare("INSERT INTO users_events (user_id, event_id, username, email, phone) VALUES (?, ?, ?, ?, ?)");
+
+            // Asignamos los parametros
+            $stmt->bind_param("iissi", $joinEventDTO->getUserId(), $joinEventDTO->getEventId(), $joinEventDTO->getUsername(), $joinEventDTO->getUserEmail(), $joinEventDTO->getUserPhone());
+
+            // Ejecutamos la consulta
+            $stmt->execute();
+
+            // Cerramos la consulta
+            $stmt->close();
+
+            return true;
+        }
+
         private function constructQuery($filters)
         {
             $query = "SELECT * FROM eventos WHERE ";
