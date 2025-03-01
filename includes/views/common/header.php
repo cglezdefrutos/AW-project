@@ -14,7 +14,7 @@
 
 <header>
     <div class="logo">
-        <a href="index.php">🏋️ The Balance</a>
+        <a href="index.php">The Balance</a>
     </div>
     <nav>
         <ul>
