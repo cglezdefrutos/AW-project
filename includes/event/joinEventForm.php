@@ -2,14 +2,14 @@
 
     include __DIR__ . "/../views/common/baseForm.php";
     include __DIR__ . "/eventAppService.php";
-
+    
     class joinEventForm extends baseForm
     {
         private $eventId;
 
         public function __construct($eventId)
         {
-            parent:: __construct('searchEventForm');
+            parent:: __construct('joinEventForm');
             $this->eventId = $eventId;
         }
 
@@ -42,8 +42,8 @@
 
             $html .= <<<EOF
                     <input type="hidden" name="event_id" value="{$this->eventId}">
-                    <input type="submit" name="join_event" value="Apuntarse">
-                </form>
+                    <button type="submit" name="join_event">Apuntarse</button>
+                </fieldset>
             EOF;
 
             return $html;
@@ -55,41 +55,41 @@
             $result = array();
 
             // Filtrado y sanitización de los datos
-            $eventName =  trim($datos['name'] ?? '');
-            $eventName = filter_var($eventName, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $username =  trim($data['name'] ?? '');
+            $username = filter_var($username, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            $email = trim($datos['email'] ?? '');
+            $email = trim($data['email'] ?? '');
             $email = filter_var($email, FILTER_SANITIZE_EMAIL);
 
-            $phone = trim($datos['phone'] ?? '');
+            $phone = trim($data['phone'] ?? '');
             $phone = filter_var($phone, FILTER_SANITIZE_NUMBER_INT);
 
-            $eventId = trim($datos['event_id'] ?? '');
+            $eventId = trim($data['event_id'] ?? '');
             $eventId = filter_var($eventId, FILTER_SANITIZE_NUMBER_INT);  
 
             if(count($result) === 0)
             {
-                $data = array(
+                $process_data = array(
                     'user_id' => $_SESSION['user_id'],
-                    'username' => $name,
+                    'username' => $username,
                     'email' => $email,
                     'phone' => $phone,
                     'event_id' => $eventId
                 );
 
                 $eventAppService = eventAppService::GetSingleton();
-                $join = $eventAppService->joinEvent($data);
+                $join = $eventAppService->joinEvent($process_data);
 
-                if($join)
-                {
-                    $_SESSION['sentJoinEvent'] = true;
-                    $result = "joinEvent.php";
-                }
-                else
+                if($join === false)
                 {
                     $result[] = "Error al apuntarse al evento";
                 }
-            }
+                else
+                {
+                    $_SESSION["sentJoinEvent"] = true;
+                    $result = "joinEvent.php";
+                }
+            } 
 
             return $result;
         }
