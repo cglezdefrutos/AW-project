@@ -31,5 +31,15 @@
 
             return $foundedEventsDTO;
         }
+
+        public function register($DTOregisterEvent)
+        {
+            $IEventDAO = eventFactory::CreateEvent();
+
+            $registEventDTO = $IEventDAO->registerEvent($DTOregisterEvent);
+
+            return $registEventDTO;
+        }
     }   
+
 ?>
