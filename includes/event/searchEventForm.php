@@ -100,18 +100,18 @@
             $result = array();
 
             // Filtrado y sanitización de los datos
-            $eventName = trim($datos['name'] ?? '');
+            $eventName = trim($data['name'] ?? '');
             $eventName = filter_var($eventName, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            $startDate = trim($datos['start_date'] ?? '');
-            $endDate = trim($datos['end_date'] ?? '');
-            $minPrice = trim($datos['min_price'] ?? '');
-            $maxPrice = trim($datos['max_price'] ?? '');
+            $startDate = trim($data['start_date'] ?? '');
+            $endDate = trim($data['end_date'] ?? '');
+            $minPrice = trim($data['min_price'] ?? '');
+            $maxPrice = trim($data['max_price'] ?? '');
 
-            $location = trim($datos['location'] ?? '');
+            $location = trim($data['location'] ?? '');
             $location = filter_var($location, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            $category = trim($datos['category'] ?? '');
+            $category = trim($data['category'] ?? '');
 
             if(count($result) === 0)
             {

@@ -53,6 +53,7 @@
             $html .= '<td>' . htmlspecialchars($eventDTO['price']) . '</td>';
             $html .= '<td>' . htmlspecialchars($eventDTO['location']) . '</td>';
             $html .= '<td>' . htmlspecialchars($eventDTO['category']) . '</td>';
+            $html .= '<td><a href="joinEvent.php?id=' . htmlspecialchars($eventDTO['id']) . '">Apuntarse</a></td>';
             $html .= '</tr>';
         }
 

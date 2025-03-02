@@ -20,9 +20,14 @@
             return $events;
         }
 
+ 
         public function registerEvent($registerEventDTO)
         {
             // Implementar la logica de acceso a la base de datos para registrar un evento
+        }
+
+        public function joinEvent($joinEventDTO)
+        {
             return true;
         }
         
