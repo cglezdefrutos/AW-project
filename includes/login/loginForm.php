@@ -55,7 +55,7 @@ EOF;
         
         if (count($result) === 0) 
         {
-            $userDTO = new userDTO(0, $userName, $password);
+            $userDTO = new userDTO(0, $userName, $password, -1);
 
             $userAppService = userAppService::GetSingleton();
 
@@ -69,7 +69,8 @@ EOF;
             else 
             {
                 $_SESSION["login"] = true;
-                $_SESSION["nombre"] = $userName;
+                $_SESSION["username"] = $foundedUserDTO->username();
+                $_SESSION["usertype"] = $foundedUserDTO->type();
 
                 $result = 'index.php';
             }

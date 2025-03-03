@@ -95,18 +95,22 @@ EOF;
                 $createdUserDTO = $userAppService->create($userDTO);
 
                 $_SESSION["login"] = true;
-                $_SESSION["username"] = $userName;
-                $_SESSION["usertype"] = $userType;
+                $_SESSION["username"] = $createdUserDTO->username();
+                $_SESSION["usertype"] = $createdUserDTO->type();
 
                 $result = 'index.php';
 
-                $app = application::getInstance();
+
+                if(false){ //poner en false para no conectarse a la base de datos
+                    $app = application::getInstance();
                 
-                $message = "Se ha registrado exitosamente como " . 
-                            ($userType == 0 ? "Cliente" : ($userType == 1 ? "Proveedor" : "Entrenador")) . 
-                            ", Bienvenido {$userName}!";
-                
-                $app->putAtributoPeticion('mensaje', $message);
+                    $message = "Se ha registrado exitosamente como " . 
+                                ($userType == 0 ? "Cliente" : ($userType == 1 ? "Proveedor" : "Entrenador")) . 
+                                ", Bienvenido {$userName}!";
+                   
+                    $app->putAtributoPeticion('mensaje', $message);
+                }
+
             }
             catch(userAlreadyExistException $e)
             {

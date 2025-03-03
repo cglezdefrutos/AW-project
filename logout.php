@@ -6,9 +6,9 @@ unset($_SESSION);
 
 session_destroy(); 
 
-$tituloPagina = 'Salir del sistema';
+$titlePage = 'Salir del sistema';
 
-$contenidoPrincipal=<<<EOS
+$mainContent=<<<EOS
 	<h1>Hasta pronto!</h1>
 EOS;
 
