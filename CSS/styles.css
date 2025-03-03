@@ -138,11 +138,12 @@ form legend {
 }
 
 form label {
-    display: block;
-    margin-bottom: 5px;
+    margin-right: 10px;;
+    margin-bottom: 15px;
 }
 
 form input[type="text"],
+form input[type="password"],
 form input[type="email"],
 form input[type="tel"],
 form input[type="date"],
@@ -157,6 +158,7 @@ form select {
 }
 
 form input[type="text"]:focus,
+form input[type="password"]:focus,
 form input[type="email"]:focus,
 form input[type="tel"]:focus,
 form input[type="date"]:focus,
