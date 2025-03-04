@@ -53,10 +53,10 @@
             $conn = application::getInstance()->getConnectionDb();
 
             // Implementar la logica de acceso a la base de datos para apuntar a un usuario a un evento
-            $stmt = $conn->prepare("INSERT INTO users_events (user_id, event_id, username, email, phone) VALUES (?, ?, ?, ?, ?)");
+            $stmt = $conn->prepare("INSERT INTO users_events (user_id, event_id, user_name, user_phone) VALUES (?, ?, ?, ?)");
 
             // Asignamos los parametros
-            $stmt->bind_param("iissi", $joinEventDTO->getUserId(), $joinEventDTO->getEventId(), $joinEventDTO->getUsername(), $joinEventDTO->getUserEmail(), $joinEventDTO->getUserPhone());
+            $stmt->bind_param("iisi", $joinEventDTO->getUserId(), $joinEventDTO->getEventId(), $joinEventDTO->getUserName(), $joinEventDTO->getUserPhone());
 
             // Ejecutamos la consulta
             $stmt->execute();

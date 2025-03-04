@@ -34,11 +34,11 @@
 
         public function joinEvent($data)
         {
-            /* $IEventDAO = eventFactory::CreateEvent();
+            $IEventDAO = eventFactory::CreateEvent();
 
-            $joinEventDTO = new joinEventDTO($data['user_id'], $data['event_id'], $data['name'], $data['email'], $data['phone']);
+            $joinEventDTO = new joinEventDTO($data['user_id'], $data['event_id'], $data['user_name'], $data['user_phone']);
 
-            return $IEventDAO->joinEvent($joinEventDTO); */
+            return $IEventDAO->joinEvent($joinEventDTO);
         }
     }  
      

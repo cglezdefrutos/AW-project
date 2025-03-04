@@ -26,12 +26,12 @@
 
             $html .= htmlspecialchars($initialData['name'] ?? '') . '">';
 
-            $html .= <<<EOF
+            /* $html .= <<<EOF
                     <label for="email">Correo Electrónico:</label>
                     <input type="email" id="email" name="email" required value="
             EOF;
             
-            $html .= htmlspecialchars($initialData['email'] ?? '') . '">';
+            $html .= htmlspecialchars($initialData['email'] ?? '') . '">'; */
 
             $html .= <<<EOF
                     <label for="phone">Teléfono:</label>
@@ -58,8 +58,8 @@
             $username =  trim($data['name'] ?? '');
             $username = filter_var($username, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            $email = trim($data['email'] ?? '');
-            $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+            /* $email = trim($data['email'] ?? '');
+            $email = filter_var($email, FILTER_SANITIZE_EMAIL); */
 
             $phone = trim($data['phone'] ?? '');
             $phone = filter_var($phone, FILTER_SANITIZE_NUMBER_INT);
@@ -71,10 +71,9 @@
             {
                 $process_data = array(
                     'user_id' => $_SESSION['user_id'],
-                    'username' => $username,
-                    'email' => $email,
-                    'phone' => $phone,
-                    'event_id' => $eventId
+                    'event_id' => $eventId,
+                    'user_name' => $username,
+                    'user_phone' => $phone,
                 );
 
                 $eventAppService = eventAppService::GetSingleton();
