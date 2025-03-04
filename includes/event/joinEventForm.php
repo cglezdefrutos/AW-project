@@ -69,24 +69,32 @@
 
             if(count($result) === 0)
             {
-                $process_data = array(
-                    'user_id' => $_SESSION['user_id'],
-                    'event_id' => $eventId,
-                    'user_name' => $username,
-                    'user_phone' => $phone,
-                );
 
-                $eventAppService = eventAppService::GetSingleton();
-                $join = $eventAppService->joinEvent($process_data);
-
-                if($join === false)
+                try 
                 {
-                    $result[] = "Error al apuntarse al evento";
-                }
-                else
+                    $process_data = array(
+                        'user_id' => $_SESSION['user_id'],
+                        'event_id' => $eventId,
+                        'user_name' => $username,
+                        'user_phone' => $phone,
+                    );
+    
+                    $eventAppService = eventAppService::GetSingleton();
+                    $join = $eventAppService->joinEvent($process_data);
+    
+                    if($join === false)
+                    {
+                        $result[] = "Error al apuntarse al evento";
+                    }
+                    else
+                    {
+                        $_SESSION["sentJoinEvent"] = true;
+                        $result = "joinEvent.php";
+                    }
+                } 
+                catch (userAlreadyJoinEventException $e) 
                 {
-                    $_SESSION["sentJoinEvent"] = true;
-                    $result = "joinEvent.php";
+                    $result[] = $e->getMessage();
                 }
             } 
 

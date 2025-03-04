@@ -2,6 +2,7 @@
     require_once("IEvent.php");
     require_once("eventDTO.php");
     require_once(__DIR__ . "/../views/common/baseDAO.php");
+    require(__DIR__ . "/../user/userAlreadyJoinEventException.php");
 
     class eventDAO extends baseDAO implements IEvent
     {
@@ -85,7 +86,14 @@
                 $stmt->close();
 
             } catch (Exception $e) {
+                
                 error_log($e->getMessage());
+
+                if($conn->sqlstate == 23000 || $conn->errno == 1062)
+                {
+                    throw new userAlreadyJoinEventException("El usuario ya está apuntado al evento");
+                }
+
                 throw $e;
             }
 
