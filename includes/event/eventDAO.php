@@ -61,9 +61,44 @@
         }
 
 
-        public function registerEvent($registerEventDTO)
+        public function registerEvent($eventDTO)
         {
-            // Implementar la logica de acceso a la base de datos para registrar un evento
+           /* try {
+                // Obtener la conexión a la base de datos
+                $conn = application::getInstance()->getConnectionDb();
+        
+                // Preparar la consulta SQL para insertar un nuevo evento
+                $stmt = $conn->prepare("INSERT INTO events (name, description, price, location, date, capacity, category) 
+                                        VALUES (?, ?, ?, ?, ?, ?, ?)");
+                if (!$stmt) {
+                    throw new Exception("Error al preparar la consulta: " . $conn->error);
+                }
+        
+                // Asignar los parámetros
+                $stmt->bind_param(
+                    "ssissis",
+                    $eventDTO->getName(),
+                    $eventDTO->getDescription(),
+                    $eventDTO->getPrice(),
+                    $eventDTO->getLocation(),
+                    $eventDTO->getDate(),
+                    $eventDTO->getCapacity(),
+                    $eventDTO->getCategory()
+                );
+        
+                // Ejecutar la consulta
+                if (!$stmt->execute()) {
+                    throw new Exception("Error al ejecutar la consulta: " . $stmt->error);
+                }
+        
+                // Cerrar la consulta
+                $stmt->close();
+        
+            } catch (Exception $e) {
+                error_log($e->getMessage());
+                throw $e;
+            }
+        */
             return true;
         }
 

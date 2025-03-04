@@ -19,7 +19,7 @@
             //    $eventDAO = new eventMock();
             //}
             
-            $eventDAO = new eventMock();
+            $eventDAO = new eventDAO();
 
             return $eventDAO;
         }

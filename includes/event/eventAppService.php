@@ -23,6 +23,16 @@
             
         } 
 
+        public function register($eventData)
+        {
+            $IEventDAO = eventFactory::CreateEvent();
+
+            $eventsDTO = new eventDTO($eventData['name'], $eventData['description'], $eventData['date'], $eventData['location'], $eventData['price'], $eventData['capacity'], $eventData['category']);
+
+            return $IEventDAO->registerEvent($eventsDTO);;
+            
+        }
+
         public function search($filters)
         {
             $IEventDAO = eventFactory::CreateEvent();
