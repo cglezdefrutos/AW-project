@@ -7,41 +7,53 @@
     {
         public function __construct()
         {
-
+            parent::__construct();
         }
         
         public function getEvents($filters = array() )
         {
-            // Tomamos la conexion a la base de datos
-            $conn = application::getInstance()->getConnectionDb();
-
-            // Implementar la logica de acceso a la base de datos para obtener los eventos que cumplan con los filtros pasados como parametro
-            $query = constructQuery($filters);
-
-            // Preparamos la consulta
-            $stmt = $conn->prepare($query[0]);
-
-            // Asignamos los parametros
-            $stmt->bind_param(str_repeat("s", count($query[1])), ...$query[1]);
-
-            // Ejecutamos la consulta
-            $stmt->execute();
-
-            // Asignamos los resultados a variables
-            $stmt->bind_result($Id, $Name, $Description, $Date, $Price, $Location, $Category);
-
-            // Creamos un array para guardar los eventos
             $events = array();
 
-            // Mientras haya resultados, los guardamos en el array
-            while ($stmt->fetch())
-            {
-                $event = new eventDTO($Id, $Name, $Description, $Date, $Price, $Location, $Category);
-                $events[] = $event;
-            }
+            try {
+                // Tomamos la conexion a la base de datos
+                $conn = application::getInstance()->getConnectionDb();
 
-            // Cerramos la consulta
-            $stmt->close();
+                // Implementar la logica de acceso a la base de datos para obtener los eventos que cumplan con los filtros pasados como parametro
+                $query = $this->constructQuery($filters);
+
+                // Preparamos la consulta
+                $stmt = $conn->prepare($query[0]);
+                if(!$stmt)
+                {
+                    throw new Exception("Error al preparar la consulta: " . $conn->error);
+                }
+
+                // Asignamos los parametros
+                $stmt->bind_param(str_repeat("s", count($query[1])), ...$query[1]);
+
+                // Ejecutamos la consulta
+                if(!$stmt->execute())
+                {
+                    throw new Exception("Error al ejecutar la consulta: " . $stmt->error);
+                }
+
+                // Asignamos los resultados a variables
+                $stmt->bind_result($Id, $Name, $Description, $Date, $Price, $Location, $Category);
+
+                // Mientras haya resultados, los guardamos en el array
+                while ($stmt->fetch())
+                {
+                    $event = new eventDTO($Id, $Name, $Description, $Date, $Price, $Location, $Category);
+                    $events[] = $event;
+                }
+
+                // Cerramos la consulta
+                $stmt->close();
+
+            } catch (Exception $e) {
+                error_log($e->getMessage());
+                throw $e;
+            }
 
             // Devolvemos el array de eventos
             return $events;
@@ -49,20 +61,33 @@
 
         public function joinEvent($joinEventDTO)
         {
-            // Tomamos la conexion a la base de datos
-            $conn = application::getInstance()->getConnectionDb();
+            try {
+                // Tomamos la conexion a la base de datos
+                $conn = application::getInstance()->getConnectionDb();
 
-            // Implementar la logica de acceso a la base de datos para apuntar a un usuario a un evento
-            $stmt = $conn->prepare("INSERT INTO users_events (user_id, event_id, user_name, user_phone) VALUES (?, ?, ?, ?)");
+                // Implementar la logica de acceso a la base de datos para apuntar a un usuario a un evento
+                $stmt = $conn->prepare("INSERT INTO event_participants (user_id, event_id, user_name, user_phone) VALUES (?, ?, ?, ?)");
+                if(!$stmt)
+                {
+                    throw new Exception("Error al preparar la consulta: " . $conn->error);
+                }
 
-            // Asignamos los parametros
-            $stmt->bind_param("iisi", $joinEventDTO->getUserId(), $joinEventDTO->getEventId(), $joinEventDTO->getUserName(), $joinEventDTO->getUserPhone());
+                // Asignamos los parametros
+                $stmt->bind_param("iisi", $joinEventDTO->getUserId(), $joinEventDTO->getEventId(), $joinEventDTO->getUserName(), $joinEventDTO->getUserPhone());
 
-            // Ejecutamos la consulta
-            $stmt->execute();
+                // Ejecutamos la consulta
+                if(!$stmt->execute())
+                {
+                    throw new Exception("Error al ejecutar la consulta: " . $stmt->error);
+                }
 
-            // Cerramos la consulta
-            $stmt->close();
+                // Cerramos la consulta
+                $stmt->close();
+
+            } catch (Exception $e) {
+                error_log($e->getMessage());
+                throw $e;
+            }
 
             return true;
         }
@@ -74,7 +99,7 @@
 
             foreach ($filters as $key => $value) {
                 $query .= $key . " = ? AND ";
-                $args[] = realEscapeString($value);
+                $args[] = $this->realEscapeString($value);
             }
 
             $query = substr($query, 0, -4);
