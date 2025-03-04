@@ -4,16 +4,14 @@
     {
         private $userId;
         private $eventId;
-        private $username;
-        private $userEmail;
+        private $userName;
         private $userPhone;
 
-        public function __construct($userId, $eventId, $username, $userEmail, $userPhone)
+        public function __construct($userId, $eventId, $userName, $userPhone)
         {
             $this->userId = $userId;
             $this->eventId = $eventId;
-            $this->username = $username;
-            $this->userEmail = $userEmail;
+            $this->userName = $userName;
             $this->userPhone = $userPhone;
         }
 
@@ -27,14 +25,9 @@
             return $this->eventId;
         }
 
-        public function getUsername()
+        public function getUserName()
         {
-            return $this->username;
-        }
-
-        public function getUserEmail()
-        {
-            return $this->userEmail;
+            return $this->userName;
         }
 
         public function getUserPhone()
@@ -52,14 +45,9 @@
             $this->eventId = $eventId;
         }
 
-        public function setUsername($username)
+        public function setUserName($username)
         {
             $this->username = $username;
-        }
-
-        public function setUserEmail($userEmail)
-        {
-            $this->userEmail = $userEmail;
         }
 
         public function setUserPhone($userPhone)

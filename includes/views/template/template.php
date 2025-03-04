@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/AW-project/CSS/styles.css" />
+    <link rel="icon" type="image/png" href="/AW-project/img/logo_thebalance.png">
     <title><?=$titlePage?></title>
 </head>
 <body>
