@@ -7,19 +7,17 @@
     {
         public static function CreateEvent() : IEvent
         {
-            //$eventDAO = false;
-            //$config = "";
+            $eventDAO = false;
+            $config = "DAO";
 
-            //if ($config == "DAO")
-            //{
-            //    $eventDAO = new eventDAO();
-            //}
-            //else
-            //{
-            //    $eventDAO = new eventMock();
-            //}
-            
-            $eventDAO = new eventMock();
+            if ($config === "DAO")
+            {
+                $eventDAO = new eventDAO();
+            }
+            else
+            {
+                $eventDAO = new eventMock();
+            }
 
             return $eventDAO;
         }

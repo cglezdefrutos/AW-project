@@ -10,7 +10,7 @@
     $titlePage = "Apuntarse a un evento";
     $mainContent = "";
 
-    if (!isset($_SESSION["sentJoinEvent"])) 
+    if (!isset($_SESSION["sentJoinEvent"]) || $_SESSION["sentJoinEvent"] == false) 
     {
         $eventId = $_GET['id'];
 
