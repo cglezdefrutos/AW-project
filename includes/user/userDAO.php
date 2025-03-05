@@ -14,7 +14,7 @@ class userDAO extends baseDAO implements IUser
 
     public function login($userDTO)
     {
-        $foundedUserDTO = $this->searchUser($userDTO->username());
+        $foundedUserDTO = $this->searchUser($userDTO->email());
         
         if ($foundedUserDTO && self::testHashPassword( $userDTO->password(), $foundedUserDTO->password())) 
         {
@@ -24,25 +24,29 @@ class userDAO extends baseDAO implements IUser
         return false;
     }
 
-    private function searchUser($username)
+    private function searchUser($email)
     {
-        $escUserName = $this->realEscapeString($username);
+        $escemail = $this->realEscapeString($email);
 
         $conn = application::getInstance()->getConexionBd();
 
-        $query = "SELECT Id, UserName, Password, Type FROM Usuarios WHERE username = ?";
+        if (!$conn) {
+            throw new Exception("No se pudo establecer la conexión a la base de datos.");
+        }
+
+        $query = "SELECT id, email, password, usertype FROM users WHERE email = ?";
 
         $stmt = $conn->prepare($query);
 
-        $stmt->bind_param("s", $escUserName);
+        $stmt->bind_param("s", $escemail);
 
         $stmt->execute();
 
-        $stmt->bind_result($Id, $UserName, $Password, $Type);
+        $stmt->bind_result($id, $email, $password, $usertype);
 
         if ($stmt->fetch())
         {
-            $user = new userDTO($Id, $UserName, $Password, $Type);
+            $user = new userDTO($id, $email, $password, $usertype);
 
             $stmt->close();
 
@@ -58,25 +62,29 @@ class userDAO extends baseDAO implements IUser
 
         try
         {
-            $escUserName = $this->realEscapeString($userDTO->userName());
+            $escemail = $this->realEscapeString($userDTO->email());
 
             $hashedPassword = self::hashPassword($userDTO->password());
 
-            $userType = (int)$userDTO->type();
+            $userType = (int)$userDTO->usertype();
 
             $conn = application::getInstance()->getConexionBd();
 
-            $query = "INSERT INTO Usuarios(UserName, Password, Type) VALUES (?, ?, ?)";
+            if (!$conn) {
+                throw new Exception("No se pudo establecer la conexión a la base de datos.");
+            }
+
+            $query = "INSERT INTO users(email, password, usertype) VALUES (?, ?, ?)";
 
             $stmt = $conn->prepare($query);
 
-            $stmt->bind_param("ssi", $escUserName, $hashedPassword, $userType);
+            $stmt->bind_param("ssi", $escemail, $hashedPassword, $userType);
 
             if ($stmt->execute())
             {
                 $idUser = $conn->insert_id;
                 
-                $createdUserDTO = new userDTO($idUser, $userDTO->userName(), $userDTO->password(), $userType);
+                $createdUserDTO = new userDTO($idUser, $escemail, $hashedPassword, $userType);
 
                 return $createdUserDTO;
             }
@@ -87,7 +95,7 @@ class userDAO extends baseDAO implements IUser
 
             if ($conn->sqlstate == 23000) 
             { 
-                throw new userAlreadyExistException("Ya existe el usuario '{$userDTO->userName()}'");
+                throw new userAlreadyExistException("Ya existe el usuario '{$userDTO->email()}'");
             }
 
             throw $e;

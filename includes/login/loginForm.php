@@ -12,17 +12,17 @@ class loginForm extends baseForm
     
     protected function CreateFields($data)
     {
-        $userName = '';
+        $email = '';
         
         if ($data) 
         {
-            $userName = isset($data['userName']) ? $data['userName'] : $userName;
+            $email = isset($data['email']) ? $data['email'] : $email;
         }
 
         $html = <<<EOF
         <fieldset>
             <legend>Usuario y contraseña</legend>
-            <p><label>Nombre:</label> <input type="text" name="userName" value="$userName"/></p>
+            <p><label>Email:</label> <input type="email" name="email" value="$email"/></p>
             <p><label>Password:</label> <input type="password" name="password" /></p>
             <button type="submit" name="login">Entrar</button>
         </fieldset>
@@ -35,13 +35,13 @@ EOF;
     {
         $result = array();
 
-        $userName = trim($data['userName'] ?? '');
+        $email = trim($data['email'] ?? '');
         
-        $userName = filter_var($userName, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $email = filter_var($email, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 
-        if ( empty($userName) ) 
+        if ( empty($email) ) 
         {
-            $result[] = "El nombre de usuario no puede estar vacío";
+            $result[] = "El email de usuario no puede estar vacío";
         }
         
         $password = trim($data['password'] ?? '');
@@ -55,7 +55,7 @@ EOF;
         
         if (count($result) === 0) 
         {
-            $userDTO = new userDTO(0, $userName, $password, -1);
+            $userDTO = new userDTO(0, $email, $password, -1);
 
             $userAppService = userAppService::GetSingleton();
 
@@ -69,8 +69,8 @@ EOF;
             else 
             {
                 $_SESSION["login"] = true;
-                $_SESSION["username"] = $foundedUserDTO->username();
-                $_SESSION["usertype"] = $foundedUserDTO->type();
+                $_SESSION["email"] = $foundedUserDTO->email();
+                $_SESSION["usertype"] = $foundedUserDTO->usertype();
 
                 $result = 'index.php';
             }

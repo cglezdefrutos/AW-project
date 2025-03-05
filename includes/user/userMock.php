@@ -14,13 +14,13 @@ class userMock implements IUser
     public function login($userDTO)
     {
         // Simula que el usuario existe y devuelve un userDTO ficticio
-        return new userDTO(1, "Pablo", "Feo", 0); // 0 = Cliente
+        return new userDTO(1, "e@e.es", "Feo", 0); // 0 = Cliente
     }
 
     public function create($userDTO)
     {
         // Simula que el usuario se ha registrado y devuelve un userDTO con un ID ficticio
-        return new userDTO(2, $userDTO->username(), $userDTO->password(), $userDTO->type());
+        return new userDTO(2, $userDTO->email(), $userDTO->password(), $userDTO->usertype());
     }
 }
 
