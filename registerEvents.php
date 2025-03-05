@@ -13,15 +13,28 @@
     $titlePage = "Registrar eventos";
     $mainContent = "";
 
+    $userDTO = json_decode($_SESSION["user"], true);
+    $user_email = htmlspecialchras($userDTO["email"]);
+    $user_type = htmlspecialchras($userDTO["usertype"]);
+
     if (!isset($_SESSION["register"]) || $_SESSION["register"] === false) 
     {
-        $form = new registerEventForm();
-        $htmlRegisterEventForm = $form->Manage();
-
-        $mainContent = <<<EOS
-            <h1>Registre un evento</h1>
-            $htmlRegisterEventForm
+        if ($user_type != 2) //type del provider es 
+        { 
+            $mainContent = <<<EOS
+            <h1>No es posible registrar un evento si no se es proveedor.</h1>
         EOS;
+        } 
+        else 
+        {
+            $form = new registerEventForm($user_email);
+            $htmlRegisterEventForm = $form->Manage();
+    
+            $mainContent = <<<EOS
+                <h1>Registre un evento</h1>
+                $htmlRegisterEventForm
+            EOS;
+        }
     } 
     else 
     {

@@ -4,9 +4,12 @@
 
     class registerEventForm extends baseForm
     {
-        public function __construct()
+        private $user_email;
+
+        public function __construct($user_email)
         {
             parent::__construct('registerEventForm');
+            $this->user_email = $user_email;
         }
 
         protected function CreateFields($initialData)
@@ -95,29 +98,6 @@
             $category = trim($data['category'] ?? '');
             $category = filter_var($category, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            // Validación de campos obligatorios
-            if(empty($eventName)) {
-                $result[] = 'El nombre del evento es obligatorio.';
-            }
-            if(empty($description)) {
-                $result[] = 'La descripción es obligatoria.';
-            }
-            if(empty($date)) {
-                $result[] = 'La fecha es obligatoria.';
-            }
-            if(empty($location)) {
-                $result[] = 'La localización es obligatoria.';
-            }
-            if(empty($price)) {
-                $result[] = 'El precio es obligatorio.';
-            }
-            if(empty($capacity)) {
-                $result[] = 'La capacidad es obligatoria.';
-            }
-            if(empty($category)) {
-                $result[] = 'La categoría es obligatoria.';
-            }
-
             if(count($result) === 0)
             {
                 // Creamos un array con los datos del nuevo evento
@@ -129,6 +109,7 @@
                 $eventData['price']      = $price;
                 $eventData['capacity']   = $capacity;
                 $eventData['category']   = $category;
+                $eventData['provider']   = $this->user_email;
 
                 // Obtenemos la instancia del servicio de eventos
                 $eventAppService = eventAppService::GetSingleton();

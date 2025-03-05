@@ -8,8 +8,10 @@
         private $price;
         private $location;
         private $category;
+        private $capacity;
+        private $email_provider;
 
-        public function __construct($id, $name, $desc, $date, $price, $location, $category)
+        public function __construct($id, $name, $desc, $date, $price, $location, $category, $capacity, $email_provider)
         {
             $this->id = $id;
             $this->name = $name;
@@ -18,6 +20,8 @@
             $this->price = $price;
             $this->location = $location;
             $this->category = $category;
+            $this->capacity = $capacity;
+            $this->email_provider = $email_provider;
         }
 
         public function getId()
@@ -55,6 +59,16 @@
             return $this->category;
         }
 
+        public function getCapacity()
+        {
+            return $this->capacity;
+        }
+
+        public function getEmailProvider()
+        {
+            return $this->email_provider;
+        }
+
         public function setId($id)
         {
             $this->id = $id;
@@ -89,6 +103,16 @@
         {
             $this->category = $category;
         }        
+
+        public function setCapacity($capacity)
+        {
+            $this->capacity = $capacity;
+        }
+
+        public function setEmailProvider($email_provider)
+        {
+            $this->email_provider = $email_provider;
+        }
         
         public function jsonSerialize()
         {
