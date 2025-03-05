@@ -1,6 +1,6 @@
 <?php
 
-class userDTO
+class userDTO implements JsonSerializable
 {
     private $id;
 
@@ -37,6 +37,11 @@ class userDTO
     public function usertype()
     {
         return $this->usertype;
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }
 ?>
