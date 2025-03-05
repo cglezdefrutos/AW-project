@@ -2,6 +2,7 @@
     require_once("IEvent.php");
     require_once("eventFactory.php");
     require_once("eventDTO.php");
+    require_once("joinEventDTO.php");
 
     class eventAppService
     {
