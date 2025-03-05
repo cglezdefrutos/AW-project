@@ -3,7 +3,9 @@
     {
         if (isset($_SESSION["login"]) && ($_SESSION["login"]===true)) 
         {
-            echo "Bienvenido, " . $_SESSION["email"] . ". <a href='logout.php'>(salir)</a>";
+            $user = json_decode($_SESSION["user"], true);
+            /* echo "Bienvenido, " . $_SESSION["email"] . ". <a href='logout.php'>(salir)</a>"; */
+            echo "Bienvenido, " . $user["email"] . ". <a href='logout.php'>(salir)</a>";
         } 
         else 
         {
