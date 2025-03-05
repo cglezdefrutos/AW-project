@@ -13,13 +13,20 @@
     $titlePage = "Registrar eventos";
     $mainContent = "";
 
-    $userDTO = json_decode($_SESSION["user"], true);
-    $user_email = htmlspecialchars($userDTO["email"]);
-    $user_type = htmlspecialchars($userDTO["usertype"]);
-
-    if (!isset($_SESSION["register"]) || $_SESSION["register"] === false) 
+    if(!isset($_SESSION["user"])) 
     {
-        if ($user_type != 2) //type del provider es 
+        $mainContent = <<<EOS
+            <h1>No es posible registrar un evento si no has iniciado sesión.</h1>
+        EOS;
+    } 
+    else if (!isset($_SESSION["register"]) || $_SESSION["register"] === false) 
+    {
+        $userDTO = json_decode($_SESSION["user"], true);
+        $user_email = htmlspecialchars($userDTO["email"]);
+        $user_type = htmlspecialchars($userDTO["usertype"]);
+
+        // Comprobar si el usuario es proveedor o administrador
+        if (!isset($user_type) || $user_type != 2 ||  $user_type != 0)
         { 
             $mainContent = <<<EOS
             <h1>No es posible registrar un evento si no se es proveedor.</h1>
