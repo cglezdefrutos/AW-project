@@ -26,7 +26,7 @@
         $user_type = htmlspecialchars($userDTO["usertype"]);
 
         // Comprobar si el usuario es proveedor o administrador
-        if (!isset($user_type) || $user_type != 2 ||  $user_type != 0)
+        if ( $user_type != 2 &&  $user_type != 0)
         { 
             $mainContent = <<<EOS
             <h1>No es posible registrar un evento si no se es proveedor.</h1>

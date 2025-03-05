@@ -28,7 +28,7 @@
         {
             $IEventDAO = eventFactory::CreateEvent();
 
-            $eventsDTO = new eventDTO(0, $eventData['name'], $eventData['description'], $eventData['date'], $eventData['location'], $eventData['price'], $eventData['capacity'], $eventData['category'], $eventData['provider']);
+            $eventsDTO = new eventDTO(0, $eventData['name'], $eventData['description'], $eventData['date'], $eventData['price'], $eventData['location'], $eventData['capacity'], $eventData['category'], $eventData['provider']);
 
             return $IEventDAO->registerEvent($eventsDTO);;
             

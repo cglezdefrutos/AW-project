@@ -11,7 +11,7 @@
         private $capacity;
         private $email_provider;
 
-        public function __construct($id, $name, $desc, $date, $price, $location, $category, $capacity, $email_provider)
+        public function __construct($id, $name, $desc, $date, $price, $location, $capacity, $category, $email_provider)
         {
             $this->id = $id;
             $this->name = $name;
@@ -19,8 +19,8 @@
             $this->date = $date;
             $this->price = $price;
             $this->location = $location;
-            $this->category = $category;
             $this->capacity = $capacity;
+            $this->category = $category;
             $this->email_provider = $email_provider;
         }
 
