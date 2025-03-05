@@ -6,7 +6,7 @@
     $titlePage = "Buscar eventos";
     $mainContent = "";
 
-    if (!isset($_SESSION["search"]))
+    if (!isset($_SESSION["search"]) || $_SESSION["search"] == false) 
     {
         $form = new searchEventForm();
 

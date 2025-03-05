@@ -2,15 +2,16 @@
     require_once("includes/config.php");
     require_once("includes/event/joinEventForm.php");
 
-/*     echo "Session ID en joinEvent.php: " . session_id() . "<br>";
+    echo "Session ID en joinEvent.php: " . session_id() . "<br>";
     echo "Contenido de la sesión: ";
     var_dump($_SESSION);
-    var_dump($_SESSION["sentJoinEvent"]); */
+    var_dump($_SESSION["sentJoinEvent"]);
+    
 
     $titlePage = "Apuntarse a un evento";
     $mainContent = "";
 
-    if (!isset($_SESSION["sentJoinEvent"])) 
+    if (!isset($_SESSION["sentJoinEvent"]) || $_SESSION["sentJoinEvent"] == false) 
     {
         $eventId = $_GET['id'];
 

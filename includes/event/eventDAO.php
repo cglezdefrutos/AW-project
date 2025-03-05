@@ -20,17 +20,20 @@
                 $conn = application::getInstance()->getConnectionDb();
 
                 // Implementar la logica de acceso a la base de datos para obtener los eventos que cumplan con los filtros pasados como parametro
-                $query = $this->constructQuery($filters);
+                $queryData = $this->constructSearchQuery($filters);
 
                 // Preparamos la consulta
-                $stmt = $conn->prepare($query[0]);
+                $stmt = $conn->prepare($queryData['query']);
                 if(!$stmt)
                 {
                     throw new Exception("Error al preparar la consulta: " . $conn->error);
                 }
 
-                // Asignamos los parametros
-                $stmt->bind_param(str_repeat("s", count($query[1])), ...$query[1]);
+                // Asignamos los parametros solo si hay parámetros para enlazar
+                if (!empty($queryData['params'])) 
+                {
+                    $stmt->bind_param($queryData['types'], ...$queryData['params']);
+                }
 
                 // Ejecutamos la consulta
                 if(!$stmt->execute())
@@ -39,7 +42,7 @@
                 }
 
                 // Asignamos los resultados a variables
-                $stmt->bind_result($Id, $Name, $Description, $Date, $Price, $Location, $Category);
+                $stmt->bind_result($Id, $Name, $Description, $Price, $Location, $Date, $Capacity, $Category);
 
                 // Mientras haya resultados, los guardamos en el array
                 while ($stmt->fetch())
@@ -142,19 +145,70 @@
             return true;
         }
 
-        private function constructQuery($filters)
+        private function constructSearchQuery($filters)
         {
-            $query = "SELECT * FROM eventos WHERE ";
+            $query = "SELECT * FROM events WHERE ";
             $args = array();
+            $types = '';
 
             foreach ($filters as $key => $value) {
-                $query .= $key . " = ? AND ";
-                $args[] = $this->realEscapeString($value);
+                
+                if($value == '')
+                {
+                    continue;
+                }
+            
+                switch ($key) {
+                    case 'name':
+                        $query .= "name LIKE ? AND ";
+                        $args[] = "%" . $this->realEscapeString($value) . "%";
+                        $types .= 's';
+                        break;
+                    case 'start_date':  
+                        $query .= "date >= ? AND ";
+                        $args[] = $this->realEscapeString($value);
+                        $types .= 's';
+                        break;  
+                    case 'end_date':            
+                        $query .= "date <= ? AND ";
+                        $args[] = $this->realEscapeString($value);
+                        $types .= 's';
+                        break;
+                    case 'min_price':
+                        $query .= "price >= ? AND ";
+                        $args[] = $this->realEscapeString($value);
+                        $types .= 'd';
+                        break;
+                    case 'max_price':
+                        $query .= "price <= ? AND ";
+                        $args[] = $this->realEscapeString($value);
+                        $types .= 'd';
+                        break;
+                    case 'location':
+                        $query .= "location LIKE ? AND ";
+                        $args[] = "%" . $this->realEscapeString($value) . "%";
+                        $types .= 's';
+                        break;
+                    case 'category':
+                        $query .= "category = ? AND ";
+                        $args[] = $this->realEscapeString($value);
+                        $types .= 's';
+                        break;
+                }
             }
 
-            $query = substr($query, 0, -4);
+            // Eliminar el último " AND " si hay filtros
+            if (!empty($args)) 
+            {
+                $query = substr($query, 0, -4);
+            } 
+            // Si no hay filtros, eliminar la cláusula WHERE
+            else 
+            {
+                $query = "SELECT * FROM events";
+            }
 
-            return array($query, $args);
+            return array('query' => $query, 'params' => $args, 'types' => $types);
         }   
 
         

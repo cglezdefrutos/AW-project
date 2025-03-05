@@ -67,10 +67,10 @@
             
             if (! $this->conn ) 
             {
-                $dBHost = $this->dbConnectionData['host'];
-                $dBUser = $this->dbConnectionData['user'];
-                $dBPass = $this->dbConnectionData['pass'];
-                $dB     = $this->dbConnectionData['db'];
+                $dbHost = $this->dbConnectionData['host'];
+                $dbUser = $this->dbConnectionData['user'];
+                $dbPass = $this->dbConnectionData['pass'];
+                $db     = $this->dbConnectionData['db'];
                 
                 //$driver = new mysqli_driver();
                 
