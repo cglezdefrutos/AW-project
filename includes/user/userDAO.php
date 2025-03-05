@@ -28,7 +28,7 @@ class userDAO extends baseDAO implements IUser
     {
         $escemail = $this->realEscapeString($email);
 
-        $conn = application::getInstance()->getConexionBd();
+        $conn = application::getInstance()->getConnectionDb();
 
         if (!$conn) {
             throw new Exception("No se pudo establecer la conexión a la base de datos.");
@@ -68,7 +68,7 @@ class userDAO extends baseDAO implements IUser
 
             $userType = (int)$userDTO->usertype();
 
-            $conn = application::getInstance()->getConexionBd();
+            $conn = application::getInstance()->getConnectionDb();
 
             if (!$conn) {
                 throw new Exception("No se pudo establecer la conexión a la base de datos.");

@@ -108,7 +108,7 @@ EOF;
                                 ($userType == 0 ? "Cliente" : ($userType == 1 ? "Proveedor" : "Entrenador")) . 
                                 ", Bienvenido {$email}!";
                    
-                    $app->putAtributoPeticion('mensaje', $message);
+                    $app->putRequestAttribute('mensaje', $message);
                 }
 
             }
