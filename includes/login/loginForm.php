@@ -68,9 +68,11 @@ EOF;
             } 
             else 
             {
+                $userJSON = json_encode($foundedUserDTO);
                 $_SESSION["login"] = true;
-                $_SESSION["email"] = $foundedUserDTO->email();
-                $_SESSION["usertype"] = $foundedUserDTO->usertype();
+                $_SESSION["user"] = $userJSON;
+               /*  $_SESSION["email"] = $foundedUserDTO->email();
+                $_SESSION["usertype"] = $foundedUserDTO->usertype(); */
 
                 $result = 'index.php';
             }

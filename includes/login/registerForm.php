@@ -13,7 +13,7 @@ class registerForm extends baseForm
     protected function CreateFields($data)
     {
         $email = '';
-        $userType = '0'; // Valor predeterminado (Cliente)
+        $userType = '1'; // Valor predeterminado (Cliente)
         
         if ($data) 
         {
@@ -30,16 +30,16 @@ class registerForm extends baseForm
             
             <legend>Selecciona tu tipo de usuario:</legend>
             <p>
-                <input type="radio" name="usertype" value="0" id="client" 
-                ".($userType === '0' ? 'checked' : '')."> 
+                <input type="radio" name="usertype" value="1" id="client" 
+                ".($userType === '1' ? 'checked' : '')."> 
                 <label for="client">Cliente</label>
 
-                <input type="radio" name="usertype" value="1" id="supplier" 
-                ".($userType === '1' ? 'checked' : '')."> 
+                <input type="radio" name="usertype" value="2" id="supplier" 
+                ".($userType === '2' ? 'checked' : '')."> 
                 <label for="supplier">Proveedor</label>
 
-                <input type="radio" name="usertype" value="2" id="trainer" 
-                ".($userType === '2' ? 'checked' : '')."> 
+                <input type="radio" name="usertype" value="3" id="trainer" 
+                ".($userType === '3' ? 'checked' : '')."> 
                 <label for="trainer">Entrenador</label>
             </p>
 
@@ -94,9 +94,13 @@ EOF;
 
                 $createdUserDTO = $userAppService->create($userDTO);
 
+                $userJSON = json_encode($createdUserDTO);
                 $_SESSION["login"] = true;
+                $_SESSION["user"] = $userJSON;
+
+                /* $_SESSION["login"] = true;
                 $_SESSION["email"] = $createdUserDTO->email();
-                $_SESSION["usertype"] = $createdUserDTO->usertype();
+                $_SESSION["usertype"] = $createdUserDTO->usertype(); */
 
                 $result = 'index.php';
 
@@ -105,7 +109,7 @@ EOF;
                     $app = application::getInstance();
                 
                     $message = "Se ha registrado exitosamente como " . 
-                                ($userType == 0 ? "Cliente" : ($userType == 1 ? "Proveedor" : "Entrenador")) . 
+                                ($userType == 1 ? "Cliente" : ($userType == 2 ? "Proveedor" : "Entrenador")) . 
                                 ", Bienvenido {$email}!";
                    
                     $app->putRequestAttribute('mensaje', $message);
