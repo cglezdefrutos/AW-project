@@ -3,7 +3,7 @@
     {
         if (isset($_SESSION["login"]) && ($_SESSION["login"]===true)) 
         {
-            echo "Bienvenido, " . $_SESSION['username'] . ". <a href='logout.php'>(salir)</a>";
+            echo "Bienvenido, " . $_SESSION["email"] . ". <a href='logout.php'>(salir)</a>";
         } 
         else 
         {

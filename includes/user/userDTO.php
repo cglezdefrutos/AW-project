@@ -4,19 +4,19 @@ class userDTO
 {
     private $id;
 
-    private $username;
+    private $email;
 
     private $password;
 
-    private $type;
+    private $usertype;
 
 
-    public function __construct($id, $username, $password, $type)
+    public function __construct($id, $email, $password, $usertype)
     {
         $this->id = $id;
-        $this->username = $username;
+        $this->email = $email;
         $this->password = $password;
-        $this->type = $type;
+        $this->usertype = $usertype;
     }
 
     public function id()
@@ -24,9 +24,9 @@ class userDTO
         return $this->id;
     }
 
-    public function username()
+    public function email()
     {
-        return $this->username;
+        return $this->email;
     }
 
     public function password()
@@ -34,9 +34,9 @@ class userDTO
         return $this->password;
     }
 
-    public function type()
+    public function usertype()
     {
-        return $this->type;
+        return $this->usertype;
     }
 }
 ?>

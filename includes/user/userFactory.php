@@ -9,7 +9,7 @@ class userFactory
     {
         $userDAO = false;
 
-        if (false)
+        if (true)
         {
             $userDAO = new userDAO();
         }
