@@ -146,6 +146,116 @@
             return true;
         }
 
+        public function getEventById($eventId)
+        {
+            $event = null;
+
+            try {
+                // Tomamos la conexion a la base de datos
+                $conn = application::getInstance()->getConnectionDb();
+
+                // Implementar la logica de acceso a la base de datos para obtener un evento por su id
+                $stmt = $conn->prepare("SELECT * FROM events WHERE id = ?");
+                if(!$stmt)
+                {
+                    throw new Exception("Error al preparar la consulta: " . $conn->error);
+                }
+
+                // Asignamos los parametros
+                $stmt->bind_param("i", $eventId);
+
+                // Ejecutamos la consulta
+                if(!$stmt->execute())
+                {
+                    throw new Exception("Error al ejecutar la consulta: " . $stmt->error);
+                }
+
+                // Asignamos los resultados a variables
+                $stmt->bind_result($Id, $Name, $Description, $Price, $Location, $Date, $Capacity, $Category, $EmailProvider);
+
+                // Si hay resultados, los guardamos en la variable $event
+                if ($stmt->fetch())
+                {
+                    $event = new eventDTO($Id, $Name, $Description, $Date, $Price, $Location, $Capacity, $Category, $EmailProvider);
+                }
+
+                // Cerramos la consulta
+                $stmt->close();
+
+            } catch (Exception $e) {
+                error_log($e->getMessage());
+                throw $e;
+            }
+
+            return $event;
+        }
+
+        public function updateEvent($eventDTO)
+        {
+            try {
+                // Tomamos la conexion a la base de datos
+                $conn = application::getInstance()->getConnectionDb();
+
+                // Implementar la logica de acceso a la base de datos para actualizar un evento
+                $stmt = $conn->prepare("UPDATE events SET name = ?, description = ?, price = ?, location = ?, date = ?, capacity = ?, category = ? WHERE id = ?");
+                if(!$stmt)
+                {
+                    throw new Exception("Error al preparar la consulta: " . $conn->error);
+                }
+
+                // Asignamos los parametros
+                $stmt->bind_param("ssissisi", $eventDTO->getName(), $eventDTO->getDesc(), $eventDTO->getPrice(), $eventDTO->getLocation(), $eventDTO->getDate(), $eventDTO->getCapacity(), $eventDTO->getCategory(), $eventDTO->getId());
+
+                // Ejecutamos la consulta
+                if(!$stmt->execute())
+                {
+                    throw new Exception("Error al ejecutar la consulta: " . $stmt->error);
+                }
+
+                // Cerramos la consulta
+                $stmt->close();
+
+            } catch (Exception $e) {
+                error_log($e->getMessage());
+                throw $e;
+            }
+
+            return true;
+        }
+
+        public function deleteEvent($eventId)
+        {
+            try {
+                // Tomamos la conexion a la base de datos
+                $conn = application::getInstance()->getConnectionDb();
+
+                // Implementar la logica de acceso a la base de datos para eliminar un evento
+                $stmt = $conn->prepare("DELETE FROM events WHERE id = ?");
+                if(!$stmt)
+                {
+                    throw new Exception("Error al preparar la consulta: " . $conn->error);
+                }
+
+                // Asignamos los parametros
+                $stmt->bind_param("i", $eventId);
+
+                // Ejecutamos la consulta
+                if(!$stmt->execute())
+                {
+                    throw new Exception("Error al ejecutar la consulta: " . $stmt->error);
+                }
+
+                // Cerramos la consulta
+                $stmt->close();
+
+            } catch (Exception $e) {
+                error_log($e->getMessage());
+                throw $e;
+            }
+
+            return true;
+        }
+
         private function constructSearchQuery($filters)
         {
             $query = "SELECT * FROM events WHERE ";
@@ -190,8 +300,18 @@
                         $args[] = "%" . $this->realEscapeString($value) . "%";
                         $types .= 's';
                         break;
+                    case 'capacity':
+                        $query .= "capacity >= ? AND ";
+                        $args[] = $this->realEscapeString($value);
+                        $types .= 'i';
+                        break;
                     case 'category':
                         $query .= "category = ? AND ";
+                        $args[] = $this->realEscapeString($value);
+                        $types .= 's';
+                        break;
+                    case 'email_provider':
+                        $query .= "email_provider = ? AND ";
                         $args[] = $this->realEscapeString($value);
                         $types .= 's';
                         break;

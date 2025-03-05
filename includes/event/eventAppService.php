@@ -51,6 +51,51 @@
 
             return $IEventDAO->joinEvent($joinEventDTO);
         }
+
+        public function getEventsByUserType($user_type)
+        {
+            $IEventDAO = eventFactory::CreateEvent();
+            $eventsDTO = null;
+
+            // Si es administrador, tomamos todos los eventos
+            if ($user_type == 0)
+            {
+                $eventsDTO = $IEventDAO->getEvents();
+            }
+                // Si es proveedor, tomamos los eventos del proveedor
+            else 
+            {
+                // Tomamos el email del usuario
+                $userDTO = json_decode($_SESSION["user"], true);
+                $user_email = htmlspecialchars($userDTO["email"]);
+
+                // Pasamos como filtro un array con el email
+                $eventsDTO = $IEventDAO->getEvents(array("email_provider" => $user_email));
+            }
+
+            return $eventsDTO;
+        }
+
+        public function getEventById($eventId)
+        {
+            $IEventDAO = eventFactory::CreateEvent();
+
+            return $IEventDAO->getEventById($eventId);
+        }
+
+        public function updateEvent($updatedEventDTO)
+        {
+            $IEventDAO = eventFactory::CreateEvent();
+
+            return $IEventDAO->updateEvent($updatedEventDTO);
+        }
+
+        public function deleteEvent($eventId)
+        {
+            $IEventDAO = eventFactory::CreateEvent();
+
+            return $IEventDAO->deleteEvent($eventId);
+        }
     }  
      
 ?>

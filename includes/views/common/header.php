@@ -23,6 +23,7 @@
             <li><a href="index.php">Shop</a></li>
             <li><a href="searchEvents.php">Events</a></li>
             <li><a href="registerEvents.php">Register Events</a></li>
+            <li><a href="manageEvents.php">Manage Events</a></li>
             <li><a href="index.php">Training Plans</a></li>
             <li><a href="index.php">Work with Us</a></li>
         </ul>
