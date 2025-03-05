@@ -42,12 +42,12 @@
                 }
 
                 // Asignamos los resultados a variables
-                $stmt->bind_result($Id, $Name, $Description, $Price, $Location, $Date, $Capacity, $Category);
+                $stmt->bind_result($Id, $Name, $Description, $Price, $Location, $Date, $Capacity, $Category, $EmailProvider);
 
                 // Mientras haya resultados, los guardamos en el array
                 while ($stmt->fetch())
                 {
-                    $event = new eventDTO($Id, $Name, $Description, $Date, $Price, $Location, $Category);
+                    $event = new eventDTO($Id, $Name, $Description, $Date, $Price, $Location, $Category, $Capacity, $EmailProvider);
                     $events[] = $event;
                 }
 

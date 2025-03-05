@@ -14,8 +14,8 @@
     $mainContent = "";
 
     $userDTO = json_decode($_SESSION["user"], true);
-    $user_email = htmlspecialchras($userDTO["email"]);
-    $user_type = htmlspecialchras($userDTO["usertype"]);
+    $user_email = htmlspecialchars($userDTO["email"]);
+    $user_type = htmlspecialchars($userDTO["usertype"]);
 
     if (!isset($_SESSION["register"]) || $_SESSION["register"] === false) 
     {
