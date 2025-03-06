@@ -72,8 +72,11 @@
 
                 try 
                 {
+                    $user = json_decode($_SESSION["user"], true);
+                    $userId = $user["id"];
+
                     $process_data = array(
-                        'user_id' => $_SESSION['user_id'],
+                        'user_id' => $userId,
                         'event_id' => $eventId,
                         'user_name' => $username,
                         'user_phone' => $phone,
@@ -88,8 +91,8 @@
                     }
                     else
                     {
-                        $_SESSION["sentJoinEvent"] = true;
-                        $result = "joinEvent.php";
+                        //$_SESSION["sentJoinEvent"] = true;
+                        $result = "joinEvent.php?success=true";
                     }
                 } 
                 catch (userAlreadyJoinEventException $e) 

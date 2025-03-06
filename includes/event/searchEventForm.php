@@ -138,7 +138,7 @@
                 }
                 else
                 {
-                    $_SESSION["search"] = true;
+                    //$_SESSION["search"] = true;
 
                     // Array de eventos en formato JSON
                     $foundedEventsDTOJSON = array();
@@ -149,7 +149,9 @@
                     // Almacenar el JSON en una variable de sesión
                     $_SESSION["foundedEventsDTO"] = $foundedEventsDTOJSON;
 
-                    $result = 'searchEvents.php';
+                    //$result = 'searchEvents.php';
+
+                    $result = 'searchEvents.php?search=true';
                 }
             }
 

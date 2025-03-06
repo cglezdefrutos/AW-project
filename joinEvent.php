@@ -5,13 +5,11 @@
     echo "Session ID en joinEvent.php: " . session_id() . "<br>";
     echo "Contenido de la sesión: ";
     var_dump($_SESSION);
-    var_dump($_SESSION["sentJoinEvent"]);
-    
 
     $titlePage = "Apuntarse a un evento";
     $mainContent = "";
 
-    if (!isset($_SESSION["sentJoinEvent"]) || $_SESSION["sentJoinEvent"] == false) 
+    if($_GET['success'] != 'true')
     {
         $eventId = $_GET['id'];
 

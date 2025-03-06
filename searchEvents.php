@@ -6,8 +6,12 @@
     $titlePage = "Buscar eventos";
     $mainContent = "";
 
-    if (!isset($_SESSION["search"]) || $_SESSION["search"] == false) 
+    //if (!isset($_SESSION["search"]) || $_SESSION["search"] == false) 
+    if (!isset($_GET["search"]) || $_GET["search"] != "true") 
     {
+        // Limpiamos resultados anteriores
+        unset($_SESSION["foundedEventsDTO"]);
+
         $form = new searchEventForm();
 
         $htmlSearchEventForm = $form->Manage();
