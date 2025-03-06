@@ -1,5 +1,4 @@
 <?php
-
     include __DIR__ . "/../views/common/baseForm.php";
     include __DIR__ . "/eventAppService.php";
     
@@ -27,13 +26,6 @@
             EOF;
 
             $html .= htmlspecialchars($initialData['name'] ?? '') . '">';
-
-            /* $html .= <<<EOF
-                    <label for="email">Correo Electrónico:</label>
-                    <input type="email" id="email" name="email" required value="
-            EOF;
-            
-            $html .= htmlspecialchars($initialData['email'] ?? '') . '">'; */
 
             $html .= <<<EOF
                     <label for="phone">Teléfono:</label>
@@ -102,5 +94,4 @@
             return $result;
         }
     }
-    
 ?>

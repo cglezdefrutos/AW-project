@@ -1,43 +1,40 @@
 <?php
+    require("userFactory.php");
 
-require("userFactory.php");
-
-class userAppService
-{
-    private static $instance;
-
-    public static function GetSingleton()
+    class userAppService
     {
-        if (!self::$instance instanceof self)
+        private static $instance;
+
+        public static function GetSingleton()
         {
-            self::$instance = new self;
+            if (!self::$instance instanceof self)
+            {
+                self::$instance = new self;
+            }
+
+            return self::$instance;
+        }
+    
+        private function __construct()
+        {
+        } 
+
+        public function login($userDTO)
+        {
+            $IUserDAO = userFactory::CreateUser();
+
+            $foundedUserDTO = $IUserDAO->login($userDTO);
+
+            return $foundedUserDTO;
         }
 
-        return self::$instance;
+        public function create($userDTO)
+        {
+            $IUserDAO = userFactory::CreateUser();
+
+            $createdUserDTO = $IUserDAO->create($userDTO);
+
+            return $createdUserDTO;
+        }
     }
-  
-    private function __construct()
-    {
-    } 
-
-    public function login($userDTO)
-    {
-        $IUserDAO = userFactory::CreateUser();
-
-        $foundedUserDTO = $IUserDAO->login($userDTO);
-
-        return $foundedUserDTO;
-    }
-
-    public function create($userDTO)
-    {
-        $IUserDAO = userFactory::CreateUser();
-
-        $createdUserDTO = $IUserDAO->create($userDTO);
-
-        return $createdUserDTO;
-    }
-
-}
-
 ?>

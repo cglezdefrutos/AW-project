@@ -62,14 +62,14 @@
             {
                 $eventsDTO = $IEventDAO->getEvents();
             }
-                // Si es proveedor, tomamos los eventos del proveedor
+            // Si es proveedor, tomamos SOLO los eventos del proveedor
             else 
             {
-                // Tomamos el email del usuario
+                // Tomamos el email del proveedor
                 $userDTO = json_decode($_SESSION["user"], true);
                 $user_email = htmlspecialchars($userDTO["email"]);
 
-                // Pasamos como filtro un array con el email
+                // Pasamos como filtro un array con el email (así solo traerá los eventos donde coincida ese email)
                 $eventsDTO = $IEventDAO->getEvents(array("email_provider" => $user_email));
             }
 
@@ -96,6 +96,5 @@
 
             return $IEventDAO->deleteEvent($eventId);
         }
-    }  
-     
+    }
 ?>

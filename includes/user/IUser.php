@@ -1,9 +1,8 @@
 <?php
+    interface IUser
+    {
+        public function login($userDTO);
 
-interface IUser
-{
-    public function login($userDTO);
-
-    public function create($userDTO);
-}
+        public function create($userDTO);
+    }
 ?>

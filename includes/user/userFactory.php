@@ -1,25 +1,24 @@
 <?php
+    require("userDAO.php");
+    require("userMock.php");
 
-require("userDAO.php");
-require("userMock.php");
-
-class userFactory
-{
-    public static function CreateUser() : IUser
+    class userFactory
     {
-        $userDAO = false;
+        public static function CreateUser() : IUser
+        {
+            $userDAO = false;
+            $config = "DAO";
 
-        if (true)
-        {
-            $userDAO = new userDAO();
+            if ($config === "DAO")
+            {
+                $userDAO = new userDAO();
+            }
+            else
+            {
+                $userDAO = new userMock();
+            }
+            
+            return $userDAO;
         }
-        else
-        {
-            $userDAO = new userMock();
-        }
-        
-        return $userDAO;
     }
-}
-
 ?>

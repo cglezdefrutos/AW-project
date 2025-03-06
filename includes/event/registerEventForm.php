@@ -75,8 +75,7 @@
             return $html;
         }
 
-        // Este método ahora procesa el registro de un nuevo evento,
-        // mostrando un mensaje de confirmación en caso de éxito.
+        // Este método ahora procesa el registro de un nuevo evento, mostrando un mensaje de confirmación en caso de éxito.
         protected function Process($data)
         {
             // Array para almacenar mensajes de error
@@ -121,8 +120,6 @@
                 {
                     $result[] = 'Los datos introducidos no son válidos';
                 }
-
-                //$_SESSION["register"] = true;
 
                 $result = 'registerEvents.php?registered=true';
             }

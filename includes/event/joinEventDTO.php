@@ -1,5 +1,4 @@
 <?php
-
     class joinEventDTO implements JsonSerializable
     {
         private $userId;
@@ -60,5 +59,4 @@
             return get_object_vars($this);
         }
     }
-
 ?>

@@ -35,7 +35,6 @@
                     $types = $queryData['types'];
                     $params = $queryData['params'];
                     $stmt->bind_param($types, ...$params);
-                    //$stmt->bind_param($queryData['types'], ...$queryData['params']);
                 }
 
                 // Ejecutamos la consulta
@@ -66,7 +65,6 @@
             return $events;
         }
 
-
         public function registerEvent($eventDTO)
         {
             try {
@@ -91,18 +89,6 @@
                 $emailProvider = $eventDTO->getEmailProvider();
 
                 $stmt->bind_param("ssississ", $name, $description, $price, $location, $date, $capacity, $category, $emailProvider);
-
-                /* $stmt->bind_param(
-                    "ssississ",
-                    $eventDTO->getName(),
-                    $eventDTO->getDesc(),
-                    $eventDTO->getPrice(),
-                    $eventDTO->getLocation(),
-                    $eventDTO->getDate(),
-                    $eventDTO->getCapacity(),
-                    $eventDTO->getCategory(),
-                    $eventDTO->getEmailProvider()
-                ); */
         
                 // Ejecutar la consulta
                 if (!$stmt->execute()) {
@@ -140,7 +126,6 @@
                 $userPhone = $joinEventDTO->getUserPhone();
 
                 $stmt->bind_param("iisi", $userId, $eventId, $userName, $userPhone);
-                //$stmt->bind_param("iisi", $joinEventDTO->getUserId(), $joinEventDTO->getEventId(), $joinEventDTO->getUserName(), $joinEventDTO->getUserPhone());
 
                 // Ejecutamos la consulta
                 if(!$stmt->execute())
@@ -234,7 +219,6 @@
                 $id = $eventDTO->getId();
 
                 $stmt->bind_param("ssissisi", $name, $desc, $price, $location, $date, $capacity, $category, $id);
-                //$stmt->bind_param("ssissisi", $eventDTO->getName(), $eventDTO->getDesc(), $eventDTO->getPrice(), $eventDTO->getLocation(), $eventDTO->getDate(), $eventDTO->getCapacity(), $eventDTO->getCategory(), $eventDTO->getId());
 
                 // Ejecutamos la consulta
                 if(!$stmt->execute())
@@ -361,7 +345,5 @@
 
             return array('query' => $query, 'params' => $args, 'types' => $types);
         }   
-
-        
     }
 ?>

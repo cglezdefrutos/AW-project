@@ -6,7 +6,6 @@
     $titlePage = "Buscar eventos";
     $mainContent = "";
 
-    //if (!isset($_SESSION["search"]) || $_SESSION["search"] == false) 
     if (!isset($_GET["search"]) || $_GET["search"] != "true") 
     {
         // Limpiamos resultados anteriores
@@ -23,7 +22,7 @@
     } 
     else 
     {
-         // Verificar el contenido de $_SESSION["foundedEventsDTO"]
+        // Verificar el contenido de $_SESSION["foundedEventsDTO"]
         if (!isset($_SESSION["foundedEventsDTO"])) {
             echo "No se encontraron eventos.";
             exit();
