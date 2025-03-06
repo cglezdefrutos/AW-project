@@ -122,9 +122,9 @@
                     $result[] = 'Los datos introducidos no son válidos';
                 }
 
-                $_SESSION["register"] = true;
+                //$_SESSION["register"] = true;
 
-                $result = 'registerEvents.php';
+                $result = 'registerEvents.php?registered=true';
             }
 
             return $result;
