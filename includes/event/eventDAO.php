@@ -32,7 +32,10 @@
                 // Asignamos los parametros solo si hay parámetros para enlazar
                 if (!empty($queryData['params'])) 
                 {
-                    $stmt->bind_param($queryData['types'], ...$queryData['params']);
+                    $types = $queryData['types'];
+                    $params = $queryData['params'];
+                    $stmt->bind_param($types, ...$params);
+                    //$stmt->bind_param($queryData['types'], ...$queryData['params']);
                 }
 
                 // Ejecutamos la consulta
@@ -78,7 +81,18 @@
                 }
         
                 // Asignar los parámetros
-                $stmt->bind_param(
+                $name = $eventDTO->getName();
+                $description = $eventDTO->getDesc();
+                $price = $eventDTO->getPrice();
+                $location = $eventDTO->getLocation();
+                $date = $eventDTO->getDate();
+                $capacity = $eventDTO->getCapacity();
+                $category = $eventDTO->getCategory();
+                $emailProvider = $eventDTO->getEmailProvider();
+
+                $stmt->bind_param("ssississ", $name, $description, $price, $location, $date, $capacity, $category, $emailProvider);
+
+                /* $stmt->bind_param(
                     "ssississ",
                     $eventDTO->getName(),
                     $eventDTO->getDesc(),
@@ -88,7 +102,7 @@
                     $eventDTO->getCapacity(),
                     $eventDTO->getCategory(),
                     $eventDTO->getEmailProvider()
-                );
+                ); */
         
                 // Ejecutar la consulta
                 if (!$stmt->execute()) {
@@ -120,7 +134,13 @@
                 }
 
                 // Asignamos los parametros
-                $stmt->bind_param("iisi", $joinEventDTO->getUserId(), $joinEventDTO->getEventId(), $joinEventDTO->getUserName(), $joinEventDTO->getUserPhone());
+                $userId = $joinEventDTO->getUserId();
+                $eventId = $joinEventDTO->getEventId();
+                $userName = $joinEventDTO->getUserName();
+                $userPhone = $joinEventDTO->getUserPhone();
+
+                $stmt->bind_param("iisi", $userId, $eventId, $userName, $userPhone);
+                //$stmt->bind_param("iisi", $joinEventDTO->getUserId(), $joinEventDTO->getEventId(), $joinEventDTO->getUserName(), $joinEventDTO->getUserPhone());
 
                 // Ejecutamos la consulta
                 if(!$stmt->execute())
@@ -204,7 +224,17 @@
                 }
 
                 // Asignamos los parametros
-                $stmt->bind_param("ssissisi", $eventDTO->getName(), $eventDTO->getDesc(), $eventDTO->getPrice(), $eventDTO->getLocation(), $eventDTO->getDate(), $eventDTO->getCapacity(), $eventDTO->getCategory(), $eventDTO->getId());
+                $name = $eventDTO->getName();
+                $desc = $eventDTO->getDesc();
+                $price = $eventDTO->getPrice();
+                $location = $eventDTO->getLocation();
+                $date = $eventDTO->getDate();
+                $capacity = $eventDTO->getCapacity();
+                $category = $eventDTO->getCategory();
+                $id = $eventDTO->getId();
+
+                $stmt->bind_param("ssissisi", $name, $desc, $price, $location, $date, $capacity, $category, $id);
+                //$stmt->bind_param("ssissisi", $eventDTO->getName(), $eventDTO->getDesc(), $eventDTO->getPrice(), $eventDTO->getLocation(), $eventDTO->getDate(), $eventDTO->getCapacity(), $eventDTO->getCategory(), $eventDTO->getId());
 
                 // Ejecutamos la consulta
                 if(!$stmt->execute())

@@ -13,7 +13,10 @@
     {
         $eventId = $_GET['id'];
 
-        $form = new joinEventForm($eventId);
+        $user = json_decode($_SESSION["user"], true);
+        $userId = $user["id"];
+
+        $form = new joinEventForm($eventId, $userId);
         $htmlJoinEventForm = $form->Manage();
 
         $mainContent = <<<EOS

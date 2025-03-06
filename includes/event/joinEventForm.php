@@ -6,11 +6,13 @@
     class joinEventForm extends baseForm
     {
         private $eventId;
+        private $userId;
 
-        public function __construct($eventId)
+        public function __construct($eventId, $userId)
         {
             parent:: __construct('joinEventForm');
             $this->eventId = $eventId;
+            $this->userId = $userId;
         }
 
         protected function CreateFields($initialData)
@@ -42,6 +44,7 @@
 
             $html .= <<<EOF
                     <input type="hidden" name="event_id" value="{$this->eventId}">
+                    <input type="hidden" name="user_id" value="{$this->userId}">
                     <button type="submit" name="join_event">Apuntarse</button>
                 </fieldset>
             EOF;
@@ -55,26 +58,22 @@
             $result = array();
 
             // Filtrado y sanitización de los datos
-            $username =  trim($data['name'] ?? '');
-            $username = filter_var($username, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
-            /* $email = trim($data['email'] ?? '');
-            $email = filter_var($email, FILTER_SANITIZE_EMAIL); */
-
-            $phone = trim($data['phone'] ?? '');
-            $phone = filter_var($phone, FILTER_SANITIZE_NUMBER_INT);
+            $userId = trim($data['user_id'] ?? '');
+            $userId = filter_var($userId, FILTER_SANITIZE_NUMBER_INT);
 
             $eventId = trim($data['event_id'] ?? '');
             $eventId = filter_var($eventId, FILTER_SANITIZE_NUMBER_INT);  
 
+            $username =  trim($data['name'] ?? '');
+            $username = filter_var($username, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+            $phone = trim($data['phone'] ?? '');
+            $phone = filter_var($phone, FILTER_SANITIZE_NUMBER_INT);
+
             if(count($result) === 0)
             {
-
                 try 
                 {
-                    $user = json_decode($_SESSION["user"], true);
-                    $userId = $user["id"];
-
                     $process_data = array(
                         'user_id' => $userId,
                         'event_id' => $eventId,
@@ -91,7 +90,6 @@
                     }
                     else
                     {
-                        //$_SESSION["sentJoinEvent"] = true;
                         $result = "joinEvent.php?success=true";
                     }
                 } 
