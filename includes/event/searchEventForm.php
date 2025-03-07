@@ -79,10 +79,10 @@
             $html .= ($initialData['category'] ?? '') == 'Fitness' ? 'selected' : '' . '>Fitness</option>';
 
             $html .= <<<EOF
-                        <option value="Conferencias" 
+                        <option value="Atletismo" 
             EOF;
             
-            $html .= ($initialData['category'] ?? '') == 'Conferencias' ? 'selected' : '' . '>Conferencias</option>';
+            $html .= ($initialData['category'] ?? '') == 'Atletismo' ? 'selected' : '' . '>Atletismo</option>';
 
             $html .= <<<EOF
                     </select>

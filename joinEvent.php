@@ -38,27 +38,6 @@
         }
 
     }
-/* 
-    if(isset($success) || ($success != 'true'))
-    {
-        $eventId = $_GET['id'];
-
-
-
-        $form = new joinEventForm($eventId, $userId);
-        $htmlJoinEventForm = $form->Manage();
-
-        $mainContent = <<<EOS
-            <h1>Apuntarse a un evento</h1>
-            $htmlJoinEventForm
-        EOS;
-    }
-    else 
-    {
-        $mainContent = <<<EOS
-            <h1>¡Enhorabuena!¡Te has apuntado al evento!</h1>
-        EOS;
-    } */
 
     require_once("includes/views/template/template.php");
 ?>
