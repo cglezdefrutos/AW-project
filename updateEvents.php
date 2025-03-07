@@ -56,7 +56,7 @@
                         <input type="text" id="location" name="location" value="{$event->getLocation()}" required>
                         
                         <label for="price">Precio:</label>
-                        <input type="number" id="price" name="price" value="{$event->getPrice()}" required>
+                        <input type="number" id="price" name="price" step="0.01" min="0" value="{$event->getPrice()}" required>
                         
                         <label for="capacity">Capacidad:</label>
                         <input type="number" id="capacity" name="capacity" value="{$event->getCapacity()}" required>

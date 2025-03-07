@@ -88,7 +88,7 @@
                 $category = $eventDTO->getCategory();
                 $emailProvider = $eventDTO->getEmailProvider();
 
-                $stmt->bind_param("ssississ", $name, $description, $price, $location, $date, $capacity, $category, $emailProvider);
+                $stmt->bind_param("ssdssiss", $name, $description, $price, $location, $date, $capacity, $category, $emailProvider);
         
                 // Ejecutar la consulta
                 if (!$stmt->execute()) {
@@ -218,7 +218,7 @@
                 $category = $eventDTO->getCategory();
                 $id = $eventDTO->getId();
 
-                $stmt->bind_param("ssissisi", $name, $desc, $price, $location, $date, $capacity, $category, $id);
+                $stmt->bind_param("ssdssisi", $name, $desc, $price, $location, $date, $capacity, $category, $id);
 
                 // Ejecutamos la consulta
                 if(!$stmt->execute())
