@@ -48,15 +48,7 @@
         }
 
         private function IsSent(&$params)
-        {
-            error_log("IsSent() ejecutado. Contenido de params: " . print_r($params, true));
-
-            if (!isset($params['action'])) {
-                error_log("ERROR: No se encontro 'action' en los datos enviados.");
-            } elseif ($params['action'] !== $this->formId) {
-                error_log("ERROR: El valor de 'action' no coincide. Esperado: " . $this->formId . ", Recibido: " . $params['action']);
-            }
-            
+        {            
             // Verifica si el formulario ha sido enviado
             return isset($params['action']) && $params['action'] == $this->formId;
         }

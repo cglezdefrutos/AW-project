@@ -9,7 +9,7 @@
             <h1>Bienvenido a The Balance</h1>
             <h2>¿Quienes somos?</h2>
             <p>
-                The Balance es una plataforma web que revoluciona el mundo del tness al combinar e-commerce de productos deportivos con servicios 
+                The Balance es una plataforma web que revoluciona el mundo del fitness al combinar e-commerce de productos deportivos con servicios 
                 personalizados para los entusiastas del deporte. Los usuarios pueden comprar suplementos y equipamiento, inscribirse en eventos deportivos y 
                 acceder a planes de entrenamiento diseñados por nuestros nutricionistas. La plataforma proporciona un enfoque integral de la salud y el bienestar, 
                 permitiendo que los usuarios mejoren su rendimiento físico con el respaldo de expertos. Además, los eventos deportivos patrocinados crean un 

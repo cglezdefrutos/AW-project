@@ -21,7 +21,7 @@
         if ( $user_type != 2 &&  $user_type != 0)
         { 
             $mainContent = <<<EOS
-            <h1>No es posible gestionar eventos si no se es proveedor.</h1>
+            <h1>No es posible gestionar eventos si no se es proveedor o administrador.</h1>
         EOS;
         } 
         else 
@@ -41,6 +41,9 @@
 
             $mainContent = <<<EOS
                 <h1>Gestión de eventos</h1>
+
+                <div class="table-container">
+
                 <table>
                     <tr>
                         <th>Nombre</th>
@@ -67,15 +70,15 @@
                         <td>{$event->getCategory()}</td>
                         <td>
                             <a href="updateEvents.php?eventId={$event->getId()}">Editar</a>
-                        </td>
-                        <td>
-                             <a href="manageEvents.php?eventId={$event->getId()}" onclick="return confirm('¿Estás seguro de que deseas eliminar este evento?');">Eliminar</a>
+                            o
+                            <a href="manageEvents.php?eventId={$event->getId()}" onclick="return confirm('¿Estás seguro de que deseas eliminar este evento?');">Eliminar</a>
                         </td>
                     </tr>
                 EOS;
 
-                $mainContent .= "</table>";
             }
+
+            $mainContent .= "</table> </div>";
         }
     }
 

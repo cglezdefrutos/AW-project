@@ -28,7 +28,7 @@
         if($user_type != 2 && $user_type != 0)
         {
             $mainContent = <<<EOS
-                <h1>No es posible registrar un evento si no se es proveedor.</h1>
+                <h1>No es posible registrar un evento si no se es proveedor o administrador.</h1>
             EOS;
         }
         else

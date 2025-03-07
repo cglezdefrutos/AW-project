@@ -37,9 +37,11 @@
             exit();
         } 
 
+        $html = '<div class="table-container">';
+
         // Mostramos cada uno de eventDTO encontrados por pantalla en una tabla
-        $html = '<table>';
-        $html .= '<tr><th>Nombre</th><th>Fecha</th><th>Precio</th><th>Ubicación</th><th>Categoría</th></tr>';
+        $html .= '<table>';
+        $html .= '<tr><th>Nombre</th><th>Fecha</th><th>Precio</th><th>Ubicación</th><th>Categoría</th><th></th></tr>';
 
         foreach($foundedEventsDTO as $eventDTO)
         {
@@ -61,6 +63,7 @@
         }
 
         $html .= '</table>';
+        $html .= '</div>';
 
         $mainContent = <<<EOS
             <h1>Eventos disponibles</h1>
