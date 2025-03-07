@@ -47,7 +47,7 @@
                         <input type="text" id="name" name="name" value="{$event->getName()}" required>
                         
                         <label for="description">Descripción:</label>
-                        <textarea id="description" name="description" required>{$event->getDesc()}</textarea>
+                        <input type="text" id="description" name="description" value="{$event->getDesc()}" required>
                         
                         <label for="date">Fecha:</label>
                         <input type="date" id="date" name="date" value="{$event->getDate()}" required>

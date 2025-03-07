@@ -221,6 +221,7 @@ form input[type="email"],
 form input[type="tel"],
 form input[type="date"],
 form input[type="number"],
+form textarea,
 form select {
     width: 100%;
     padding: 10px;
@@ -236,6 +237,7 @@ form input[type="email"]:focus,
 form input[type="tel"]:focus,
 form input[type="date"]:focus,
 form input[type="number"]:focus,
+form textarea:focus,
 form select:focus {
     border: 1px solid #0056b3; /* Azul estilo Decathlon */
 }
@@ -252,6 +254,11 @@ form input[type="submit"] {
 
 form input[type="submit"]:hover {
     background: #39ff14; /* Verde fosforito */
+}
+
+form textarea {
+    height: 100px; /* Ajusta la altura según tus necesidades */
+    resize: vertical; /* Permite cambiar el tamaño verticalmente */
 }
 
 /* Footer */

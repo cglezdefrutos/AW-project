@@ -41,12 +41,12 @@
 
         // Mostramos cada uno de eventDTO encontrados por pantalla en una tabla
         $html .= '<table>';
-        $html .= '<tr><th>Nombre</th><th>Fecha</th><th>Ubicación</th><th>Precio</th><th>Capacidad</th><th>Categoría</th><th></th></tr>';
+        $html .= '<tr><th>Nombre</th><th>Descripción</th><th>Fecha</th><th>Ubicación</th><th>Precio</th><th>Capacidad</th><th>Categoría</th><th></th></tr>';
 
         foreach($foundedEventsDTO as $eventDTO)
         {
             // Verificar que $eventDTO es un array con los campos esperados
-            if (!is_array($eventDTO) || !isset($eventDTO['name'], $eventDTO['date'], $eventDTO['location'], $eventDTO['price'], $eventDTO['category'], $eventDTO['capacity'])) {
+            if (!is_array($eventDTO) || !isset($eventDTO['name'], $eventDTO['desc'], $eventDTO['date'], $eventDTO['location'], $eventDTO['price'], $eventDTO['category'], $eventDTO['capacity'])) {
                 echo "Error: El elemento no tiene la estructura esperada.";
                 var_dump($eventDTO);
                 exit();
@@ -54,6 +54,7 @@
 
             $html .= '<tr>';
             $html .= '<td>' . htmlspecialchars($eventDTO['name']) . '</td>';
+            $html .= '<td>' . htmlspecialchars($eventDTO['desc']) . '</td>';
             $html .= '<td>' . htmlspecialchars($eventDTO['date']) . '</td>';
             $html .= '<td>' . htmlspecialchars($eventDTO['location']) . '</td>';
             $html .= '<td>' . htmlspecialchars($eventDTO['price']) . '</td>';
