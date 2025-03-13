@@ -2,10 +2,10 @@
 
     require_once("application.php");
 
-    define('DB_HOST', 'localhost');
+    define('DB_HOST', 'vm012.db.swarm.test');
     define('DB_NAME', 'the_balance');
-    define('DB_USER', 'user');
-    define('DB_PASS', 'pass');
+    define('DB_USER', 'root');
+    define('DB_PASS', 'EvbBYyU2kNwH0XUxjWRw');
 
     ini_set('default_charset', 'UTF-8');
     setLocale(LC_ALL, 'es_ES.UTF.8');
