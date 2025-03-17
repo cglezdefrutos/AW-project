@@ -1,17 +1,30 @@
 <?php
 
-require("IUser.php");
-require("userDTO.php");
-require(__DIR__ . "/../views/common/baseDAO.php");
-require("userAlreadyExistException.php");
+namespace TheBalance\user;
 
+use TheBalance\views\common\baseDAO;
+use TheBalance\application;
+
+/**
+ * Clase que contiene la lógica de acceso a datos de usuarios
+ */
 class userDAO extends baseDAO implements IUser
 {
+    /**
+     * Constructor
+     */
     public function __construct()
     {
 
     }
 
+    /**
+     * Inicio de sesión de un usuario
+     * 
+     * @param userDTO $userDTO Datos del usuario
+     * 
+     * @return userDTO|bool Usuario encontrado|false
+     */
     public function login($userDTO)
     {
         $foundedUserDTO = $this->searchUser($userDTO->email());
@@ -24,6 +37,13 @@ class userDAO extends baseDAO implements IUser
         return false;
     }
 
+    /**
+     * Busca un usuario por su email
+     * 
+     * @param string $email Email del usuario
+     * 
+     * @return userDTO|bool Usuario encontrado|false
+     */
     private function searchUser($email)
     {
         $escemail = $this->realEscapeString($email);
@@ -56,6 +76,13 @@ class userDAO extends baseDAO implements IUser
         return false;
     }
 
+    /**
+     * Creación de un usuario
+     * 
+     * @param userDTO $userDTO Datos del usuario
+     * 
+     * @return userDTO Usuario creado
+     */
     public function create($userDTO)
     {
         $createdUserDTO = false;
@@ -104,11 +131,26 @@ class userDAO extends baseDAO implements IUser
         return $createdUserDTO;
     }
 
+    /**
+     * Nos da el hash de la contraseña
+     * 
+     * @param string $password Contraseña
+     * 
+     * @return string Hash de la contraseña
+     */
     private static function hashPassword($password)
     {
         return password_hash($password, PASSWORD_BCRYPT);
     }
 
+    /**
+     * Comprueba si la contraseña es correcta
+     * 
+     * @param string $password Contraseña
+     * @param string $hashedPassword Hash de la contraseña
+     * 
+     * @return bool Resultado de la comprobación
+     */
     private static function testHashPassword($password, $hashedPassword)
     {
         var_dump($password);
@@ -119,4 +161,3 @@ class userDAO extends baseDAO implements IUser
         return $result;
     }
 }
-?>

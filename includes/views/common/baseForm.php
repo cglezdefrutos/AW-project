@@ -1,94 +1,157 @@
 <?php
-    abstract class baseForm
+
+namespace TheBalance\views\common;
+
+/**
+ * Clase base para la creación de formularios
+ */
+abstract class baseForm
+{
+    /**
+     * Identificador único para el formulario (identificarlo cuando se envíe y gestionar sus acciones)
+     * 
+     * @var string
+     */
+    private $formId;
+
+    /**
+     * URL a la que se enviarán los datos del formulario
+     * 
+     * @var string
+     */
+    private $action;
+
+    /**
+     * Constructor
+     * 
+     * @param string $formId Identificador único para el formulario
+     * @param array $options Opciones del formulario
+     */
+    public function __construct($formId, $options = array() )
     {
-        private $formId;    // Identificador único para el formulario (identificarlo cuando se envíe y gestionar sus acciones)
-        private $action;    // Define la acción del formulario (es decir, el destino de donde se enviarán los datos)
+        $this->formId = $formId;
+        $defaultOptions = array( 'action' => null, );
 
-        public function __construct($formId, $options = array() )
+        $options = array_merge($defaultOptions, $options);
+
+        $this->action = $options['action'];
+
+        if(!$this->action)
         {
-            $this->formId = $formId;
-            $defaultOptions = array( 'action' => null, );
-
-            $options = array_merge($defaultOptions, $options);
-
-            $this->action = $options['action'];
-
-            if(!$this->action)
-            {
-                $this->action = htmlentities($_SERVER['PHP_SELF']);
-            }
+            $this->action = htmlentities($_SERVER['PHP_SELF']);
         }
+    }
 
-        public function Manage()
+    /**
+     * Gestiona el formulario
+     * 
+     * @return string Código HTML del formulario
+     */
+    public function Manage()
+    {
+        // Si no se ha enviado el formulario -> Se crea el formulario
+        if ( ! $this->IsSent($_POST) ) 
         {
-            // Si no se ha enviado el formulario -> Se crea el formulario
-            if ( ! $this->IsSent($_POST) ) 
+            return $this->Create();
+        } 
+        // Si se ha enviado el formulario -> Lo procesamos
+        else 
+        {
+            // Pasamos los datos (variable $POST) al método abstracto Process(), que será implementado por cada subclase
+            $result = $this->Process($_POST);
+            
+            // Si process devuelve un array -> Significa que hay errores
+            if ( is_array($result) ) 
             {
-                return $this->Create();
+                // Llamamos al método Create() con el array de errores y las variables enviadas ($POST)
+                return $this->Create($result, $_POST);
             } 
-            // Si se ha enviado el formulario -> Lo procesamos
+            // Si no devuelve un array -> Se ha devuelto la URL a donde hay que redirigir al usuario
             else 
             {
-                // Pasamos los datos (variable $POST) al método abstracto Process(), que será implementado por cada subclase
-                $result = $this->Process($_POST);
-                
-                // Si process devuelve un array -> Significa que hay errores
-                if ( is_array($result) ) 
-                {
-                    // Llamamos al método Create() con el array de errores y las variables enviadas ($POST)
-                    return $this->Create($result, $_POST);
-                } 
-                // Si no devuelve un array -> Se ha devuelto la URL a donde hay que redirigir al usuario
-                else 
-                {
-                    header('Location: ' . $result);                   
-                    exit();
-                }
-            }  
-        }
-
-        private function IsSent(&$params)
-        {            
-            // Verifica si el formulario ha sido enviado
-            return isset($params['action']) && $params['action'] == $this->formId;
-        }
-
-        private function Create($errors = array(), &$data = array())
-        {
-            // En caso de haber errores -> Genera los mensajes de errores
-            $html= $this->CreateErrors($errors);
-
-            // Se genera el formulario
-            $html .= '<form method="POST" action="'.$this->action.'" id="'.$this->formId.'" >';
-            $html .= '<input type="hidden" name="action" value="'.$this->formId.'" />';
-            
-            // Llama al método abstracto para crear los campos, que será implementado por cada subclase 
-            $html .= $this->CreateFields($data);
-            $html .= '</form>';
-            
-            // Se retorna todo el código HTML
-            return $html;
-        }
-
-        private function CreateErrors($errors)
-        {
-            $html='';
-            $numErrors = count($errors);
-            if (  $numErrors == 1 ) 
-            {
-                $html .= "<ul><li>".$errors[0]."</li></ul>";
-            } 
-            else if ( $numErrors > 1 ) 
-            {
-                $html .= "<ul><li>";
-                $html .= implode("</li><li>", $errors);
-                $html .= "</li></ul>";
+                header('Location: ' . $result);                   
+                exit();
             }
-            return $html;
-        }
-
-        // Métodos abstractos que las clases hijas deben implementar
-        abstract protected function CreateFields($initialData);
-        abstract protected function Process($data);
+        }  
     }
-?>
+
+    /**
+     * Comprueba si el formulario ha sido enviado
+     * 
+     * @param array $params Parámetros del formulario
+     * 
+     * @return bool True si el formulario ha sido enviado, false en caso contrario
+     */
+    private function IsSent(&$params)
+    {            
+        // Verifica si el formulario ha sido enviado
+        return isset($params['action']) && $params['action'] == $this->formId;
+    }
+
+    /**
+     * Crea el formulario
+     * 
+     * @param array $errors Errores del formulario
+     * @param array $data Datos del formulario
+     * 
+     * @return string Código HTML del formulario
+     */
+    private function Create($errors = array(), &$data = array())
+    {
+        // En caso de haber errores -> Genera los mensajes de errores
+        $html= $this->CreateErrors($errors);
+
+        // Se genera el formulario
+        $html .= '<form method="POST" action="'.$this->action.'" id="'.$this->formId.'" >';
+        $html .= '<input type="hidden" name="action" value="'.$this->formId.'" />';
+        
+        // Llama al método abstracto para crear los campos, que será implementado por cada subclase 
+        $html .= $this->CreateFields($data);
+        $html .= '</form>';
+        
+        // Se retorna todo el código HTML
+        return $html;
+    }
+
+    /**
+     * Genera los mensajes de errores
+     * 
+     * @param array $errors Errores del formulario
+     * 
+     * @return string Código HTML de los errores
+     */
+    private function CreateErrors($errors)
+    {
+        $html='';
+        $numErrors = count($errors);
+        if (  $numErrors == 1 ) 
+        {
+            $html .= "<ul><li>".$errors[0]."</li></ul>";
+        } 
+        else if ( $numErrors > 1 ) 
+        {
+            $html .= "<ul><li>";
+            $html .= implode("</li><li>", $errors);
+            $html .= "</li></ul>";
+        }
+        return $html;
+    }
+
+    /**
+     * Crea los campos del formulario
+     * 
+     * @param array $initialData Datos iniciales del formulario
+     * 
+     * @return string Código HTML de los campos del formulario
+     */
+    abstract protected function CreateFields($initialData);
+    
+    /**
+     * Procesa los datos del formulario
+     * 
+     * @param array $data Datos del formulario
+     * 
+     * @return array|string Array con los errores o string con la URL a la que redirigir
+     */
+    abstract protected function Process($data);
+}
