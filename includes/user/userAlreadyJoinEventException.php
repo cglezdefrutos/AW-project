@@ -5,7 +5,7 @@ namespace TheBalance\user;
 /**
  * Excepción para cuando un usuario ya se ha unido a un evento
  */
-class userAlreadyJoinEventException extends Exception
+class userAlreadyJoinEventException extends \Exception
 {
     /**
      * Constructor

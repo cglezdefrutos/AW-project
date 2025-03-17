@@ -5,7 +5,7 @@ namespace TheBalance\user;
 /**
  * Excepción para cuando un usuario ya existe
  */
-class userAlreadyExistException extends Exception
+class userAlreadyExistException extends \Exception
 {
     /**
      * Constructor

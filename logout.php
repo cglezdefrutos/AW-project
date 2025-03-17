@@ -1,6 +1,6 @@
 <?php
 
-require_once("includes/config.php");
+require_once __DIR__.'/includes/config.php';
 
 unset($_SESSION);
 
@@ -12,4 +12,4 @@ $mainContent=<<<EOS
 	<h1>Hasta pronto!</h1>
 EOS;
 
-require_once("includes/views/template/template.php");
+require_once __DIR__.'/includes/views/template/template.php';

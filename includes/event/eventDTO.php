@@ -5,7 +5,7 @@ namespace TheBalance\event;
 /**
  * Data Transfer Object de un evento
  */
-class eventDTO implements JsonSerializable
+class eventDTO implements \JsonSerializable
 {
     // Atributos
     /**

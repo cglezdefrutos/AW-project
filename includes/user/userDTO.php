@@ -5,7 +5,7 @@ namespace TheBalance\user;
 /**
  * Data Transfer Object de usuario
  */
-class userDTO implements JsonSerializable
+class userDTO implements \JsonSerializable
 {
     /**
      * @var int Identificador del usuario

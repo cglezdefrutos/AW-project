@@ -10,6 +10,12 @@ define('DB_NAME', 'the_balance');
 define('DB_USER', 'root');
 define('DB_PASS', 'EvbBYyU2kNwH0XUxjWRw');
 
+/* define('DB_HOST', 'localhost');
+define('DB_NAME', 'the_balance');
+define('DB_USER', 'root');
+define('DB_PASS', ''); */
+
+
 /**
  * Configuración del soporte de UTF-8, localización (idioma y país) y zona horaria
  */
@@ -48,13 +54,11 @@ spl_autoload_register(function ($class) {
     $relative_class = substr($class, $len);
 
     // Convertir namespace en ruta de archivos
-    $prueba = str_replace(DIRECTORY_SEPARATOR, '/', $base_dir);
     $file = str_replace(DIRECTORY_SEPARATOR, '/', $base_dir) . str_replace(DIRECTORY_SEPARATOR, '/', $relative_class) . '.php';
-    //$file = $base_dir . str_replace('\\', DIRECTORY_SEPARATOR, $relative_class) . '.php';
 
     // Cargar el archivo si existe
     if (file_exists($file)) {
-        require $file;
+        require_once $file;
     }
 });
 

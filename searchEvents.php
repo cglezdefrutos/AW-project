@@ -1,5 +1,5 @@
 <?php
-require_once("includes/config.php");
+require_once __DIR__.'/includes/config.php';
 
 use TheBalance\event\searchEventForm;
 
@@ -73,4 +73,4 @@ else
     EOS;
 }
 
-require_once("includes/views/template/template.php");
+require_once __DIR__.'/includes/views/template/template.php';

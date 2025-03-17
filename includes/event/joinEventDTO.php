@@ -5,7 +5,7 @@ namespace TheBalance\event;
 /**
  * Data Transfer Object de apuntarse a un evento
  */
-class joinEventDTO implements JsonSerializable
+class joinEventDTO implements \JsonSerializable
 {
     /**
      * @var int Identificador del usuario

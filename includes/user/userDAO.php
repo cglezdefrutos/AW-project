@@ -3,6 +3,7 @@
 namespace TheBalance\user;
 
 use TheBalance\views\common\baseDAO;
+use TheBalance\application;
 
 /**
  * Clase que contiene la lógica de acceso a datos de usuarios

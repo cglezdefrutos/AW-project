@@ -1,6 +1,6 @@
 <?php
 
-require_once("includes/config.php");
+require_once __DIR__.'/includes/config.php';
 
 use TheBalance\event\eventAppService;
 use TheBalance\event\eventDTO;
@@ -75,4 +75,4 @@ if (!isset($_SESSION["user"])) {
     }
 }
 
-require_once("includes/views/template/template.php");
+require_once __DIR__.'/includes/views/template/template.php';
