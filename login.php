@@ -1,18 +1,18 @@
 <?php
-    require_once("includes/config.php");
 
-    require_once("includes/login/loginForm.php");
+require_once("includes/config.php");
 
-    $titlePage = 'Acceso al sistema';
+use TheBalance\user\loginForm;
 
-    $form = new loginForm(); 
+$titlePage = 'Acceso al sistema';
 
-    $htmlFormLogin = $form->Manage();
+$form = new loginForm(); 
 
-    $mainContent = <<<EOS
-        <h1>Inicio de Sesión</h1>
-        $htmlFormLogin
-    EOS;
+$htmlFormLogin = $form->Manage();
 
-    require_once("includes/views/template/template.php");
-?>
+$mainContent = <<<EOS
+    <h1>Inicio de Sesión</h1>
+    $htmlFormLogin
+EOS;
+
+require_once("includes/views/template/template.php");

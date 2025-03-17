@@ -1,18 +1,18 @@
 <?php
-    require_once("includes/config.php");
 
-    require_once("includes/login/registerForm.php");
+require_once("includes/config.php");
 
-    $titlePage = 'Registro en el sistema';
+use TheBalance\user\registerForm;
 
-    $form = new registerForm(); 
+$titlePage = 'Registro en el sistema';
 
-    $htmlFormRegistro = $form->Manage();
+$form = new registerForm(); 
 
-    $mainContent = <<<EOS
-        <h1>Registro de usuario</h1>
-        $htmlFormRegistro
-    EOS;
+$htmlFormRegistro = $form->Manage();
 
-    require_once("includes/views/template/template.php");
-?>
+$mainContent = <<<EOS
+    <h1>Registro de usuario</h1>
+    $htmlFormRegistro
+EOS;
+
+require_once("includes/views/template/template.php");
