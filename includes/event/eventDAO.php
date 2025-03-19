@@ -232,11 +232,16 @@ class eventDAO extends baseDAO implements IEvent
         return $event;
     }
 
-    
-    public function ownsEvent($eventId, $user_email)
+    /**
+     * Comprueba si un usuario es propietario de un evento
+     * 
+     * @param int $eventId Id del evento
+     * @param string $user_email Email del usuario
+     * 
+     * @return bool Resultado de la operación
+     */
+    public function ownsEvent($eventId, $userEmail)
     {
-        $event = null;
-
         try {
             // Tomamos la conexion a la base de datos
             $conn = application::getInstance()->getConnectionDb();
@@ -250,7 +255,7 @@ class eventDAO extends baseDAO implements IEvent
 
             // Asignamos los parametros
             $escEventId = $this->realEscapeString($eventId);
-            $escUserEmail = $this->realEscapeString($user_email);
+            $escUserEmail = $this->realEscapeString($userEmail);
             $stmt->bind_param("is", $escEventId, $escUserEmail);
 
             // Ejecutamos la consulta
@@ -261,10 +266,9 @@ class eventDAO extends baseDAO implements IEvent
 
             // Almacenar el resultado para verificar el número de filas
             $stmt->store_result();
-            $number_of_rows = $stmt->num_rows;
 
             // Si no se encontraron filas, el evento no pertenece al usuario
-            if ($number_of_rows === 0)
+            if ($stmt->num_rows === 0)
             {
                 $stmt->close();
                 return false;
@@ -354,7 +358,6 @@ class eventDAO extends baseDAO implements IEvent
             // Asignamos los parametros
             $escEventId = $this->realEscapeString($eventId);
             $stmt->bind_param("i", $escEventId);
-            //$stmt->bind_param("i", $this->realEscapeString($eventId));
 
             // Ejecutamos la consulta
             if(!$stmt->execute())
