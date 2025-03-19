@@ -155,6 +155,32 @@ class eventAppService
     {
         $IEventDAO = eventFactory::CreateEvent();
 
-        return $IEventDAO->deleteEvent($eventId);
+        // Tomamos el tipo de usuario
+        $userDTO = json_decode($_SESSION["user"], true);
+        $user_type = htmlspecialchars($userDTO["usertype"]);
+
+        // Si es administrador, se permite eliminar cualquier evento
+        if ($user_type == 0)
+        {
+            return $IEventDAO->deleteEvent($eventId);
+        }
+        // Si es proveedor, solo puede eliminar sus eventos
+        else 
+        {
+            // Tomamos el email del proveedor
+            $user_email = htmlspecialchars($userDTO["email"]);
+
+            // Comprobamos si el evento pertenece al proveedor
+            $owner = $IEventDAO->ownsEvent($eventId, $user_email);
+
+            if ($owner)
+            {
+                return $IEventDAO->deleteEvent($eventId);
+            }
+            else
+            {
+                throw new notEventOwnerException("No puedes eliminar un evento que no te pertenece.");
+            }
+        }
     }
 }

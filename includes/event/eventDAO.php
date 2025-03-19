@@ -41,7 +41,7 @@ class eventDAO extends baseDAO implements IEvent
             $stmt = $conn->prepare($queryData['query']);
             if(!$stmt)
             {
-                throw new Exception("Error al preparar la consulta: " . $conn->error);
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
             }
 
             // Asignamos los parametros solo si hay parámetros para enlazar
@@ -55,7 +55,7 @@ class eventDAO extends baseDAO implements IEvent
             // Ejecutamos la consulta
             if(!$stmt->execute())
             {
-                throw new Exception("Error al ejecutar la consulta: " . $stmt->error);
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
             }
 
             // Asignamos los resultados a variables
@@ -71,7 +71,7 @@ class eventDAO extends baseDAO implements IEvent
             // Cerramos la consulta
             $stmt->close();
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             error_log($e->getMessage());
             throw $e;
         }
@@ -97,7 +97,7 @@ class eventDAO extends baseDAO implements IEvent
             $stmt = $conn->prepare("INSERT INTO events (name, description, price, location, date, capacity, category, email_provider) 
                                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             if (!$stmt) {
-                throw new Exception("Error al preparar la consulta: " . $conn->error);
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
             }
     
             // Asignar los parámetros
@@ -114,13 +114,13 @@ class eventDAO extends baseDAO implements IEvent
     
             // Ejecutar la consulta
             if (!$stmt->execute()) {
-                throw new Exception("Error al ejecutar la consulta: " . $stmt->error);
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
             }
     
             // Cerrar la consulta
             $stmt->close();
     
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             error_log($e->getMessage());
             throw $e;
         }
@@ -145,7 +145,7 @@ class eventDAO extends baseDAO implements IEvent
             $stmt = $conn->prepare("INSERT INTO event_participants (user_id, event_id, user_name, user_phone) VALUES (?, ?, ?, ?)");
             if(!$stmt)
             {
-                throw new Exception("Error al preparar la consulta: " . $conn->error);
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
             }
 
             // Asignamos los parametros
@@ -159,13 +159,13 @@ class eventDAO extends baseDAO implements IEvent
             // Ejecutamos la consulta
             if(!$stmt->execute())
             {
-                throw new Exception("Error al ejecutar la consulta: " . $stmt->error);
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
             }
 
             // Cerramos la consulta
             $stmt->close();
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             
             error_log($e->getMessage());
 
@@ -199,18 +199,17 @@ class eventDAO extends baseDAO implements IEvent
             $stmt = $conn->prepare("SELECT * FROM events WHERE id = ?");
             if(!$stmt)
             {
-                throw new Exception("Error al preparar la consulta: " . $conn->error);
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
             }
 
             // Asignamos los parametros
             $escEventId = $this->realEscapeString($eventId);
             $stmt->bind_param("i", $escEventId);
-            //$stmt->bind_param("i", $this->realEscapeString($eventId));
 
             // Ejecutamos la consulta
             if(!$stmt->execute())
             {
-                throw new Exception("Error al ejecutar la consulta: " . $stmt->error);
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
             }
 
             // Asignamos los resultados a variables
@@ -225,12 +224,62 @@ class eventDAO extends baseDAO implements IEvent
             // Cerramos la consulta
             $stmt->close();
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             error_log($e->getMessage());
             throw $e;
         }
 
         return $event;
+    }
+
+    
+    public function ownsEvent($eventId, $user_email)
+    {
+        $event = null;
+
+        try {
+            // Tomamos la conexion a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Comprobamos si el usuario es propietario del evento
+            $stmt = $conn->prepare("SELECT * FROM events WHERE id = ? AND email_provider = ?");
+            if(!$stmt)
+            {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Asignamos los parametros
+            $escEventId = $this->realEscapeString($eventId);
+            $escUserEmail = $this->realEscapeString($user_email);
+            $stmt->bind_param("is", $escEventId, $escUserEmail);
+
+            // Ejecutamos la consulta
+            if(!$stmt->execute())
+            {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            // Almacenar el resultado para verificar el número de filas
+            $stmt->store_result();
+            $number_of_rows = $stmt->num_rows;
+
+            // Si no se encontraron filas, el evento no pertenece al usuario
+            if ($number_of_rows === 0)
+            {
+                $stmt->close();
+                return false;
+            }
+
+            // Cerramos la consulta
+            $stmt->close();
+        } 
+        catch (\Exception $e) 
+        {
+            error_log($e->getMessage());
+            throw $e;
+        }
+
+        return true;
     }
 
     /**

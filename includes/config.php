@@ -82,10 +82,12 @@ function exceptionHandler(Throwable $exception)
     http_response_code(500);
 
     $titlePage = 'Error';
+    $errorMessage = $exception->getMessage();
 
     $mainContent = <<<EOS
-    <h1>Oops</h1>
-    <p> Parece que ha habido un fallo.</p>
+        <h1>Oops</h1>
+        <p> Parece que ha habido un fallo.</p>
+        $errorMessage
     EOS;
 
     require_once("includes/views/template/template.php");
