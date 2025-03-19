@@ -101,14 +101,14 @@ class eventDAO extends baseDAO implements IEvent
             }
     
             // Asignar los parámetros
-            $name = $eventDTO->getName();
-            $description = $eventDTO->getDesc();
-            $price = $eventDTO->getPrice();
-            $location = $eventDTO->getLocation();
-            $date = $eventDTO->getDate();
-            $capacity = $eventDTO->getCapacity();
-            $category = $eventDTO->getCategory();
-            $emailProvider = $eventDTO->getEmailProvider();
+            $name = $this->realEscapeString($eventDTO->getName());
+            $description = $this->realEscapeString($eventDTO->getDesc());
+            $price = $this->realEscapeString($eventDTO->getPrice());
+            $location = $this->realEscapeString($eventDTO->getLocation());
+            $date = $this->realEscapeString($eventDTO->getDate());
+            $capacity = $this->realEscapeString($eventDTO->getCapacity());
+            $category = $this->realEscapeString($eventDTO->getCategory());
+            $emailProvider = $this->realEscapeString($eventDTO->getEmailProvider());
 
             $stmt->bind_param("ssdssiss", $name, $description, $price, $location, $date, $capacity, $category, $emailProvider);
     
@@ -149,10 +149,10 @@ class eventDAO extends baseDAO implements IEvent
             }
 
             // Asignamos los parametros
-            $userId = $joinEventDTO->getUserId();
-            $eventId = $joinEventDTO->getEventId();
-            $userName = $joinEventDTO->getUserName();
-            $userPhone = $joinEventDTO->getUserPhone();
+            $userId = $this->realEscapeString($joinEventDTO->getUserId());
+            $eventId = $this->realEscapeString($joinEventDTO->getEventId());
+            $userName = $this->realEscapeString($joinEventDTO->getUserName());
+            $userPhone = $this->realEscapeString($joinEventDTO->getUserPhone());
 
             $stmt->bind_param("iisi", $userId, $eventId, $userName, $userPhone);
 
@@ -203,7 +203,9 @@ class eventDAO extends baseDAO implements IEvent
             }
 
             // Asignamos los parametros
-            $stmt->bind_param("i", $eventId);
+            $escEventId = $this->realEscapeString($eventId);
+            $stmt->bind_param("i", $escEventId);
+            //$stmt->bind_param("i", $this->realEscapeString($eventId));
 
             // Ejecutamos la consulta
             if(!$stmt->execute())
@@ -252,14 +254,14 @@ class eventDAO extends baseDAO implements IEvent
             }
 
             // Asignamos los parametros
-            $name = $eventDTO->getName();
-            $desc = $eventDTO->getDesc();
-            $price = $eventDTO->getPrice();
-            $location = $eventDTO->getLocation();
-            $date = $eventDTO->getDate();
-            $capacity = $eventDTO->getCapacity();
-            $category = $eventDTO->getCategory();
-            $id = $eventDTO->getId();
+            $name = $this->realEscapeString($eventDTO->getName());
+            $desc = $this->realEscapeString($eventDTO->getDesc());
+            $price = $this->realEscapeString($eventDTO->getPrice());
+            $location = $this->realEscapeString($eventDTO->getLocation());
+            $date = $this->realEscapeString($eventDTO->getDate());
+            $capacity = $this->realEscapeString($eventDTO->getCapacity());
+            $category = $this->realEscapeString($eventDTO->getCategory());
+            $id = $this->realEscapeString($eventDTO->getId());
 
             $stmt->bind_param("ssdssisi", $name, $desc, $price, $location, $date, $capacity, $category, $id);
 
@@ -301,7 +303,9 @@ class eventDAO extends baseDAO implements IEvent
             }
 
             // Asignamos los parametros
-            $stmt->bind_param("i", $eventId);
+            $escEventId = $this->realEscapeString($eventId);
+            $stmt->bind_param("i", $escEventId);
+            //$stmt->bind_param("i", $this->realEscapeString($eventId));
 
             // Ejecutamos la consulta
             if(!$stmt->execute())
