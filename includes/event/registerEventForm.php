@@ -112,18 +112,39 @@ class registerEventForm extends baseForm
         // Filtrado y sanitización de los datos recibidos
         $eventName = trim($data['name'] ?? '');
         $eventName = filter_var($eventName, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (empty($eventName) || strlen($eventName) > 50) {
+            $result[] = 'El nombre del evento es obligatorio y no debe exceder los 50 caracteres.';
+        }
 
         $description = trim($data['description'] ?? '');
         $description = filter_var($description, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (empty($description) || strlen($description) > 1000) {
+            $result[] = 'La descripción es obligatoria y no debe exceder los 1000 caracteres.';
+        }
 
         $date = trim($data['date'] ?? '');
+
         $location = trim($data['location'] ?? '');
         $location = filter_var($location, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (empty($location) || strlen($location) > 100) {
+            $result[] = 'La localización es obligatoria y no debe exceder los 100 caracteres.';
+        }
 
         $price = trim($data['price'] ?? '');
+        if (!is_numeric($price) || $price < 0) {
+            $result[] = 'El precio debe ser un número positivo.';
+        }
+
         $capacity = trim($data['capacity'] ?? '');
+        if (!is_numeric($capacity) || $capacity < 0) {
+            $result[] = 'La capacidad debe ser un número positivo.';
+        }
+
         $category = trim($data['category'] ?? '');
         $category = filter_var($category, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (empty($category) || strlen($category) > 50) {
+            $result[] = 'La categoría es obligatoria y no debe exceder los 50 caracteres.';
+        }
 
         if(count($result) === 0)
         {

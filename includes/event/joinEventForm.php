@@ -95,9 +95,15 @@ class joinEventForm extends baseForm
 
         $username =  trim($data['name'] ?? '');
         $username = filter_var($username, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (empty($username) || strlen($username) > 50) {
+            $result[] = 'El nombre es obligatorio y no debe exceder los 50 caracteres.';
+        }
 
         $phone = trim($data['phone'] ?? '');
         $phone = filter_var($phone, FILTER_SANITIZE_NUMBER_INT);
+        if (empty($phone) || strlen($phone) > 9) {
+            $result[] = 'El teléfono es obligatorio y no debe exceder los 9 caracteres.';
+        }
 
         if(count($result) === 0)
         {

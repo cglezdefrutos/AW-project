@@ -27,9 +27,9 @@ class userDAO extends baseDAO implements IUser
      */
     public function login($userDTO)
     {
-        $foundedUserDTO = $this->searchUser($userDTO->email());
+        $foundedUserDTO = $this->searchUser($this->realEscapeString($userDTO->email()));
         
-        if ($foundedUserDTO && self::testHashPassword( $userDTO->password(), $foundedUserDTO->password())) 
+        if ($foundedUserDTO && self::testHashPassword( $this->realEscapeString($userDTO->password()), $foundedUserDTO->password())) 
         {
             return $foundedUserDTO;
         } 
@@ -93,7 +93,7 @@ class userDAO extends baseDAO implements IUser
 
             $hashedPassword = self::hashPassword($userDTO->password());
 
-            $userType = (int)$userDTO->usertype();
+            $userType = $this->realEscapeString((int)$userDTO->usertype());
 
             $conn = application::getInstance()->getConnectionDb();
 
