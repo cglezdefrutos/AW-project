@@ -2,6 +2,8 @@
 require_once __DIR__.'/includes/config.php';
 
 use TheBalance\event\searchEventForm;
+use TheBalance\event\searchEventTable;
+use TheBalance\event\eventDTO;
 
 $titlePage = "Buscar eventos";
 $mainContent = "";
@@ -35,37 +37,29 @@ else
     if (!is_array($foundedEventsDTO)) {
         echo "Error al decodificar los datos de eventos.";
         exit();
-    } 
-
-    $html = '<div class="table-container">';
-
-    // Mostramos cada uno de eventDTO encontrados por pantalla en una tabla
-    $html .= '<table>';
-    $html .= '<tr><th>Nombre</th><th>Descripción</th><th>Fecha</th><th>Ubicación</th><th>Precio</th><th>Capacidad</th><th>Categoría</th><th></th></tr>';
-
-    foreach($foundedEventsDTO as $eventDTO)
-    {
-        // Verificar que $eventDTO es un array con los campos esperados
-        if (!is_array($eventDTO) || !isset($eventDTO['name'], $eventDTO['desc'], $eventDTO['date'], $eventDTO['location'], $eventDTO['price'], $eventDTO['category'], $eventDTO['capacity'])) {
-            echo "Error: El elemento no tiene la estructura esperada.";
-            var_dump($eventDTO);
-            exit();
-        }
-
-        $html .= '<tr>';
-        $html .= '<td>' . htmlspecialchars($eventDTO['name']) . '</td>';
-        $html .= '<td>' . htmlspecialchars($eventDTO['desc']) . '</td>';
-        $html .= '<td>' . htmlspecialchars($eventDTO['date']) . '</td>';
-        $html .= '<td>' . htmlspecialchars($eventDTO['location']) . '</td>';
-        $html .= '<td>' . htmlspecialchars($eventDTO['price']) . '</td>';
-        $html .= '<td>' . htmlspecialchars($eventDTO['capacity']) . '</td>';
-        $html .= '<td>' . htmlspecialchars($eventDTO['category']) . '</td>';
-        $html .= '<td><a href="joinEvent.php?id=' . htmlspecialchars($eventDTO['id']) . '">Apuntarse</a></td>';
-        $html .= '</tr>';
     }
+    
+    // Convertir los datos decodificados en objetos eventDTO
+    $events = array_map(function($eventData) {
+        return new eventDTO(
+            $eventData['id'],
+            $eventData['name'],
+            $eventData['desc'],
+            $eventData['date'],
+            $eventData['price'],
+            $eventData['location'],
+            $eventData['capacity'],
+            $eventData['category'],
+            $eventData['email_provider']
+        );
+    }, $foundedEventsDTO);
 
-    $html .= '</table>';
-    $html .= '</div>';
+    // Definir las columnas que se mostrarán en la tabla
+    $columns = ['Nombre', 'Descripción', 'Fecha', 'Ubicación', 'Precio', 'Capacidad', 'Categoría', 'Proveedor', ''];
+
+    // Generar la tabla de eventos
+    $eventTable = new searchEventTable($events, $columns);
+    $html = $eventTable->generateTable();
 
     $mainContent = <<<EOS
         <h1>Eventos disponibles</h1>

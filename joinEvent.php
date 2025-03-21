@@ -30,13 +30,16 @@ else
                 <h1>No se ha especificado el evento al que apuntarse.</h1>
             EOS;
         }
-        $form = new joinEventForm($eventId, $userId);
-        $htmlJoinEventForm = $form->Manage();
-
-        $mainContent = <<<EOS
-            <h1>Apuntarse a un evento</h1>
-            $htmlJoinEventForm
-        EOS;
+        else 
+        {
+            $form = new joinEventForm($eventId, $userId);
+            $htmlJoinEventForm = $form->Manage();
+    
+            $mainContent = <<<EOS
+                <h1>Apuntarse a un evento</h1>
+                $htmlJoinEventForm
+            EOS;
+        }
     }
     else 
     {
