@@ -3,12 +3,7 @@
 require_once __DIR__.'/includes/config.php';
 
 use TheBalance\event\registerEventForm;
-
-// Comprobar si se ha pulsado el botón de registrar otro evento y resetear la sesión antes de renderizar la página
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["registerAnother"])) {
-    header("Location: " . $_SERVER["PHP_SELF"]); // Recargar la página para mostrar el formulario de nuevo
-    exit();
-}
+use TheBalance\event\registerAnotherEventForm;
 
 $titlePage = "Registrar eventos";
 $mainContent = "";
@@ -37,14 +32,12 @@ else
         // Comprobar si el evento ya ha sido registrado
         if (isset($_GET["registered"]) && $_GET["registered"] === "true") 
         {
+            $form = new registerAnotherEventForm();
+            $htmlRegisterAnotherEventForm = $form->Manage();
+
             $mainContent = <<<EOS
                 <h1>Evento registrado correctamente.</h1>
-                <form method="post">
-                    <button type="submit" name="registerAnother">Registrar otro evento</button>
-                    <a href="index.php">
-                        <button type="button">Volver a inicio</button>
-                    </a>
-                </form>
+                $htmlRegisterAnotherEventForm
             EOS;
         }
         else
@@ -58,7 +51,6 @@ else
             EOS;
         }
     }
-
 }
 
 require_once __DIR__.'/includes/views/template/template.php';
