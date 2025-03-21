@@ -4,6 +4,7 @@ require_once __DIR__.'/includes/config.php';
 
 use TheBalance\event\eventAppService;
 use TheBalance\event\eventDTO;
+use TheBalance\event\manageEventTable;
 
 $titlePage = "Gestionar eventos";
 $mainContent = "";
@@ -41,46 +42,17 @@ else
         // Cogemos los eventos correspondientes al usuario
         $eventsDTO = $eventAppService->getEventsByUserType($user_type);
 
-        $mainContent = <<<EOS
+        // Definir las columnas que se mostrarán en la tabla
+        $columns = ['Nombre', 'Descripción', 'Fecha', 'Lugar', 'Precio', 'Capacidad', 'Categoría', 'Acciones'];
+
+        // Generar la tabla de gestión de eventos
+        $eventTable = new manageEventTable($eventsDTO, $columns);
+        $html = $eventTable->generateTable();
+
+        $mainContent .= <<<EOS
             <h1>Gestión de eventos</h1>
-
-            <div class="table-container">
-
-            <table>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Fecha</th>
-                    <th>Lugar</th>
-                    <th>Precio</th>
-                    <th>Capacidad</th>
-                    <th>Categoría</th>
-                    <th>Acciones</th>
-                </tr>
+            $html
         EOS;
-
-        foreach($eventsDTO as $event)
-        {
-            $mainContent .= <<<EOS
-                <tr>
-                    <td>{$event->getName()}</td>
-                    <td>{$event->getDesc()}</td>
-                    <td>{$event->getDate()}</td>
-                    <td>{$event->getLocation()}</td>
-                    <td>{$event->getPrice()}</td>
-                    <td>{$event->getCapacity()}</td>
-                    <td>{$event->getCategory()}</td>
-                    <td>
-                        <a href="updateEvents.php?eventId={$event->getId()}">Editar</a>
-                        o
-                        <a href="manageEvents.php?eventId={$event->getId()}" onclick="return confirm('¿Estás seguro de que deseas eliminar este evento?');">Eliminar</a>
-                    </td>
-                </tr>
-            EOS;
-
-        }
-
-        $mainContent .= "</table> </div>";
     }
 }
 
