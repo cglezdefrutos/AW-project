@@ -2,6 +2,8 @@
 
 namespace TheBalance\event;
 
+use TheBalance\user\userAlreadyJoinEventException;
+
 /**
  * Clase que contiene la lógica de la aplicación de eventos
  */
@@ -79,6 +81,14 @@ class eventAppService
     {
         $IEventDAO = eventFactory::CreateEvent();
 
+        // Comprobamos si el usuario ya está registrado en el evento
+        $isJoined = $IEventDAO->isJoined($data['user_id'], $data['event_id']);
+
+        if ($isJoined)
+        {
+            throw new userAlreadyJoinEventException("Ya estás registrado en este evento.");
+        }
+
         $joinEventDTO = new joinEventDTO($data['user_id'], $data['event_id'], $data['user_name'], $data['user_phone']);
 
         return $IEventDAO->joinEvent($joinEventDTO);
@@ -154,6 +164,14 @@ class eventAppService
     public function deleteEvent($eventId)
     {
         $IEventDAO = eventFactory::CreateEvent();
+
+        // Si el evento tiene participantes, no se puede eliminar
+        $participants = $IEventDAO->getParticipants($eventId);
+
+        if (count($participants) > 0)
+        {
+            throw new eventHasParticipantsException("No puedes eliminar un evento que tiene participantes.");
+        }
 
         // Tomamos el tipo de usuario
         $userDTO = json_decode($_SESSION["user"], true);
