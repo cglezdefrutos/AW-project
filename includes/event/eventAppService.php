@@ -155,6 +155,14 @@ class eventAppService
     {
         $IEventDAO = eventFactory::CreateEvent();
 
+        // Si el evento tiene participantes, no se puede eliminar
+        $participants = $IEventDAO->getParticipants($eventId);
+
+        if (count($participants) > 0)
+        {
+            throw new eventHasParticipantsException("No puedes eliminar un evento que tiene participantes.");
+        }
+
         // Tomamos el tipo de usuario
         $userDTO = json_decode($_SESSION["user"], true);
         $user_type = htmlspecialchars($userDTO["usertype"]);

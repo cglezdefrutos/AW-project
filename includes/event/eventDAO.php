@@ -286,6 +286,52 @@ class eventDAO extends baseDAO implements IEvent
         return true;
     }
 
+    public function getParticipants($eventId)
+    {
+        $participants = array();
+
+        try {
+            // Tomamos la conexion a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Implementar la logica de acceso a la base de datos para obtener los participantes de un evento
+            $stmt = $conn->prepare("SELECT * FROM event_participants WHERE event_id = ?");
+            if(!$stmt)
+            {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Asignamos los parametros
+            $escEventId = $this->realEscapeString($eventId);
+            $stmt->bind_param("i", $escEventId);
+
+            // Ejecutamos la consulta
+            if(!$stmt->execute())
+            {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            // Asignamos los resultados a variables
+            $stmt->bind_result($userId, $eventId, $userName, $userPhone);
+
+            // Mientras haya resultados, los guardamos en el array
+            while ($stmt->fetch())
+            {
+                $participant = new joinEventDTO($userId, $eventId, $userName, $userPhone);
+                $participants[] = $participant;
+            }
+
+            // Cerramos la consulta
+            $stmt->close();
+
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+
+        return $participants;
+    }
+
     /**
      * Actualiza un evento
      * 
