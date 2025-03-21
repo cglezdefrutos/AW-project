@@ -23,7 +23,13 @@ else
 {
     if(!isset($success) || ($success != 'true'))
     {
-        $eventId = $_GET['id'];
+        $eventId = $_GET['id'] ?? $_POST['eventId'] ?? null;
+        if($eventId == null)
+        {
+            $mainContent = <<<EOS
+                <h1>No se ha especificado el evento al que apuntarse.</h1>
+            EOS;
+        }
         $form = new joinEventForm($eventId, $userId);
         $htmlJoinEventForm = $form->Manage();
 

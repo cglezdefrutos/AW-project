@@ -2,6 +2,8 @@
 
 namespace TheBalance\event;
 
+use TheBalance\user\userAlreadyJoinEventException;
+
 /**
  * Clase que contiene la lógica de la aplicación de eventos
  */
@@ -78,6 +80,14 @@ class eventAppService
     public function joinEvent($data)
     {
         $IEventDAO = eventFactory::CreateEvent();
+
+        // Comprobamos si el usuario ya está registrado en el evento
+        $isJoined = $IEventDAO->isJoined($data['user_id'], $data['event_id']);
+
+        if ($isJoined)
+        {
+            throw new userAlreadyJoinEventException("Ya estás registrado en este evento.");
+        }
 
         $joinEventDTO = new joinEventDTO($data['user_id'], $data['event_id'], $data['user_name'], $data['user_phone']);
 

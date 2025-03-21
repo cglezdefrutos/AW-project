@@ -129,6 +129,60 @@ class eventDAO extends baseDAO implements IEvent
     }
 
     /**
+     * Comprueba si un usuario ya está apuntado a un evento
+     * 
+     * @param int $userId Id del usuario
+     * @param int $eventId Id del evento
+     * 
+     * @return bool Resultado de la operación
+     */
+    public function isJoined($userId, $eventId)
+    {
+        try {
+            // Tomamos la conexion a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Implementar la logica de acceso a la base de datos para comprobar si un usuario ya está apuntado a un evento
+            $stmt = $conn->prepare("SELECT * FROM event_participants WHERE user_id = ? AND event_id = ?");
+            if(!$stmt)
+            {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Asignamos los parametros
+            $escUserId = $this->realEscapeString($userId);
+            $escEventId = $this->realEscapeString($eventId);
+            $stmt->bind_param("ii", $escUserId, $escEventId);
+
+            // Ejecutamos la consulta
+            if(!$stmt->execute())
+            {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            // Almacenar el resultado para verificar el número de filas
+            $stmt->store_result();
+
+            // Si no se encontraron filas, el usuario no está apuntado al evento
+            if ($stmt->num_rows === 0)
+            {
+                $stmt->close();
+                return false;
+            }
+
+            // Cerramos la consulta
+            $stmt->close();
+        } 
+        catch (\Exception $e) 
+        {
+            error_log($e->getMessage());
+            throw $e;
+        }
+
+        return true;
+    }
+
+    /**
      * Apunta a un usuario a un evento
      * 
      * @param array $joinEventDTO Datos del usuario y evento
@@ -166,14 +220,7 @@ class eventDAO extends baseDAO implements IEvent
             $stmt->close();
 
         } catch (\Exception $e) {
-            
             error_log($e->getMessage());
-
-            if($conn->sqlstate == 23000 || $conn->errno == 1062)
-            {
-                throw new userAlreadyJoinEventException("El usuario ya está apuntado al evento");
-            }
-
             throw $e;
         }
 
