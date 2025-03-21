@@ -24,10 +24,13 @@ class registerAnotherEventForm extends baseForm
     protected function CreateFields($initialData)
     {
         $html = <<<EOS
-            <button type="submit" name="registerAnother">Registrar otro evento</button>
-            <a href="index.php">
-                <button type="button">Volver a inicio</button>
-            </a>
+            <fieldset>
+                <legend>¿Dónde desea ir?</legend>
+                <button type="submit" name="registerAnother">Registrar otro evento</button>
+                <a href="index.php">
+                    <button type="button">Volver a inicio</button>
+                </a>
+            </fieldset>
         EOS;
 
         return $html;

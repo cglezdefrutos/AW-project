@@ -36,7 +36,11 @@ else
         if (isset($_GET['eventId'])) {
             $eventId = $_GET['eventId'];
             $eventAppService->deleteEvent($eventId);
-            $mainContent .= "<p>Evento eliminado correctamente.</p>";
+            $mainContent .= <<<EOS
+                <div class="alert-success">
+                    Evento eliminado correctamente.
+                </div>
+            EOS;
         }
 
         // Cogemos los eventos correspondientes al usuario

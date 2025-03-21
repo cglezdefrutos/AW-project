@@ -34,6 +34,9 @@ class updateEventForm extends baseForm
      */
     protected function CreateFields($initialData)
     {
+        // Formatear la fecha y hora en el formato YYYY-MM-DDTHH:MM
+        $formattedDateTime = date('Y-m-d\TH:i', strtotime($this->eventInitialData->getDate()));
+
         // Creamos el formulario de actualización de eventos
         $html = <<<EOF
             <fieldset>
@@ -51,18 +54,18 @@ class updateEventForm extends baseForm
         $html .= htmlspecialchars($this->eventInitialData->getName()) . '"><br>';
 
         $html .= <<<EOF
-                <label for="description">Descripción:</label>
-                <input type="text" name="description" id="description" required placeholder="Escribe una breve descripcion" value="
+            <label for="description">Descripción:</label>
+            <textarea name="description" id="description" required placeholder="Escribe una breve descripcion" rows="4" cols="50">
         EOF;
         
-        $html .= htmlspecialchars($this->eventInitialData->getDesc()) . '"><br>';
+        $html .= htmlspecialchars($this->eventInitialData->getDesc()) . '</textarea><br>';
 
         $html .= <<<EOF
                 <label for="date">Fecha:</label>
-                <input type="date" name="date" id="date" required value="
+                <input type="datetime-local" name="date" id="date" required value="
         EOF;
         
-        $html .= htmlspecialchars($this->eventInitialData->getDate()) . '"><br>';
+        $html .= htmlspecialchars($formattedDateTime) . '"><br>';
 
         $html .= <<<EOF
                 <label for="location">Lugar:</label>
