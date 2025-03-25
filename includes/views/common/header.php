@@ -1,15 +1,19 @@
 <?php
 
+use TheBalance\application;
+
 /**
  * Muestra el login o el nombre del usuario si está logueado
  */
 function mostrarLogin() 
 {
-    if (isset($_SESSION["login"]) && ($_SESSION["login"]===true)) 
+    $app = application::getInstance();
+    
+    if ($app->isCurrentUserLogged()) 
     {
-        $user = json_decode($_SESSION["user"], true);
-        echo "Bienvenido, " . $user["email"] . ". <a href='logout.php'>(salir)</a>";
-    } 
+        $email = $app->getCurrentUserEmail();
+        echo "Bienvenido, " . $email . ". <a href='logout.php'>(salir)</a>";
+    }
     else 
     {
         echo "Usuario desconocido. <a href='login.php'>Login.</a> <a href='register.php'>Registro</a>";

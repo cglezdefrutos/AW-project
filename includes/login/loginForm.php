@@ -5,6 +5,7 @@ namespace TheBalance\login;
 use TheBalance\views\common\baseForm;
 use TheBalance\user\userAppService;
 use TheBalance\user\userDTO;
+use TheBalance\application;
 
 /**
  * Formulario de inicio de sesión
@@ -92,8 +93,9 @@ class loginForm extends baseForm
             else 
             {
                 $userJSON = json_encode($foundedUserDTO);
-                $_SESSION["login"] = true;
-                $_SESSION["user"] = $userJSON;
+                
+                $app = application::getInstance();
+                $app->loginUser($userJSON);
 
                 $result = 'index.php';
             }

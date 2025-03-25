@@ -47,27 +47,12 @@ class registerEventForm extends baseForm
         
         $html .= htmlspecialchars($initialData['name'] ?? '') . '"><br>';
 
-        /* $html .= <<<EOF
-                <label for="description">Descripción:</label>
-                <input type="text" name="description" id="description" required placeholder="Escribe una breve descripcion" value="
-        EOF;
-        
-        $html .= htmlspecialchars($initialData['description'] ?? '') . '"><br>'; */
-
         $html .= <<<EOF
                 <label for="description">Descripción:</label>
                 <textarea name="description" id="description" required placeholder="Escribe una breve descripcion" rows="4" cols="50">
         EOF;
         
         $html .= htmlspecialchars($initialData['description'] ?? '') . '</textarea><br>';
-
-
-        /* $html .= <<<EOF
-                <label for="date">Fecha:</label>
-                <input type="date" name="date" id="date" required value="
-        EOF;
-        
-        $html .= htmlspecialchars($initialData['date'] ?? '') . '"><br>'; */
 
         $html .= <<<EOF
                 <label for="date">Fecha y hora:</label>

@@ -4,11 +4,14 @@ require_once __DIR__.'/includes/config.php';
 
 use TheBalance\event\registerEventForm;
 use TheBalance\event\registerAnotherEventForm;
+use TheBalance\application;
 
 $titlePage = "Registrar eventos";
 $mainContent = "";
 
-if(!isset($_SESSION["user"])) 
+$app = application::getInstance();
+
+if(!$app->isCurrentUserLogged())
 {
     $mainContent = <<<EOS
         <h1>No es posible registrar un evento si no has iniciado sesión.</h1>
@@ -16,12 +19,8 @@ if(!isset($_SESSION["user"]))
 } 
 else 
 {
-    $userDTO = json_decode($_SESSION["user"], true);
-    $user_email = htmlspecialchars($userDTO["email"]);
-    $user_type = htmlspecialchars($userDTO["usertype"]);
-
     // Comprobar si el usuario es proveedor o administrador
-    if($user_type != 2 && $user_type != 0)
+    if(!$app->isCurrentUserProvider() && !$app->isCurrentUserAdmin())
     {
         $mainContent = <<<EOS
             <h1>No es posible registrar un evento si no se es proveedor o administrador.</h1>
@@ -42,6 +41,7 @@ else
         }
         else
         {
+            $user_email = $app->getCurrentUserEmail();
             $form = new registerEventForm($user_email);
             $htmlRegisterEventForm = $form->Manage();
 

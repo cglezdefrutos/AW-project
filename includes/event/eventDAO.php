@@ -333,6 +333,13 @@ class eventDAO extends baseDAO implements IEvent
         return true;
     }
 
+    /**
+     * Obtiene los participantes de un evento
+     * 
+     * @param int $eventId Id del evento
+     * 
+     * @return array Participantes
+     */
     public function getParticipants($eventId)
     {
         $participants = array();

@@ -3,6 +3,7 @@
 namespace TheBalance\event;
 
 use TheBalance\user\userAlreadyJoinEventException;
+use TheBalance\application;
 
 /**
  * Clase que contiene la lógica de la aplicación de eventos
@@ -101,13 +102,15 @@ class eventAppService
      * 
      * @return array Resultado de la búsqueda
      */
-    public function getEventsByUserType($user_type)
+    public function getEventsByUserType()
     {
         $IEventDAO = eventFactory::CreateEvent();
         $eventsDTO = null;
 
+        $app = application::getInstance();
+
         // Si es administrador, tomamos todos los eventos
-        if ($user_type == 0)
+        if ($app->isCurrentUserAdmin())
         {
             $eventsDTO = $IEventDAO->getEvents();
         }
@@ -115,16 +118,14 @@ class eventAppService
         else 
         {
             // Tomamos el email del proveedor
-            $userDTO = json_decode($_SESSION["user"], true);
-            $user_email = htmlspecialchars($userDTO["email"]);
+            $userEmail = htmlspecialchars($app->getCurrentUserEmail());
 
             // Pasamos como filtro un array con el email (así solo traerá los eventos donde coincida ese email)
-            $eventsDTO = $IEventDAO->getEvents(array("email_provider" => $user_email));
+            $eventsDTO = $IEventDAO->getEvents(array("email_provider" => $userEmail));
         }
 
         return $eventsDTO;
     }
-
 
     /**
      * Devuelve los evento asociado a ese id
@@ -173,12 +174,11 @@ class eventAppService
             throw new eventHasParticipantsException("No puedes eliminar un evento que tiene participantes.");
         }
 
-        // Tomamos el tipo de usuario
-        $userDTO = json_decode($_SESSION["user"], true);
-        $user_type = htmlspecialchars($userDTO["usertype"]);
+        // Tomamos la instancia de la aplicación
+        $app = application::getInstance();
 
         // Si es administrador, se permite eliminar cualquier evento
-        if ($user_type == 0)
+        if ($app->isCurrentUserAdmin())
         {
             return $IEventDAO->deleteEvent($eventId);
         }
@@ -186,10 +186,10 @@ class eventAppService
         else 
         {
             // Tomamos el email del proveedor
-            $user_email = htmlspecialchars($userDTO["email"]);
+            $userEmail = htmlspecialchars($app->getCurrentUserEmail());
 
             // Comprobamos si el evento pertenece al proveedor
-            $owner = $IEventDAO->ownsEvent($eventId, $user_email);
+            $owner = $IEventDAO->ownsEvent($eventId, $userEmail);
 
             if ($owner)
             {
