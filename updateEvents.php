@@ -4,24 +4,30 @@ require_once __DIR__.'/includes/config.php';
 
 use TheBalance\event\eventAppService;
 use TheBalance\event\updateEventForm;
+use TheBalance\application;
 
 $titlePage = "Actualizar evento";
 $mainContent = "";
 
-if (!isset($_SESSION["user"])) {
+$app = application::getInstance();
+
+if (!$app->isCurrentUserLogged())
+{
     $mainContent = <<<EOS
         <h1>No es posible actualizar eventos si no has iniciado sesión.</h1>
     EOS;
-} else {
-    $userDTO = json_decode($_SESSION["user"], true);
-    $user_type = htmlspecialchars($userDTO["usertype"]);
-
+} 
+else 
+{
     // Comprobar si el usuario es proveedor o administrador
-    if ($user_type != 2 && $user_type != 0) {
+    if ( ! $app->isCurrentUserProvider() && ! $app->isCurrentUserAdmin() )
+    {
         $mainContent = <<<EOS
-        <h1>No es posible actualizar eventos si no se es proveedor.</h1>
-    EOS;
-    } else {
+            <h1>No es posible actualizar eventos si no se es proveedor.</h1>
+        EOS;
+    } 
+    else 
+    {
         // Manejar la actualización del evento si se proporciona un eventId en la URL o al enviar el formulario
         $eventId = $_GET['eventId'] ?? $_POST['eventId'] ?? null;
 

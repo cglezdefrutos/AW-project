@@ -5,6 +5,7 @@ namespace TheBalance\login;
 use TheBalance\views\common\baseForm;
 use TheBalance\user\userAppService;
 use TheBalance\user\userDTO;
+use TheBalance\application;
 
 /**
  * Formulario de registro
@@ -119,12 +120,15 @@ class registerForm extends baseForm
                 $createdUserDTO = $userAppService->create($userDTO);
 
                 $userJSON = json_encode($createdUserDTO);
-                $_SESSION["login"] = true;
-                $_SESSION["user"] = $userJSON;
+
+                $app = application::getInstance();
+                $app->loginUser($userJSON);
 
                 $result = 'index.php';
 
-                if(true){ //poner en false para no conectarse a la base de datos
+                if(true)
+                { 
+                    // Poner en false para no conectarse a la base de datos
                     $app = application::getInstance();
                 
                     $message = "Se ha registrado exitosamente como " . 

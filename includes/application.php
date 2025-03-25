@@ -206,7 +206,6 @@ class application
 	/**
 	 * Devuelve un atributo establecido en la petición actual o en la petición justamente anterior.
 	 * 
-	 * 
 	 * @param string $key Clave sobre la que buscar el atributo.
 	 * 
 	 * @return any Atributo asociado a la sesión bajo la clave <code>$key</code> o <code>null</code> si no existe.
@@ -222,4 +221,84 @@ class application
         
         return $result;
     }
+
+    /**
+     * Asigna el usuario que ha iniciado sesión.
+     * 
+     * @param array $user JSON del usuario que ha iniciado sesión.
+     */
+    public function loginUser($user)
+    {
+        $_SESSION['user'] = $user;
+    }
+
+    /**
+     * Verifica si el usuario actual está logueado.
+     * 
+     * @return bool Verdadero si el usuario está logueado, falso en caso contrario.
+     */
+    public function isCurrentUserLogged()
+    {
+        return isset($_SESSION['user']);
+    }
+    
+    /**
+     * Verifica si el usuario actual es administrador.
+     * 
+     * @return bool Verdadero si el usuario es administrador, falso en caso contrario.
+     */
+    public function isCurrentUserAdmin()
+    {
+        return $this->isCurrentUserLogged() && json_decode($_SESSION['user'], true)['usertype'] == 0;
+    }
+
+    /**
+     * Verifica si el usuario actual es cliente.
+     * 
+     * @return bool Verdadero si el usuario es cliente, falso en caso contrario.
+     */
+    public function isCurrentUserClient()
+    {
+        return $this->isCurrentUserLogged() && json_decode($_SESSION['user'], true)['usertype'] == 1;
+    }
+
+    /**
+     * Verifica si el usuario actual es proveedor.
+     * 
+     * @return bool Verdadero si el usuario es proveedor, falso en caso contrario.
+     */
+    public function isCurrentUserProvider()
+    {
+        return $this->isCurrentUserLogged() && json_decode($_SESSION['user'], true)['usertype'] == 2;
+    }
+
+    /**
+     * Verifica si el usuario actual es entrenador.
+     * 
+     * @return bool Verdadero si el usuario es entrenador, falso en caso contrario.
+     */
+    public function isCurrentUserTrainer()
+    {
+        return $this->isCurrentUserLogged() && json_decode($_SESSION['user'], true)['usertype'] == 3;
+    }    
+
+    /**
+     * Devuelve el id del usuario actual.
+     * 
+     * @return int|null Id del usuario actual o null si no está logueado.
+     */
+    public function getCurrentUserId()
+    {
+        return json_decode($_SESSION['user'], true)['id'] ?? null;
+    }
+
+    /**
+     * Devuelve el email del usuario actual.
+     * 
+     * @return string|null Email del usuario actual o null si no está logueado.
+     */
+    public function getCurrentUserEmail()
+    {
+        return json_decode($_SESSION['user'], true)['email'] ?? null;
+    }    
 }

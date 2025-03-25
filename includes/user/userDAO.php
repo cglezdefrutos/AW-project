@@ -152,12 +152,8 @@ class userDAO extends baseDAO implements IUser
      * @return bool Resultado de la comprobación
      */
     private static function testHashPassword($password, $hashedPassword)
-    {
-        var_dump($password);
-        var_dump($hashedPassword);
-        
+    {        
         $result = password_verify($password, $hashedPassword);
-        var_dump($result);
         return $result;
     }
 }

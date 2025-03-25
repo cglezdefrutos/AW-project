@@ -3,17 +3,22 @@
 require_once __DIR__.'/includes/config.php';
 
 use TheBalance\event\joinEventForm;
+use TheBalance\application;
 
 $titlePage = "Apuntarse a un evento";
 $mainContent = "";
 
 $success = $_GET['success'] ?? 'false';
 
-$user = json_decode($_SESSION["user"], true);
-$userId = $user["id"];
-$userType = $user["usertype"];
+$app = application::getInstance();
 
-if($userType != 1)
+if(!$app->isCurrentUserLogged())
+{
+    $mainContent = <<<EOS
+        <h1>No es posible apuntarse a eventos si no has iniciado sesión.</h1>
+    EOS;
+}
+else if(!$app->isCurrentUserClient())
 {
     $mainContent = <<<EOS
         <h1>No es posible apuntarse a eventos si no eres cliente.</h1>
@@ -32,6 +37,7 @@ else
         }
         else 
         {
+            $userId = $app->getCurrentUserId();
             $form = new joinEventForm($eventId, $userId);
             $htmlJoinEventForm = $form->Manage();
     

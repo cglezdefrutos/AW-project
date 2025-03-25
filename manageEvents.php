@@ -5,11 +5,15 @@ require_once __DIR__.'/includes/config.php';
 use TheBalance\event\eventAppService;
 use TheBalance\event\eventDTO;
 use TheBalance\event\manageEventTable;
+use TheBalance\application;
 
 $titlePage = "Gestionar eventos";
 $mainContent = "";
 
-if(!isset($_SESSION["user"]))
+$app = application::getInstance();
+
+
+if(!$app->isCurrentUserLogged())
 {
     $mainContent = <<<EOS
         <h1>No es posible gestionar eventos si no has iniciado sesión.</h1>
@@ -17,17 +21,14 @@ if(!isset($_SESSION["user"]))
 }
 else
 {
-    $userDTO = json_decode($_SESSION["user"], true);
-    $user_type = htmlspecialchars($userDTO["usertype"]);
-
     // Comprobar si el usuario es proveedor o administrador
-    if ( $user_type != 2 &&  $user_type != 0)
+    if ( ! $app->isCurrentUserProvider() && ! $app->isCurrentUserAdmin() )
     { 
         $mainContent = <<<EOS
-        <h1>No es posible gestionar eventos si no se es proveedor o administrador.</h1>
-    EOS;
-    } 
-    else 
+            <h1>No es posible gestionar eventos si no se es proveedor o administrador.</h1>
+        EOS;
+    }
+    else
     {
         // Obtenemos la instancia del servicio de eventos
         $eventAppService = eventAppService::GetSingleton();
@@ -44,7 +45,7 @@ else
         }
 
         // Cogemos los eventos correspondientes al usuario
-        $eventsDTO = $eventAppService->getEventsByUserType($user_type);
+        $eventsDTO = $eventAppService->getEventsByUserType();
 
         // Definir las columnas que se mostrarán en la tabla
         $columns = ['Nombre', 'Descripción', 'Fecha', 'Lugar', 'Precio', 'Capacidad', 'Categoría', 'Acciones'];
@@ -56,7 +57,7 @@ else
         $mainContent .= <<<EOS
             <h1>Gestión de eventos</h1>
             $html
-        EOS;
+        EOS;        
     }
 }
 
