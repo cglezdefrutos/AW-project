@@ -173,3 +173,4 @@ class productDTO implements \JsonSerializable
         return get_object_vars($this);
     }
 }
+
