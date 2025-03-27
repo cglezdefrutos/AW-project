@@ -29,19 +29,35 @@ class catalogFilterForm extends baseForm
                 <legend>Filtrar Productos</legend>
 
                 <label for="name">Nombre:</label>
-                <input type="text" name="name" id="name" placeholder="Buscar por nombre" value="{$initialData['name'] ?? ''}"><br>
+                <input type="text" name="name" id="name" placeholder="Buscar por nombre" value="
+        EOF;
 
-                <label for="category">Categoría:</label>
-                <input type="text" name="category" id="category" placeholder="Buscar por categoría" value="{$initialData['category'] ?? ''}"><br>
+        $html .= htmlspecialchars($initialData['name'] ?? '') . '">';
 
-                <label for="minPrice">Precio mínimo:</label>
-                <input type="number" name="minPrice" id="minPrice" step="0.01" placeholder="Ej: 10" value="{$initialData['minPrice'] ?? ''}"><br>
+        $html .= <<<EOF
+            <label for="category">Categoría:</label>
+            <input type="text" name="category" id="category" placeholder="Buscar por categoría" value="
+        EOF;
 
-                <label for="maxPrice">Precio máximo:</label>
-                <input type="number" name="maxPrice" id="maxPrice" step="0.01" placeholder="Ej: 100" value="{$initialData['maxPrice'] ?? ''}"><br>
+        $html .= htmlspecialchars($initialData['category'] ?? '') . '">';
 
-                <button type="submit" class="btn btn-primary">Filtrar</button>
-            </fieldset>
+        $html .= <<<EOF
+        <label for="minPrice">Precio mínimo:</label>
+        <input type="number" name="minPrice" id="minPrice" step="0.01" placeholder="Ej: 0" value="
+        EOF;
+
+        $html .= htmlspecialchars($initialData['minPrice'] ?? '') . '">';
+
+        $html .= <<<EOF
+            <label for="maxPrice">Precio máximo:</label>
+            <input type="number" name="maxPrice" id="maxPrice" step="0.01" placeholder="Ej: 100" value="
+        EOF;
+
+        $html .= htmlspecialchars($initialData['maxPrice'] ?? '') . '">';
+
+        $html .= <<<EOF
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+        </fieldset>
         EOF;
 
         return $html;

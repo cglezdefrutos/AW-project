@@ -4,6 +4,9 @@ require_once __DIR__.'/includes/config.php';
 
 use TheBalance\application;
 use TheBalance\product\productAppService;
+use TheBalance\product\productDTO;
+use TheBalance\catalog\catalogContent;
+use TheBalance\catalog\catalogFilterForm;
 
 $app = application::getInstance();
 
@@ -27,12 +30,13 @@ if (!isset($_GET["search"]) || $_GET["search"] != "true")
     unset($_SESSION["foundedProductsJSON"]);
 
     // Tomar todos los productos de la BBDD
-    $productsDTO = $productAppService->getAllProducts();
+    $productsDTO = $productAppService->searchProducts(array());
 }
 else
 {
     // Verificar el contenido de $_SESSION["foundedProductsDTO"]
-    if (!isset($_SESSION["foundedProductsDTO"])) {
+    if (!isset($_SESSION["foundedProductsDTO"])) 
+    {
         echo "No se encontraron productos.";
         exit();
     }
@@ -41,7 +45,8 @@ else
     $foundedProductsJSON = json_decode($_SESSION["foundedProductsJSON"], true);
 
     // Verificar que la decodificación fue exitosa y que es un array
-    if (!is_array($foundedProductsJSON)) {
+    if (!is_array($foundedProductsJSON)) 
+    {
         echo "Error al decodificar los datos de productos.";
         exit();
     }
@@ -65,7 +70,7 @@ else
 
 // Generar el contenido del catálogo
 $catalog = new catalogContent($productsDTO);
-$htmlCatalog = $catalog->generateCatalog();
+$htmlCatalog = $catalog->generateContent();
 
 // Combinar el formulario y el catálogo
 $mainContent .= <<<EOS

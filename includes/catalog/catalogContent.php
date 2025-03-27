@@ -1,6 +1,6 @@
 <?php
 
-namespace TheBalance\product;
+namespace TheBalance\catalog;
 
 /**
  * Clase para generar el contenido del catálogo.
