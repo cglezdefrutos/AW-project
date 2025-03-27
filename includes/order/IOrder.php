@@ -8,6 +8,15 @@ namespace TheBalance\order;
 interface IOrder
 {
 
+
+    /**
+     * Optiene todos los Orders
+     * 
+     * @param 
+     * @return array de orders
+     */
+    public function getAllOrders();
+
     /**
      * Optiene los Orders de un usuario
      * 

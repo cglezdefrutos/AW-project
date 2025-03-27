@@ -35,5 +35,36 @@ class orderAppService
     {
     } 
 
+    /**
+     * Devuelve los orders asociados al tipo de usuario
+     * 
+     * @param string $user_type Tipo de usuario
+     * 
+     * @return array Resultado de la búsqueda
+     */
+    public function getOrdersByUserType()
+    {
+        $IOrderDAO = orderFactory::CreateOrder();
+        $ordersDTO = null;
+
+        $app = application::getInstance();
+
+        // Si es administrador, tomamos todos los orders
+        if ($app->isCurrentUserAdmin())
+        {
+            $ordersDTO = $IOrderDAO->getAllOrders();
+        }
+        // Si es usuario, tomamos SOLO los orders del usuario
+        else
+        {
+            // Tomamos el id del usuario
+            $userId = $app->getCurrentUserId();
+
+            // Pasamos como filtro el id del usuario
+            $ordersDTO = $IOrderDAO->getOrdersByUserId($userId);
+        }
+
+        return $ordersDTO;
+    }
 
 }
