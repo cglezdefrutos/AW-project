@@ -45,13 +45,9 @@ class productAppService
      */
     public function searchProducts($filters)
     {
-        /* $IProductDAO = productFactory::CreateProduct();
+        $IProduct = productFactory::CreateProduct();
 
-        $productsDTO = new productDTO(0, $filters['name'], $filters['description'], $filters['category'], $filters['price'], $filters['provider']);
-
-        return $IProductDAO->searchProducts($productsDTO); */
-
-        return array();
+        return $IProduct->searchProducts($filters);
     }
 
 }

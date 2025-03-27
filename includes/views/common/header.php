@@ -1,7 +1,7 @@
 <!-- Logo -->
-<div class="col-12 col-md-5 text-center text-md-start mb-3 mb-md-0">
+<div class="col-12 col-md-5 text-center text-md-start mt-5 mb-3 mt-md-0 mb-md-0">
     <a href="index.php" class="text-white text-decoration-none">
-        <h1 class="m-0 fs-1">The Balance</h1>
+        <h1 class="fs-1">The Balance</h1>
     </a>
 </div>
 

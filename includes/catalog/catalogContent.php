@@ -22,18 +22,18 @@ class catalogContent
     public function generateContent()
     {
         $html = '<div class="container mt-4">';
-        $html .= '<h1 class="text-center mb-4">Catálogo de Productos</h1>';
+        $html .= '<h2 class="text-center mb-4">Catálogo de Productos</h2>';
         $html .= '<div class="row">';
 
         foreach ($this->products as $product) {
             $html .= <<<EOS
-                <div class="col-md-3 col-sm-6 mb-4">
+                <div class="col-sm-6 col-md-4 mb-4">
                     <div class="card h-100">
-                        <img src="{$product->getImage()}" class="card-img-top" alt="{$product->getName()}">
+                        <img src="{$product->getImageUrl()}" class="card-img-top" alt="{$product->getName()}">
                         <div class="card-body">
                             <h5 class="card-title">{$product->getName()}</h5>
                             <p class="card-text"><strong>Descripción:</strong> {$product->getDescription()}</p>
-                            <p class="card-text"><strong>Categoría:</strong> {$product->getCategory()}</p>
+                            <p class="card-text"><strong>Categoría:</strong> {$product->getCategoryId()}</p>
                             <p class="card-text"><strong>Precio:</strong> {$product->getPrice()} €</p>
                             <p class="card-text"><strong>Stock:</strong> {$product->getStock()}</p>
                             <p class="card-text"><strong>Fecha de creación:</strong> {$product->getCreatedAt()}</p>

@@ -11,7 +11,7 @@
     </head>
     <body>
         <div class="container-fluid"> 
-            <header class="row align-items-center bg-primary text-white py-3">
+            <header class="row align-items-center bg-primary text-white mb-0">
                 <?php
                     require("includes/views/common/header.php");
                 ?>
@@ -29,7 +29,7 @@
                 </main>
             </div>
 
-            <footer class="row bg-dark text-white p-0">
+            <footer class="row bg-dark text-white p-0 mb-0">
                 <?php
                     require("includes/views/common/footer.php");
                 ?>

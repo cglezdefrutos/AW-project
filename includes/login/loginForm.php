@@ -37,11 +37,23 @@ class loginForm extends baseForm
         }
 
         $html = <<<EOF
-            <fieldset>
-                <legend>Usuario y contraseña</legend>
-                <p><label>Email:</label> <input type="email" name="email" value="$email"/></p>
-                <p><label>Password:</label> <input type="password" name="password" /></p>
-                <button type="submit" name="login">Entrar</button>
+            <fieldset class="border p-4 rounded">
+                <legend class="w-auto">Usuario y contraseña</legend>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" name="email" id="email" class="form-control" placeholder="Introduce tu email" value="$email" required>
+                    <div class="invalid-feedback">Por favor, introduce un email válido.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password:</label>
+                    <input type="password" name="password" id="password" class="form-control" placeholder="Introduce tu contraseña" required>
+                    <div class="invalid-feedback">Por favor, introduce tu contraseña.</div>
+                </div>
+                <div class="mt-3">
+                    <button type="submit" name="login" class="btn btn-primary w-100">Entrar</button>
+                </div>
             </fieldset>
         EOF;
         

@@ -75,9 +75,15 @@ $htmlCatalog = $catalog->generateContent();
 // Combinar el formulario y el catálogo
 $mainContent .= <<<EOS
     <div class="container mt-4">
-        <h1>Catálogo</h1>
-        $htmlFilterForm
-        $htmlCatalog
+        <div class="row">
+            <div class="col-md-3">
+                <h2>Filtros</h2>
+                $htmlFilterForm
+            </div>
+            <div class="col-md-9">
+                $htmlCatalog
+            </div>
+        </div>
     </div>
 EOS;
 
