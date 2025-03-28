@@ -38,60 +38,90 @@ class registerEventForm extends baseForm
     {
         // Creamos el formulario de registro de eventos
         $html = <<<EOF
-            <fieldset>
-                <legend>Registro de Evento</legend>
+            <fieldset class="border p-4 rounded">
+                <legend class="w-auto">Registro de Evento</legend>
 
-                <label for="name">Nombre del evento:</label>
-                <input type="text" name="name" id="name" required placeholder="Ej: Torneo de Futbol" value="
+                <!-- Campo Nombre del evento -->
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nombre del evento:</label>
+                    <input type="text" name="name" id="name" class="form-control" placeholder="Ej: Torneo de Futbol" value="
         EOF;
-        
-        $html .= htmlspecialchars($initialData['name'] ?? '') . '"><br>';
 
+        $html .= htmlspecialchars($initialData['name'] ?? '') . '" required>';
+        
         $html .= <<<EOF
-                <label for="description">Descripción:</label>
-                <textarea name="description" id="description" required placeholder="Escribe una breve descripcion" rows="4" cols="50">
+                </div>
+
+                <!-- Campo Descripción -->
+                <div class="mb-3">
+                    <label for="description" class="form-label">Descripción:</label>
+                    <textarea name="description" id="description" class="form-control" placeholder="Escribe una breve descripción" rows="4" required>
         EOF;
-        
-        $html .= htmlspecialchars($initialData['description'] ?? '') . '</textarea><br>';
 
+        $html .= htmlspecialchars($initialData['description'] ?? '') . '</textarea>';
+        
         $html .= <<<EOF
-                <label for="date">Fecha y hora:</label>
-                <input type="datetime-local" name="date" id="date" required value="
+                </div>
+
+                <!-- Campo Fecha y hora -->
+                <div class="mb-3">
+                    <label for="date" class="form-label">Fecha y hora:</label>
+                    <input type="datetime-local" name="date" id="date" class="form-control" value="
         EOF;
+
+        $html .= htmlspecialchars($initialData['date'] ?? '') . '" required>';
         
-        $html .= htmlspecialchars($initialData['date'] ?? '') . '"><br>';
-
-
         $html .= <<<EOF
-                <label for="location">Localización:</label>
-                <input type="text" name="location" id="location" required placeholder="Escribe aquí tu localización" value="
+                </div>
+
+                <!-- Campo Localización -->
+                <div class="mb-3">
+                    <label for="location" class="form-label">Localización:</label>
+                    <input type="text" name="location" id="location" class="form-control" placeholder="Escribe aquí tu localización" value="
         EOF;
-        
-        $html .= htmlspecialchars($initialData['location'] ?? '') . '"><br>';
 
+        $html .= htmlspecialchars($initialData['location'] ?? '') . '" required>';
+        
         $html .= <<<EOF
-                <label for="price">Precio (€):</label>
-                <input type="number" name="price" id="price" step="0.01" min="0" required placeholder="Ej: 25.99" value="
+                </div>
+
+                <!-- Campo Precio -->
+                <div class="mb-3">
+                    <label for="price" class="form-label">Precio (€):</label>
+                    <input type="number" name="price" id="price" class="form-control" step="0.01" min="0" placeholder="Ej: 25.99" value="
         EOF;
-        
-        $html .= htmlspecialchars($initialData['price'] ?? '') . '"><br>';
 
+        $html .= htmlspecialchars($initialData['price'] ?? '') . '" required>';
+        
         $html .= <<<EOF
-                <label for="capacity">Capacidad:</label>
-                <input type="number" name="capacity" id="capacity" required placeholder="Ej: 100" value="
+                </div>
+
+                <!-- Campo Capacidad -->
+                <div class="mb-3">
+                    <label for="capacity" class="form-label">Capacidad:</label>
+                    <input type="number" name="capacity" id="capacity" class="form-control" min="0" placeholder="Ej: 100" value="
         EOF;
-        
-        $html .= htmlspecialchars($initialData['capacity'] ?? '') . '"><br>';
 
+        $html .= htmlspecialchars($initialData['capacity'] ?? '') . '" required>';
+        
         $html .= <<<EOF
-                <label for="category">Categoría:</label>
-                <input type="text" name="category" id="category" required placeholder="Ej: Deportes" value="
+                </div>
+
+                <!-- Campo Categoría -->
+                <div class="mb-3">
+                    <label for="category" class="form-label">Categoría:</label>
+                    <input type="text" name="category" id="category" class="form-control" placeholder="Ej: Deportes" value="
         EOF;
-        
-        $html .= htmlspecialchars($initialData['category'] ?? '') . '"><br>';
 
+        $html .= htmlspecialchars($initialData['category'] ?? '') . '" required>';
+        
         $html .= <<<EOF
-                <button type="submit" name="botonRegisterEvent">Registrar Evento</button>
+                </div>
+
+                <!-- Botón de registro -->
+                <div class="mt-3">
+                    <button type="submit" name="botonRegisterEvent" class="btn btn-primary w-100">Registrar Evento</button>
+                </div>
             </fieldset>
         EOF;
 

@@ -25,81 +25,111 @@ class searchEventForm extends baseForm
     {
         // Creamos el formulario de búsqueda de eventos
         $html = <<<EOF
-            <fieldset>
-                <legend>Buscar eventos</legend>
+            <fieldset class="border p-4 rounded">
+                <legend class="w-auto">Buscar eventos</legend>
 
-                <label for="name">Nombre del evento:</label>
-                <input type="text" name="name" id="name" placeholder="Ej: Fitness" value="
+                <!-- Campo Nombre del evento -->
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nombre del evento:</label>
+                    <input type="text" name="name" id="name" class="form-control" placeholder="Ej: Fitness" value="
         EOF;
-        
+
         $html .= htmlspecialchars($initialData['name'] ?? '') . '">';
-
-        $html .= <<<EOF
-                <label for="start_date">Desde:</label>
-                <input type="date" name="start_date" id="start_date" value="
-        EOF;
         
+        $html .= <<<EOF
+                </div>
+
+                <!-- Campo Fecha de inicio -->
+                <div class="mb-3">
+                    <label for="start_date" class="form-label">Desde:</label>
+                    <input type="date" name="start_date" id="start_date" class="form-control" value="
+        EOF;
+
         $html .= htmlspecialchars($initialData['start_date'] ?? '') . '">';
-
-        $html .= <<<EOF
-                <label for="end_date">Hasta:</label>
-                <input type="date" name="end_date" id="end_date" value="
-        EOF;
         
+        $html .= <<<EOF
+                </div>
+
+                <!-- Campo Fecha de fin -->
+                <div class="mb-3">
+                    <label for="end_date" class="form-label">Hasta:</label>
+                    <input type="date" name="end_date" id="end_date" class="form-control" value="
+        EOF;
+
         $html .= htmlspecialchars($initialData['end_date'] ?? '') . '">';
-
-        $html .= <<<EOF
-                <label for="min_price">Precio mínimo (€):</label>
-                <input type="number" name="min_price" id="min_price" step="0.01" placeholder="0" value="
-        EOF;
         
+        $html .= <<<EOF
+                </div>
+
+                <!-- Campo Precio mínimo -->
+                <div class="mb-3">
+                    <label for="min_price" class="form-label">Precio mínimo (€):</label>
+                    <input type="number" name="min_price" id="min_price" class="form-control" step="0.01" placeholder="0" value="
+        EOF;
+
         $html .= htmlspecialchars($initialData['min_price'] ?? '') . '">';
-
-        $html .= <<<EOF
-                <label for="max_price">Precio máximo (€):</label>
-                <input type="number" name="max_price" id="max_price" step="0.01" placeholder="1000" value="
-        EOF;
         
+        $html .= <<<EOF
+                </div>
+
+                <!-- Campo Precio máximo -->
+                <div class="mb-3">
+                    <label for="max_price" class="form-label">Precio máximo (€):</label>
+                    <input type="number" name="max_price" id="max_price" class="form-control" step="0.01" placeholder="1000" value="
+        EOF;
+
         $html .= htmlspecialchars($initialData['max_price'] ?? '') . '">';
-
-        $html .= <<<EOF
-                <label for="location">Ubicación:</label>
-                <input type="text" name="location" id="location" placeholder="Ej: Madrid" value="
-        EOF;
         
+        $html .= <<<EOF
+                </div>
+
+                <!-- Campo Ubicación -->
+                <div class="mb-3">
+                    <label for="location" class="form-label">Ubicación:</label>
+                    <input type="text" name="location" id="location" class="form-control" placeholder="Ej: Madrid" value="
+        EOF;
+
         $html .= htmlspecialchars($initialData['location'] ?? '') . '">';
-
-        $html .= <<<EOF
-                <label for="category">Categoría:</label>
-                <select name="category" id="category">
-                    <option value="">Todas</option>
-                    <option value="Futbol" 
-        EOF;
         
+        $html .= <<<EOF
+                </div>
+
+                <!-- Campo Categoría -->
+                <div class="mb-3">
+                    <label for="category" class="form-label">Categoría:</label>
+                    <select name="category" id="category" class="form-select">
+                        <option value="">Todas</option>
+                        <option value="Futbol" 
+        EOF;
+
         $html .= ($initialData['category'] ?? '') == 'Futbol' ? 'selected' : '' . '>Futbol</option>';
-
-        $html .= <<<EOF
-                    <option value="Baloncesto" 
-        EOF;
         
+        $html .= <<<EOF
+                        <option value="Baloncesto" 
+        EOF;
+
         $html .= ($initialData['category'] ?? '') == 'Baloncesto' ? 'selected' : '' . '>Baloncesto</option>';
-
-        $html .= <<<EOF
-                    <option value="Fitness" 
-        EOF;
         
+        $html .= <<<EOF
+                        <option value="Fitness" 
+        EOF;
+
         $html .= ($initialData['category'] ?? '') == 'Fitness' ? 'selected' : '' . '>Fitness</option>';
-
-        $html .= <<<EOF
-                    <option value="Atletismo" 
-        EOF;
         
-        $html .= ($initialData['category'] ?? '') == 'Atletismo' ? 'selected' : '' . '>Atletismo</option>';
-
         $html .= <<<EOF
-                </select>
+                        <option value="Atletismo" 
+        EOF;
 
-                <button type="submit" name="botonSearchEvents"">Buscar</button>
+        $html .= ($initialData['category'] ?? '') == 'Atletismo' ? 'selected' : '' . '>Atletismo</option>';
+        
+        $html .= <<<EOF
+                    </select>
+                </div>
+
+                <!-- Botón de búsqueda -->
+                <div class="mt-3">
+                    <button type="submit" name="botonSearchEvents" class="btn btn-primary w-100">Buscar</button>
+                </div>
             </fieldset>
         EOF;
 

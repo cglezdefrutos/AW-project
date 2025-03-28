@@ -48,26 +48,35 @@ class joinEventForm extends baseForm
     {
         // Creamos el formulario de apuntarse al evento
         $html = <<<EOF
-            <fieldset>
-                <legend>Apuntate al evento</legend>
+            <fieldset class="border p-4 rounded">
+                <legend class="w-auto">Apúntate al evento</legend>
 
-                <label for="name">Nombre:</label>
-                <input type="text" id="name" name="name" required value="
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nombre:</label>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="Introduce tu nombre" value="
         EOF;
 
-        $html .= htmlspecialchars($initialData['name'] ?? '') . '">';
-
-        $html .= <<<EOF
-                <label for="phone">Teléfono:</label>
-                <input type="tel" id="phone" name="phone" required value="
-        EOF;
+        $html .= htmlspecialchars($initialData['name'] ?? '') . '" required>';
         
-        $html .= htmlspecialchars($initialData['phone'] ?? '') . '">';
-
         $html .= <<<EOF
+                </div>
+
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Teléfono:</label>
+                    <input type="tel" id="phone" name="phone" class="form-control" placeholder="Introduce tu teléfono" value="
+        EOF;
+
+        $html .= htmlspecialchars($initialData['phone'] ?? '') . '" required>';
+        
+        $html .= <<<EOF
+                </div>
+
                 <input type="hidden" name="event_id" value="{$this->eventId}">
                 <input type="hidden" name="user_id" value="{$this->userId}">
-                <button type="submit" name="join_event">Apuntarse</button>
+
+                <div class="mt-3">
+                    <button type="submit" name="join_event" class="btn btn-primary w-100">Apuntarse</button>
+                </div>
             </fieldset>
         EOF;
 
