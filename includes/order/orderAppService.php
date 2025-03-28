@@ -2,6 +2,8 @@
 
 namespace TheBalance\order;
 
+use TheBalance\application;
+
 /**
  * Clase que contiene la lógica de la aplicación de orders
  */
@@ -58,7 +60,7 @@ class orderAppService
         else
         {
             // Tomamos el id del usuario
-            $userId = $app->getCurrentUserId();
+            $userId = htmlspecialchars($app->getCurrentUserId());
 
             // Pasamos como filtro el id del usuario
             $ordersDTO = $IOrderDAO->getOrdersByUserId($userId);

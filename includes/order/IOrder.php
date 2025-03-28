@@ -25,22 +25,4 @@ interface IOrder
      */
     public function getOrdersByUserId($userId);
 
-    /**
-     * Actualiza un order
-     * 
-     * @param array $orderDTO Datos del order
-     * 
-     * @return bool Resultado de la operación
-     */
-    public function updateOrder($orderDTO);
-    
-    /**
-     * Elimina un order
-     * 
-     * @param int $orderId Id del order
-     * 
-     * @return bool Resultado de la operación
-     */
-    public function deleteOrder($orderId);
-
 }
