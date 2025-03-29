@@ -50,20 +50,20 @@ class catalogFilterForm extends baseForm
 
                 <div class="mb-3">
                     <label for="minPrice" class="form-label">Precio mínimo:</label>
-                    <input type="number" name="minPrice" id="minPrice" class="form-control" step="0.01" placeholder="Ej: 0" value="
+                    <input type="number" name="minPrice" id="minPrice" class="form-control" step="0.01" placeholder="Ej: 0" value="0">
         EOF;
 
-        $html .= htmlspecialchars($initialData['minPrice'] ?? '') . '">';
-
+/*         $html .= htmlspecialchars($initialData['minPrice'] ?? '') . '">';
+ */
         $html .= <<<EOF
                 </div>
 
                 <div class="mb-3">
                     <label for="maxPrice" class="form-label">Precio máximo:</label>
-                    <input type="number" name="maxPrice" id="maxPrice" class="form-control" step="0.01" placeholder="Ej: 100" value="
+                    <input type="number" name="maxPrice" id="maxPrice" class="form-control" step="0.01" placeholder="Ej: 100" value="0">
         EOF;
 
-        $html .= htmlspecialchars($initialData['maxPrice'] ?? '') . '">';
+/*         $html .= htmlspecialchars($initialData['maxPrice'] ?? '') . '">'; */
 
         $html .= <<<EOF
                 </div>
@@ -92,22 +92,22 @@ class catalogFilterForm extends baseForm
         // Filtrado y sanitización de los datos recibidos
         $name = trim($data['name'] ?? '');
         $name = filter_var($name, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if (empty($name) || strlen($name) > 50) {
+        if (strlen($name) > 50) {
             $result[] = 'El nombre del producto no puede estar vacío ni superar los 50 caracteres.';
         }
 
         $category = trim($data['category'] ?? '');
         $category = filter_var($category, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if (empty($category) || strlen($category) > 50) {
+        if (strlen($category) > 50) {
             $result[] = 'La categoría del producto no puede estar vacía ni superar los 50 caracteres.';
         }
 
-        $minPrice = filter_var($data['minPrice'] ?? '', FILTER_VALIDATE_FLOAT);
+        $minPrice = filter_var($data['minPrice'] ?? 0.0, FILTER_VALIDATE_FLOAT);
         if (!is_numeric($minPrice ) || $minPrice  < 0) {
             $result[] = 'El precio debe ser un número positivo.';
         }
 
-        $maxPrice = filter_var($data['maxPrice'] ?? '', FILTER_VALIDATE_FLOAT);
+        $maxPrice = filter_var($data['maxPrice'] ?? 1000.0, FILTER_VALIDATE_FLOAT);
         if (!is_numeric($maxPrice ) || $maxPrice  < 0) {
             $result[] = 'El precio debe ser un número positivo.';
         }
@@ -144,5 +144,7 @@ class catalogFilterForm extends baseForm
                 $result = 'catalog.php?search=true';
             }
         }
+
+        return $result;
     }
 }

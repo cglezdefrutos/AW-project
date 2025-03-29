@@ -40,7 +40,7 @@ class updateEventForm extends baseForm
         // Creamos el formulario de actualización de eventos
         $html = <<<EOF
             <fieldset class="border p-4 rounded">
-                <legend class="w-auto">Actualizar Evento</legend>
+                <legend class="w-auto">Actualizar Evento</legend> <br>
 
                 <input type="hidden" name="eventId" id="eventId" value="
         EOF;

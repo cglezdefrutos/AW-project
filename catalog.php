@@ -32,24 +32,30 @@ if (!isset($_GET["search"]) || $_GET["search"] != "true")
     // Tomar todos los productos de la BBDD
     $productsDTO = $productAppService->searchProducts(array());
 }
-else
+// Si hay filtros aplicados y se ha utilizado la barra de búsqueda, buscamos ese nombre
+else if(isset($_GET["name"]) && $_GET["name"] != "") 
 {
-    // Verificar el contenido de $_SESSION["foundedProductsDTO"]
-    if (!isset($_SESSION["foundedProductsDTO"])) 
-    {
-        echo "No se encontraron productos.";
-        exit();
-    }
+    // Tomamos el contenido de la barra de busqueda
+    $name = $_GET["name"];
 
-    // Decodificar el JSON almacenado en la sesión
-    $foundedProductsJSON = json_decode($_SESSION["foundedProductsJSON"], true);
+    // Crear un array de filtros con el nombre del producto
+    $filters = array();
+    $filters['name'] = $name;
 
-    // Verificar que la decodificación fue exitosa y que es un array
-    if (!is_array($foundedProductsJSON)) 
+    // Llamamos a la instancia de SA de productos
+    $productAppService = productAppService::GetSingleton();
+    $productsDTO = $productAppService->searchProducts($filters);
+}
+// Si hay filtros aplicados y no se ha utilizado la barra de búsqueda, buscamos por los filtros
+else 
+{
+    $foundedProductsJSON = array();
+
+    // Si $_SESSION["foundedProductsJSON"] esta definida, decodificamos el JSON almacenado en la sesión
+    if (isset($_SESSION["foundedProductsJSON"])) 
     {
-        echo "Error al decodificar los datos de productos.";
-        exit();
-    }
+        $foundedProductsJSON = json_decode($_SESSION["foundedProductsJSON"], true);
+    } 
 
     // Convertir los datos decodificados en objetos eventDTO
     $productsDTO = array_map(function($productData) {
@@ -65,7 +71,6 @@ else
             $productData['created_at']
         );
     }, $foundedProductsJSON);
-    
 }
 
 // Generar el contenido del catálogo

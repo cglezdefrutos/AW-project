@@ -25,7 +25,7 @@ class productMock implements IProduct
     {
         // Return a list of DTOProducts
         return array(
-            new productDTO(1, 1, "Producto 1", "Descripción del producto 1", 100.0, 10, 1, "/AW-project/img/logo_thebalance.png", "2021-01-01"),
+            new productDTO(1, 1, "Camiseta Nike", "Camiseta Nike para hacer deporte", 29.99, 10, 1, "/AW-project/img/camiseta_nike.png", "2021-01-01"),
             new productDTO(2, 1, "Producto 2", "Descripción del producto 2", 200.0, 20, 1, "/AW-project/img/logo_thebalance.png", "2021-01-01"),
             new productDTO(3, 1, "Producto 3", "Descripción del producto 3", 300.0, 30, 1, "/AW-project/img/logo_thebalance.png", "2021-01-01"),
             new productDTO(4, 1, "Producto 4", "Descripción del producto 4", 400.0, 40, 1, "/AW-project/img/logo_thebalance.png", "2021-01-01"),
@@ -36,5 +36,17 @@ class productMock implements IProduct
             new productDTO(9, 1, "Producto 9", "Descripción del producto 9", 900.0, 90, 1, "/AW-project/img/logo_thebalance.png", "2021-01-01"),
             new productDTO(10, 1, "Producto 10", "Descripción del producto 10", 1000.0, 100, 1, "/AW-project/img/logo_thebalance.png", "2021-01-01")
         );
+    }
+
+    /**
+     * Get product by ID
+     * 
+     * @param int $id
+     * @return productDTO
+     */
+    public function getProductById($id)
+    {
+        // Return a product DTO
+        return new productDTO($id, 1, "Camiseta Nike", "Camiseta Nike para hacer deporte", 29.99, 10, 1, "/AW-project/img/camiseta_nike.png", "2021-01-01");
     }
 }

@@ -50,6 +50,20 @@ class productAppService
         return $IProduct->searchProducts($filters);
     }
 
+    /**
+     * Busca un producto por su ID
+     * 
+     * @param int $id ID del producto
+     * 
+     * @return productDTO Detalles del producto
+     */
+    public function getProductById($id)
+    {
+        $IProduct = productFactory::CreateProduct();
+
+        return $IProduct->getProductById($id);
+    }
+
 }
     
 
