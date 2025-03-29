@@ -29,16 +29,14 @@ if (!$app->isCurrentUserLogged()) {
         EOS;
     } else {
         $orderDetailAppService = orderDetailAppService::GetSingleton();
- //       $detailsData = $orderDetailAppService->showOrderDetail($orderId);
         $detailsData = $orderDetailAppService->getDetailsByOrderId($orderId);
 
 
         // Convertir los datos en objetos DTO
         $details = array_map(function($detailData) {
             return new orderDetailDTO(
-                $detailData->getId(),
                 $detailData->getOrderId(),
-                $detailData->getProductName(), //antes getProductId()
+                $detailData->getProductName(),
                 $detailData->getImageUrl(),
                 $detailData->getQuantity(),
                 $detailData->getPrice()

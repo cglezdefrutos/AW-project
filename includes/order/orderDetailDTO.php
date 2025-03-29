@@ -8,11 +8,6 @@ namespace TheBalance\order;
 class orderDetailDTO implements \JsonSerializable
 {
     /**
-     * @var int Identificador del detalle
-     */
-    private $id;
-
-    /**
      * @var int ID del pedido asociado
      */
     private $order_id;
@@ -20,12 +15,12 @@ class orderDetailDTO implements \JsonSerializable
     /**
      * @var int ID del producto
      */
-    private $product_name; //antes $product_id
+    private $product_name;
 
     /**
      * @var int ID del producto
      */
-    private $image_url; //antes $product_id
+    private $image_url;
 
     /**
      * @var int Cantidad del producto
@@ -40,11 +35,10 @@ class orderDetailDTO implements \JsonSerializable
     /**
      * Constructor
      */
-    public function __construct($id, $order_id, $product_name, $image_url, $quantity, $price) //antes $product_id
+    public function __construct($order_id, $product_name, $image_url, $quantity, $price)
     {
-        $this->id = $id;
         $this->order_id = $order_id;
-        $this->product_name = $product_name; //antes $product_id
+        $this->product_name = $product_name;
         $this->image_url = $image_url;
         $this->quantity = $quantity;
         $this->price = $price;
@@ -53,17 +47,12 @@ class orderDetailDTO implements \JsonSerializable
     /**
      * Getters
      */
-    public function getId()
-    {
-        return $this->id;
-    }
-
     public function getOrderId()
     {
         return $this->order_id;
     }
 
-    public function getProductName() //antes $product_id
+    public function getProductName()
     {
         return $this->product_name;
     }
