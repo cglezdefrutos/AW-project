@@ -39,7 +39,7 @@ if (!$app->isCurrentUserLogged()) {
     }, $ordersData);
 
     // Definir las columnas de la tabla
-    $columns = ['Precio total', 'Estado', 'Fecha'];
+    $columns = ['Precio total', 'Estado', 'Fecha', 'Detalles'];
 
     if (empty($orders)) {
         $mainContent = "<h1>No tienes pedidos registrados.</h1>";
