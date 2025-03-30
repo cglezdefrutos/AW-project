@@ -8,6 +8,14 @@ namespace TheBalance\order;
 interface IOrder
 {
 
+    /**
+     * Devuelve el pedido asociado a ese id
+     * 
+     * @param string $orderId ID del pedido
+     * 
+     * @return orderDAO Resultado de la búsqueda
+     */
+    public function getOrderById($orderId);
 
     /**
      * Optiene todos los Orders

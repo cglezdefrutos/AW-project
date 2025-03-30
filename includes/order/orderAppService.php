@@ -38,6 +38,20 @@ class orderAppService
     } 
 
     /**
+     * Devuelve el pedido asociado a ese id
+     * 
+     * @param string $orderId ID del pedido
+     * 
+     * @return orderDTO Resultado de la búsqueda
+     */
+    public function getOrderById($orderId)
+    {
+        $IOrderDAO = orderFactory::CreateOrder();
+
+        return $IOrderDAO->getOrderById($orderId);
+    }
+
+    /**
      * Devuelve los orders asociados al tipo de usuario
      * 
      * @param string $user_type Tipo de usuario

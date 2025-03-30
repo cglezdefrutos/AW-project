@@ -19,6 +19,52 @@ class orderDAO extends baseDAO implements IOrder
     }
 
     /**
+     * Devuelve el pedido asociado a ese id
+     * 
+     * @param string $orderId ID del pedido
+     * 
+     * @return orderDTO Resultado de la búsqueda
+     */
+    public function getOrderById($orderId)
+    {
+        $order = null;
+    
+        try {
+            // Obtener la conexión a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+    
+            // Preparar la consulta SQL
+            $stmt = $conn->prepare("SELECT * FROM orders WHERE id = ?");
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+    
+            // Asignar el parámetro y ejecutar la consulta
+            $stmt->bind_param("i", $orderId);
+    
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+    
+            // Asignar los resultados a variables
+            $stmt->bind_result($id, $user_id, $address_id, $total_price, $status, $created_at);
+    
+            // Obtener el resultado
+            if ($stmt->fetch()) {
+                $order = new orderDTO($id, $user_id, $address_id, $total_price, $status, $created_at);
+            }
+    
+            // Cerrar la consulta
+            $stmt->close();
+    
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+        }
+    
+        return $order;
+    }
+
+    /**
      * Optiene todos los Orders
      * 
      * @param none
