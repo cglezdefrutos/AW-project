@@ -24,6 +24,15 @@ class productDetailsContent
         // Limpiar la sesión para que el Offcanvas no se muestre en la siguiente recarga
         unset($_SESSION['show_offcanvas']);
 
+        // Obtener las tallas del producto
+        $sizes = $this->productDTO->getSizes();
+        $sizeOptions = '';
+
+        // Generar las opciones del select para las tallas
+        foreach ($sizes as $size) {
+            $sizeOptions .= "<option value=\"{$size}\">{$size}</option>";
+        }
+
         $html = <<<EOF
             <div class="row">
                 <div class="col-md-6 d-flex justify-content-center align-items-center">
@@ -37,6 +46,15 @@ class productDetailsContent
 
                     <form action="" method="POST">
                         <input type="hidden" name="product_id" value="{$this->productDTO->getId()}">
+
+                        <div class="mb-3">
+                            <label for="product_size" class="form-label">Selecciona tu talla:</label>
+                            <select class="form-select" id="product_size" name="product_size" required>
+                                <option value="" disabled selected>Elige una talla</option>
+                                {$sizeOptions}
+                            </select>
+                        </div>
+
                         <button type="submit" class="btn btn-primary btn-lg w-100">Añadir al carrito</button>
                     </form>
                 </div>

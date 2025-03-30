@@ -53,9 +53,14 @@ class productDTO implements \JsonSerializable
     private $created_at;
 
     /**
+     * @var array Tallas del producto
+     */
+    private $sizes = [];
+
+    /**
      * Constructor
      */
-    public function __construct($id, $provider_id, $name, $description, $price, $stock, $category_id, $image_url, $created_at)
+    public function __construct($id, $provider_id, $name, $description, $price, $stock, $category_id, $image_url, $created_at, $sizes = [])
     {
         $this->id = $id;
         $this->provider_id = $provider_id;
@@ -66,6 +71,7 @@ class productDTO implements \JsonSerializable
         $this->category_id = $category_id;
         $this->image_url = $image_url;
         $this->created_at = $created_at;
+        $this->sizes = $sizes;
     }
 
     /**
@@ -116,6 +122,11 @@ class productDTO implements \JsonSerializable
         return $this->created_at;
     }
 
+    public function getSizes()
+    {
+        return $this->sizes;
+    }
+
     /**
      * Setters
      */
@@ -162,6 +173,11 @@ class productDTO implements \JsonSerializable
     public function setCreatedAt($created_at)
     {
         $this->created_at = $created_at;
+    }
+
+    public function setSizes($sizes)
+    {
+        $this->sizes = $sizes;
     }
 
     /**

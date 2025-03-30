@@ -44,9 +44,10 @@ if ($sessionId) {
             $productName = $item->description;
             $productPrice = $item->amount / 100; // Convertir de céntimos a euros
             $quantity = $item->quantity;
+            $size = $item->price->product_data->metadata->size ?? 'N/A'; // Obtener la talla desde los metadatos
 
             // Crear un nuevo detalle de pedido
-            $orderDetailDTO = new orderDetailDTO($orderId, $productName, $quantity, $productPrice);
+            $orderDetailDTO = new orderDetailDTO($orderId, $productName, $quantity, $productPrice, $size);
             orderDetailAppService::GetSingleton()->createOrderDetail($orderDetailDTO);
         }
 

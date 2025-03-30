@@ -17,9 +17,15 @@ Stripe::setApiKey(STRIPE_SECRET_KEY);
 $cart = $_SESSION['cart'] ?? [];
 $lineItems = [];
 
-foreach ($cart as $productId => $quantity) {
+foreach ($cart as $cartKey => $quantity) 
+{
+    // Separar el product_id y la talla desde la clave del carrito
+    [$productId, $size] = explode('|', $cartKey);
+
+    // Obtener el producto usando el product_id
     $product = productAppService::GetSingleton()->getProductById($productId);
-    if ($product) {
+    if ($product) 
+    {
         $categoryName = productAppService::GetSingleton()->getCategoryNameById($product->getCategoryId());
         $lineItems[] = [
             'price_data' => [
@@ -30,6 +36,7 @@ foreach ($cart as $productId => $quantity) {
                     'metadata' => [
                         'product_id' => $productId,
                         'category' => $categoryName,
+                        'size' => $size,
                     ],
                 ],
                 'unit_amount' => $product->getPrice() * 100,

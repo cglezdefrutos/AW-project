@@ -50,11 +50,9 @@ class catalogFilterForm extends baseForm
 
                 <div class="mb-3">
                     <label for="minPrice" class="form-label">Precio mínimo:</label>
-                    <input type="number" name="minPrice" id="minPrice" class="form-control" step="0.01" placeholder="Ej: 0" value="0">
+                    <input type="number" name="minPrice" id="minPrice" class="form-control" step="0.50" min="0" placeholder="Ej: 0" value="0">
         EOF;
 
-/*         $html .= htmlspecialchars($initialData['minPrice'] ?? '') . '">';
- */
         $html .= <<<EOF
                 </div>
 
@@ -62,8 +60,6 @@ class catalogFilterForm extends baseForm
                     <label for="maxPrice" class="form-label">Precio máximo:</label>
                     <input type="number" name="maxPrice" id="maxPrice" class="form-control" step="0.01" placeholder="Ej: 100" value="0">
         EOF;
-
-/*         $html .= htmlspecialchars($initialData['maxPrice'] ?? '') . '">'; */
 
         $html .= <<<EOF
                 </div>

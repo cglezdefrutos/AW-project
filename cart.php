@@ -12,25 +12,29 @@ $mainContent = "";
 // Procesar acciones del carrito
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['update_quantity'])) {
-        $productId = $_POST['product_id'];
+        $cartKey = $_POST['cart_key'];
         $quantity = max(1, (int)$_POST['quantity']);
-        $_SESSION['cart'][$productId] = $quantity;
+        $_SESSION['cart'][$cartKey] = $quantity;
     }
 
     if (isset($_POST['remove_product'])) {
-        $productId = $_POST['product_id'];
-        unset($_SESSION['cart'][$productId]);
+        $cartKey = $_POST['cart_key'];
+        unset($_SESSION['cart'][$cartKey]);
     }
 }
 
 // Generar contenido del carrito
 $cart = $_SESSION['cart'] ?? [];
-$columns = ['Imagen', 'Producto', 'Precio', 'Cantidad', 'Subtotal', 'Acciones'];
+$columns = ['Imagen', 'Producto', 'Precio', 'Talla', 'Cantidad', 'Subtotal', 'Acciones'];
 $cartTable = new cartTable($cart, $columns);
 
 // Calcular el total del carrito
 $total = 0;
-foreach ($cart as $productId => $quantity) {
+foreach ($cart as $cartKey => $quantity) 
+{
+    // Separar el product_id y la talla desde la clave del carrito
+    [$productId, $size] = explode('|', $cartKey);
+    
     $product = productAppService::GetSingleton()->getProductById($productId);
     if ($product) {
         $total += $product->getPrice() * $quantity;

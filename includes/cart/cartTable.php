@@ -24,12 +24,17 @@ class cartTable extends baseTable
     protected function generateTableContent()
     {
         $html = '';
-        foreach ($this->data as $productId => $quantity) {
+        foreach ($this->data as $cartKey => $quantity) {
+            // Separar el product_id y la talla desde la clave del carrito
+            [$productId, $size] = explode('|', $cartKey);
+
+            // Obtener el producto usando el product_id
             $product = $this->productAppService->getProductById($productId);
             if (!$product) {
                 continue;
             }
 
+            // Calcular el subtotal
             $subtotal = $product->getPrice() * $quantity;
 
             $html .= <<<EOF
@@ -42,9 +47,11 @@ class cartTable extends baseTable
 
                     <td class="text-center align-middle">{$product->getPrice()} €</td>
 
+                    <td class="text-center align-middle">{$size}</td> 
+
                     <td class="text-center align-middle w-25">
                         <form action="cart.php" method="POST" class="d-flex flex-column flex-md-row align-items-center">
-                            <input type="hidden" name="product_id" value="{$productId}">
+                            <input type="hidden" name="cart_key" value="{$cartKey}">
                             <input type="number" name="quantity" value="{$quantity}" min="1" class="form-control mb-2 mb-md-0 me-md-2" style="width: 80px;">
                             <button type="submit" name="update_quantity" class="btn btn-primary">Actualizar</button>
                         </form>
@@ -54,7 +61,7 @@ class cartTable extends baseTable
 
                     <td class="text-center align-middle">
                         <form action="cart.php" method="POST" class="d-inline align-items-center w-20">
-                            <input type="hidden" name="product_id" value="{$productId}">
+                            <input type="hidden" name="cart_key" value="{$cartKey}">
                             <button type="submit" name="remove_product" class="btn btn-danger">Eliminar</button>
                         </form>
                     </td>
