@@ -149,4 +149,121 @@ class productDAO extends baseDAO implements IProduct
 
         return array('query' => $query, 'params' => $args, 'types' => $types);
     }
+
+    public function getProducts($filters = array())
+    {
+        $products = array();
+
+        try {
+            // Tomamos la conexión a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Implementar la lógica de acceso a la base de datos para obtener los productos que cumplan con los filtros pasados como parámetro
+            $queryData = $this->buildSearchQuery($filters);
+
+            // Preparamos la consulta
+            $stmt = $conn->prepare($queryData['query']);
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Asignamos los parámetros solo si hay parámetros para enlazar
+            if (!empty($queryData['params'])) {
+                $types = $queryData['types'];
+                $params = $queryData['params'];
+                $stmt->bind_param($types, ...$params);
+            }
+
+            // Ejecutamos la consulta
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            // Asignamos los resultados a variables
+            $stmt->bind_result($id, $provider_id, $name, $description, $price, $stock, $category_id, $image_url, $created_at);
+
+            // Mientras haya resultados, los guardamos en el array
+            while ($stmt->fetch()) {
+                $product = new productDTO($id, $provider_id, $name, $description, $price, $stock, $category_id, $image_url, $created_at);
+                $products[] = $product;
+            }
+
+            // Cerramos la consulta
+            $stmt->close();
+
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+
+        // Devolvemos el array de productos
+        return $products;
+    }
+
+    public function deleteProduct($productId)
+    {
+        try {
+            // Tomamos la conexión a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Preparamos la consulta SQL para eliminar el producto
+            $stmt = $conn->prepare("DELETE FROM products WHERE id = ?");
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Enlazamos el parámetro
+            $stmt->bind_param('i', $productId);
+
+            // Ejecutamos la consulta
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            // Cerramos la consulta
+            $stmt->close();
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function ownsProduct($productId, $userEmail)
+    {
+        try {
+            // Tomamos la conexión a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Preparamos la consulta SQL para verificar si el producto pertenece al proveedor
+            $stmt = $conn->prepare("SELECT COUNT(*) FROM products WHERE id = ? AND provider_id = (SELECT id FROM users WHERE email = ?)");
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Enlazamos los parámetros
+            $stmt->bind_param('is', $productId, $userEmail);
+
+            // Ejecutamos la consulta
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            // Obtenemos el resultado
+            $stmt->bind_result($count);
+            $stmt->fetch();
+
+            // Cerramos la consulta
+            $stmt->close();
+
+            return $count > 0;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function getOrdersByProduct($productId){
+        
+    }
+    
 }

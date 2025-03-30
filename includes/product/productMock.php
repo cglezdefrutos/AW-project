@@ -37,4 +37,9 @@ class productMock implements IProduct
             new productDTO(10, 1, "Producto 10", "Descripción del producto 10", 1000.0, 100, 1, "/AW-project/img/logo_thebalance.png", "2021-01-01")
         );
     }
+
+    public function getProducts($filters){}
+    public function deleteProduct($productId){}
+    public function ownsProduct($productId, $userEmail){}
+    public function getOrdersByProduct($productId){}
 }
