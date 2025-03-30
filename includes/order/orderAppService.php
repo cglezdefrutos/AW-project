@@ -83,6 +83,23 @@ class orderAppService
         return $ordersDTO;
     }
 
+    public function updateOrder($order)
+    {
+        $IOrderDAO = orderFactory::CreateOrder();
+
+        try {
+
+        // Intentar actualizar el pedido en la base de datos
+        return $IOrderDAO->updateOrder($order);
+
+        } catch (\Exception $e) {
+            error_log("Error actualizando el pedido: " . $e->getMessage());
+            return false;
+        }
+
+    }    
+
+
     /**
      * Elimina un pedido y sus detalles asociados
      *

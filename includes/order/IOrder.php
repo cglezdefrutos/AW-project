@@ -34,6 +34,14 @@ interface IOrder
     public function getOrdersByUserId($userId);
 
     /**
+     * Actualiza un pedido
+     * 
+     * @param orderDTO $order el dto del pedido a eliminar
+     * @return bool True si se eliminó correctamente
+     */
+    public function updateOrder($order);
+
+    /**
      * Elimina un pedido por su ID
      * 
      * @param int $orderId ID del pedido a eliminar

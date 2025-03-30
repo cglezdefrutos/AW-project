@@ -163,10 +163,53 @@ class orderDAO extends baseDAO implements IOrder
     }
 
     /**
+     * Actualiza un pedido
+     * 
+     * @param orderDTO $order el dto del pedido a eliminar
+     * @return bool True si se eliminó correctamente
+     */
+    public function updateOrder($order)
+    {
+        try {
+            $conn = application::getInstance()->getConnectionDb();
+
+            $stmt = $conn->prepare("UPDATE orders SET user_id = ?, address_id = ?, total_price = ?, status = ?, created_at = ? WHERE id = ?");
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Obtener valores del DTO
+            $userId = $order->getUserId();
+            $addressId = $order->getAddressId();
+            $totalPrice = $order->getTotalPrice();
+            $status = $order->getStatus();
+            $createdAt = $order->getCreatedAt();
+            $orderId = $order->getId();
+
+            $stmt->bind_param("iidssi", $userId, $addressId, $totalPrice, $status, $createdAt, $orderId);
+
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al ejecutar la actualización: " . $stmt->error);
+            }
+
+            $stmt->close();
+
+
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+
+        return true;
+
+    }
+
+
+    /**
      * Elimina un pedido por su ID
      * 
      * @param int $orderId ID del pedido a eliminar
-     * @return bool True si se eliminó correctamente, False si falló
+     * @return bool True si se eliminó correctamente
      */
     public function deleteOrder($orderId)
     {
