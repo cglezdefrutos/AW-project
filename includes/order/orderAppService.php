@@ -56,17 +56,46 @@ class orderAppService
         {
             $ordersDTO = $IOrderDAO->getAllOrders();
         }
-        // Si es usuario, tomamos SOLO los orders del usuario
+        // Si es cliente, tomamos SOLO los orders del cliente
         else
         {
-            // Tomamos el id del usuario
+            // Tomamos el id del cliente
             $userId = htmlspecialchars($app->getCurrentUserId());
 
-            // Pasamos como filtro el id del usuario
+            // Pasamos como filtro el id del cliente
             $ordersDTO = $IOrderDAO->getOrdersByUserId($userId);
         }
 
         return $ordersDTO;
     }
+
+    /**
+     * Elimina un pedido y sus detalles asociados
+     *
+     * @param int $orderId ID del pedido a eliminar
+     * @return bool True si se eliminó correctamente, False si hubo un error
+     */
+    public function deleteOrderById($orderId)
+    {
+        $IOrderDAO = orderFactory::CreateOrder();
+        $IOrderDetailDAO = orderDetailFactory::createOrderDetail();
+
+        try {
+
+            // Primero, eliminar los detalles del pedido
+            $orderDetailsDeleted = $IOrderDetailDAO->deleteOrderDetailsByOrderId($orderId);
+
+            // Luego, eliminar el pedido en sí
+            $orderDeleted = $IOrderDAO->deleteOrder($orderId);
+
+            // Si ambos se eliminaron correctamente, retornar true
+            return $orderDetailsDeleted && $orderDeleted;
+
+        } catch (\Exception $e) {
+            error_log("Error eliminando el pedido con ID $orderId: " . $e->getMessage());
+            return false;
+        }
+    }
+
 
 }

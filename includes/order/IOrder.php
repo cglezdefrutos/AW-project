@@ -25,4 +25,12 @@ interface IOrder
      */
     public function getOrdersByUserId($userId);
 
+    /**
+     * Elimina un pedido por su ID
+     * 
+     * @param int $orderId ID del pedido a eliminar
+     * @return bool True si se eliminó correctamente, False si falló
+     */
+    public function deleteOrder($orderId);
+
 }

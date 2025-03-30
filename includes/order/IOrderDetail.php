@@ -14,4 +14,12 @@ interface IOrderDetail
      * @return array de orderDetailDTO
      */
     public function getDetailsByOrderId($orderId);
+
+    /**
+     * Elimina todos los detalles de un pedido por su order_id
+     * 
+     * @param int $orderId ID del pedido cuyos detalles serán eliminados
+     * @return bool True si se eliminaron correctamente, False si falló
+     */
+    public function deleteOrderDetailsByOrderId($orderId);
 }

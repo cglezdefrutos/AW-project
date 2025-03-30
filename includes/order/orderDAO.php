@@ -116,4 +116,42 @@ class orderDAO extends baseDAO implements IOrder
 
     }
 
+    /**
+     * Elimina un pedido por su ID
+     * 
+     * @param int $orderId ID del pedido a eliminar
+     * @return bool True si se eliminó correctamente, False si falló
+     */
+    public function deleteOrder($orderId)
+    {
+        try {
+            // Obtener la conexión a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Preparar la consulta SQL
+            $stmt = $conn->prepare("DELETE FROM orders WHERE id = ?");
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Asignar el parámetro y ejecutar la consulta
+            $stmt->bind_param("i", $orderId);
+
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            $stmt->close();
+
+           
+
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+
+        return true;
+    }
+
+
 }

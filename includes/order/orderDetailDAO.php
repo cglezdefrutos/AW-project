@@ -58,4 +58,42 @@ class orderDetailDAO extends baseDAO implements IOrderDetail
 
         return $details;
     }
+
+    /**
+     * Elimina todos los detalles de un pedido por su order_id
+     * 
+     * @param int $orderId ID del pedido cuyos detalles serán eliminados
+     * @return bool True si se eliminaron correctamente, False si falló
+     */
+    public function deleteOrderDetailsByOrderId($orderId)
+    {
+        try {
+            // Obtener la conexión a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Preparar la consulta SQL
+            $stmt = $conn->prepare("DELETE FROM order_details WHERE order_id = ?");
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Asignar el parámetro y ejecutar la consulta
+            $stmt->bind_param("i", $orderId);
+
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            $stmt->close();
+
+            
+
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+
+        return true;
+    }
+
 }
