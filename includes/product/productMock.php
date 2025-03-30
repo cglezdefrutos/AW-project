@@ -49,4 +49,15 @@ class productMock implements IProduct
         // Return a product DTO
         return new productDTO($id, 1, "Camiseta Nike", "Camiseta Nike para hacer deporte", 29.99, 10, 1, "/AW-project/img/camiseta_nike.png", "2021-01-01");
     }
+
+    /**
+     * Get category name by ID
+     * 
+     * @param int $id
+     * @return string Categoria del producto
+     */
+    public function getCategoryNameById($id)
+    {
+        return "Camisetas";
+    }
 }

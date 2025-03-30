@@ -34,6 +34,26 @@ h2 {
     margin-bottom: 1.5rem;
 }
 
+/* Página de éxito */
+.success-page {
+    margin-top: 20px; /* Margen superior */
+    margin-bottom: 20px; /* Margen inferior */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Tarjeta de éxito */
+.success-card {
+    max-width: 600px;
+    width: 100%;
+}
+
+/* Logo en la tarjeta */
+.success-logo {
+    max-width: 150px;
+}
+
 /* Tarjetas */
 .card {
     border: none; /* Elimina el borde predeterminado */

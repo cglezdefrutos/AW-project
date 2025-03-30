@@ -64,6 +64,19 @@ class productAppService
         return $IProduct->getProductById($id);
     }
 
+    /**
+     * Busca el nombre de una categoría por su ID
+     * 
+     * @param int $id ID de la categoría
+     * 
+     * @return string Nombre de la categoría
+     */
+    public function getCategoryNameById($id)
+    {
+        $IProduct = productFactory::CreateProduct();
+
+        return $IProduct->getCategoryNameById($id);
+    }
 }
     
 
