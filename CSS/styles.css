@@ -5,187 +5,105 @@
     box-sizing: border-box;
 }
 
-/* Body Styles */
+/* General */
 body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-    line-height: 1.6;
+    font-family: 'Arial', sans-serif; /* Cambia la fuente a algo más moderno */
+    line-height: 1.6; /* Mejora la legibilidad */
+    color: #333; /* Color de texto más suave */
+    background-color: #f8f9fa; /* Fondo claro */
     margin: 0;
     padding: 0;
 }
 
-/* Container */
-.container {
-    width: 80%;
-    margin: auto;
-    overflow: hidden;
+/* Encabezado principal */
+h1.display-4 {
+    font-weight: bold;
+    color: #007bff; /* Azul primario */
+    margin-bottom: 1rem;
 }
 
-/* Header */
-header {
-    background: #0056b3; /* Azul estilo Decathlon */
-    color: #fff;
-    padding: 20px 20px;
-    border-bottom: #39ff14 3px solid; /* Verde fosforito */
+p.lead {
+    font-size: 1.2rem;
+    color: #555; /* Gris suave */
 }
 
-header a {
+/* Títulos secundarios */
+h2 {
+    font-weight: bold;
+    color: #343a40; /* Gris oscuro */
+    margin-bottom: 1.5rem;
+}
+
+/* Tarjetas */
+.card {
+    border: none; /* Elimina el borde predeterminado */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Efecto de elevación al pasar el ratón */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #007bff; /* Azul primario */
+}
+
+.card-text {
+    color: #555; /* Gris suave */
+}
+
+/* Botones */
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Azul más oscuro */
+    transform: scale(1.05); /* Efecto de zoom al pasar el ratón */
+}
+
+/* Imagen del logo */
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px; /* Bordes redondeados */
+}
+
+/* Márgenes entre filas */
+.row {
+    margin-bottom: 2rem; /* Espaciado entre filas */
+}
+
+/* Footer */
+footer {
+    background-color: #343a40; /* Fondo gris oscuro */
+    color: #fff; /* Texto blanco */
+    padding: 2rem 0;
+}
+
+footer h5 {
+    font-weight: bold;
     color: #fff;
+}
+
+footer p {
+    color: #ccc; /* Gris claro */
+}
+
+footer a {
+    color: #007bff; /* Azul primario */
     text-decoration: none;
-    text-transform: uppercase;
-    font-size: 16px;
 }
 
-header .logo a {
-    font-size: 30px;
-    font-weight: bold;
-}
-
-header ul {
-    padding: 0;
-    list-style: none;
-}
-
-header li {
-    display: inline;
-    padding: 0 20px;
-}
-
-header #branding {
-    float: left;
-}
-
-header #branding h1 {
-    margin: 0;
-}
-
-header nav {
-    float: right;
-    margin-top: 10px;
-}
-
-header .highlight, header .current a {
-    color: #39ff14; /* Verde fosforito */
-    font-weight: bold;
-}
-
-header a:hover {
-    color: #39ff14; /* Verde fosforito */
-}
-
-/* Showcase */
-#showcase {
-    min-height: 400px;
-    background: url('../img/showcase.jpg') no-repeat center center/cover;
-    text-align: center;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-#showcase h1 {
-    font-size: 55px;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-}
-
-#showcase p {
-    font-size: 20px;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-}
-
-/* Main Content */
-main {
-    padding: 20px;
-    background: #fff;
-    margin-top: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-}
-
-main h1 {
-    margin-bottom: 20px;
-    color: #0056b3; /* Azul estilo Decathlon */
-}
-
-main p {
-    margin-bottom: 20px;
-}
-
-/* Welcome Section */
-.welcome {
-    text-align: center;
-    padding: 50px 50px;
-    background: #fff; /* Light blue background */
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.welcome h1 {
-    font-size: 36px;
-    color: #0056b3; /* Azul estilo Decathlon */
-    margin-bottom: 20px;
-}
-
-.welcome h2 {
-    font-size: 28px;
-    color: #333;
-    margin-bottom: 20px;
-}
-
-.welcome p {
-    font-size: 18px;
-    line-height: 1.8;
-    margin-bottom: 20px;
-}
-
-.welcome img {
-    max-width: 200px;
-    margin-top: 20px;
-}
-
-/* Features Section */
-.features {
-    padding: 50px 20px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.features h2 {
-    text-align: center;
-    color: #0056b3; /* Azul estilo Decathlon */
-    margin-bottom: 40px;
-}
-
-.feature-box {
-    text-align: center;
-    padding: 20px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    background-color: #0056b3;
-}
-
-.feature-box h3 {
-    color: chartreuse; /* Azul estilo Decathlon */
-    margin-bottom: 10px;
-}
-
-.feature-box p {
-    color: #fff;
-    font-size: 16px;
-    line-height: 1.6;
-}
-
-.feature-box:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+footer a:hover {
+    color: #0056b3; /* Azul más oscuro */
+    text-decoration: underline;
 }
 
 /* Form Styles */

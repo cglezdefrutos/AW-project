@@ -25,22 +25,52 @@ class catalogFilterForm extends baseForm
     protected function CreateFields($initialData)
     {
         $html = <<<EOF
-            <fieldset>
-                <legend>Filtrar Productos</legend>
+            <fieldset class="border p-4 rounded">
+                <legend class="w-auto">Filtrar Productos</legend>
 
-                <label for="name">Nombre:</label>
-                <input type="text" name="name" id="name" placeholder="Buscar por nombre" value="{$initialData['name'] ?? ''}"><br>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nombre:</label>
+                    <input type="text" name="name" id="name" class="form-control" placeholder="Buscar por nombre" value="
+        EOF;
 
-                <label for="category">Categoría:</label>
-                <input type="text" name="category" id="category" placeholder="Buscar por categoría" value="{$initialData['category'] ?? ''}"><br>
+        $html .= htmlspecialchars($initialData['name'] ?? '') . '">';
 
-                <label for="minPrice">Precio mínimo:</label>
-                <input type="number" name="minPrice" id="minPrice" step="0.01" placeholder="Ej: 10" value="{$initialData['minPrice'] ?? ''}"><br>
+        $html .= <<<EOF
+                </div>
 
-                <label for="maxPrice">Precio máximo:</label>
-                <input type="number" name="maxPrice" id="maxPrice" step="0.01" placeholder="Ej: 100" value="{$initialData['maxPrice'] ?? ''}"><br>
+                <div class="mb-3">
+                    <label for="category" class="form-label">Categoría:</label>
+                    <input type="text" name="category" id="category" class="form-control" placeholder="Buscar por categoría" value="
+        EOF;
 
-                <button type="submit" class="btn btn-primary">Filtrar</button>
+        $html .= htmlspecialchars($initialData['category'] ?? '') . '">';
+
+        $html .= <<<EOF
+                </div>
+
+                <div class="mb-3">
+                    <label for="minPrice" class="form-label">Precio mínimo:</label>
+                    <input type="number" name="minPrice" id="minPrice" class="form-control" step="0.01" placeholder="Ej: 0" value="
+        EOF;
+
+        $html .= htmlspecialchars($initialData['minPrice'] ?? '') . '">';
+
+        $html .= <<<EOF
+                </div>
+
+                <div class="mb-3">
+                    <label for="maxPrice" class="form-label">Precio máximo:</label>
+                    <input type="number" name="maxPrice" id="maxPrice" class="form-control" step="0.01" placeholder="Ej: 100" value="
+        EOF;
+
+        $html .= htmlspecialchars($initialData['maxPrice'] ?? '') . '">';
+
+        $html .= <<<EOF
+                </div>
+
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                </div>
             </fieldset>
         EOF;
 

@@ -39,64 +39,88 @@ class updateEventForm extends baseForm
 
         // Creamos el formulario de actualización de eventos
         $html = <<<EOF
-            <fieldset>
-                <legend>Actualizar Evento</legend>
+            <fieldset class="border p-4 rounded">
+                <legend class="w-auto">Actualizar Evento</legend>
+
                 <input type="hidden" name="eventId" id="eventId" value="
         EOF;
 
         $html .= htmlspecialchars($this->eventInitialData->getId()) . '">';
 
         $html .= <<<EOF
-                <label for="name">Nombre del evento:</label>
-                <input type="text" name="name" id="name" required placeholder="Ej: Torneo de Futbol" value="
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nombre del evento:</label>
+                    <input type="text" name="name" id="name" class="form-control" placeholder="Ej: Torneo de Futbol" value="
         EOF;
+
+        $html .= htmlspecialchars($this->eventInitialData->getName()) . '" required>';
         
-        $html .= htmlspecialchars($this->eventInitialData->getName()) . '"><br>';
-
         $html .= <<<EOF
-            <label for="description">Descripción:</label>
-            <textarea name="description" id="description" required placeholder="Escribe una breve descripcion" rows="4" cols="50">
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Descripción:</label>
+                    <textarea name="description" id="description" class="form-control" placeholder="Escribe una breve descripción" rows="4" required>
         EOF;
+
+        $html .= htmlspecialchars($this->eventInitialData->getDesc()) . '</textarea>';
         
-        $html .= htmlspecialchars($this->eventInitialData->getDesc()) . '</textarea><br>';
-
         $html .= <<<EOF
-                <label for="date">Fecha:</label>
-                <input type="datetime-local" name="date" id="date" required value="
+                </div>
+
+                <div class="mb-3">
+                    <label for="date" class="form-label">Fecha:</label>
+                    <input type="datetime-local" name="date" id="date" class="form-control" value="
         EOF;
+
+        $html .= htmlspecialchars($formattedDateTime) . '" required>';
         
-        $html .= htmlspecialchars($formattedDateTime) . '"><br>';
-
         $html .= <<<EOF
-                <label for="location">Lugar:</label>
-                <input type="text" name="location" id="location" required placeholder="Ej: Estadio de futbol" value="
+                </div>
+
+                <div class="mb-3">
+                    <label for="location" class="form-label">Lugar:</label>
+                    <input type="text" name="location" id="location" class="form-control" placeholder="Ej: Estadio de futbol" value="
         EOF;
+
+        $html .= htmlspecialchars($this->eventInitialData->getLocation()) . '" required>';
         
-        $html .= htmlspecialchars($this->eventInitialData->getLocation()) . '"><br>';
-
         $html .= <<<EOF
-                <label for="price">Precio:</label>
-                <input type="number" name="price" id="price" required placeholder="Ej: 10" value="
+                </div>
+
+                <div class="mb-3">
+                    <label for="price" class="form-label">Precio (€):</label>
+                    <input type="number" name="price" id="price" class="form-control" step="0.01" min="0" placeholder="Ej: 10" value="
         EOF;
+
+        $html .= htmlspecialchars($this->eventInitialData->getPrice()) . '" required>';
         
-        $html .= htmlspecialchars($this->eventInitialData->getPrice()) . '"><br>';
-
         $html .= <<<EOF
-                <label for="capacity">Capacidad:</label>
-                <input type="number" name="capacity" id="capacity" required placeholder="Ej: 100" value="
+                </div>
+
+                <div class="mb-3">
+                    <label for="capacity" class="form-label">Capacidad:</label>
+                    <input type="number" name="capacity" id="capacity" class="form-control" min="0" placeholder="Ej: 100" value="
         EOF;
+
+        $html .= htmlspecialchars($this->eventInitialData->getCapacity()) . '" required>';
         
-        $html .= htmlspecialchars($this->eventInitialData->getCapacity()) . '"><br>';
-
         $html .= <<<EOF
-                <label for="category">Categoría:</label>
-                <input type="text" name="category" id="category" required placeholder="Ej: Deportes" value="
+                </div>
+
+                <div class="mb-3">
+                    <label for="category" class="form-label">Categoría:</label>
+                    <input type="text" name="category" id="category" class="form-control" placeholder="Ej: Deportes" value="
         EOF;
 
-        $html .= htmlspecialchars($this->eventInitialData->getCategory()) . '"><br>';
-
+        $html .= htmlspecialchars($this->eventInitialData->getCategory()) . '" required>';
+        
         $html .= <<<EOF
-                <input type="submit" value="Actualizar">
+                </div>
+
+                <div class="mt-3">
+                    <button type="submit" name="update_event" class="btn btn-primary w-100">Actualizar Evento</button>
+                </div>
             </fieldset>
         EOF;
         

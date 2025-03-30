@@ -102,11 +102,14 @@ abstract class baseForm
         $html= $this->CreateErrors($errors);
 
         // Se genera el formulario
-        $html .= '<form method="POST" action="'.$this->action.'" id="'.$this->formId.'" >';
+        $html .= '<form method="POST" action="'.$this->action.'" id="'.$this->formId.'" class="needs-validation" novalidate>';
         $html .= '<input type="hidden" name="action" value="'.$this->formId.'" />';
         
         // Llama al método abstracto para crear los campos, que será implementado por cada subclase 
+        $html .= '<div class="row g-3">'; // Añade un contenedor de filas con espacio entre campos
         $html .= $this->CreateFields($data);
+        $html .= '</div>';
+
         $html .= '</form>';
         
         // Se retorna todo el código HTML
@@ -124,15 +127,18 @@ abstract class baseForm
     {
         $html='';
         $numErrors = count($errors);
-        if (  $numErrors == 1 ) 
-        {
-            $html .= "<ul><li>".$errors[0]."</li></ul>";
-        } 
-        else if ( $numErrors > 1 ) 
-        {
-            $html .= "<ul><li>";
-            $html .= implode("</li><li>", $errors);
-            $html .= "</li></ul>";
+        if ($numErrors > 0) {
+            $html .= '<div class="alert alert-danger" role="alert">';
+            if ($numErrors == 1) {
+                $html .= $errors[0];
+            } else {
+                $html .= '<ul>';
+                foreach ($errors as $error) {
+                    $html .= '<li>' . $error . '</li>';
+                }
+                $html .= '</ul>';
+            }
+            $html .= '</div>';
         }
         return $html;
     }

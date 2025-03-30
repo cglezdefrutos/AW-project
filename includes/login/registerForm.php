@@ -39,28 +39,49 @@ class registerForm extends baseForm
         }
 
         $html = <<<EOF
-            <fieldset>
-                <legend>Inserta los datos</legend>
-                <p><label>Email:</label> <input type="email" name="email" value="$email"/></p>
-                <p><label>Password:</label> <input type="password" name="password" /></p>
-                <p><label>Re-Password:</label> <input type="password" name="rePassword" /></p>
-                
-                <legend>Selecciona tu tipo de usuario:</legend>
-                <p>
-                    <input type="radio" name="usertype" value="1" id="client" 
-                    ".($userType === '1' ? 'checked' : '')."> 
-                    <label for="client">Cliente</label>
+            <fieldset class="border p-4 rounded">
+                <legend class="w-auto">Inserta los datos</legend>
 
-                    <input type="radio" name="usertype" value="2" id="supplier" 
-                    ".($userType === '2' ? 'checked' : '')."> 
-                    <label for="supplier">Proveedor</label>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" name="email" id="email" class="form-control" placeholder="Introduce tu email" value="$email" required>
+                    <div class="invalid-feedback">Por favor, introduce un email válido.</div>
+                </div>
 
-                    <input type="radio" name="usertype" value="3" id="trainer" 
-                    ".($userType === '3' ? 'checked' : '')."> 
-                    <label for="trainer">Entrenador</label>
-                </p>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password:</label>
+                    <input type="password" name="password" id="password" class="form-control" placeholder="Introduce tu contraseña" required>
+                    <div class="invalid-feedback">Por favor, introduce tu contraseña.</div>
+                </div>
 
-                <button type="submit" name="register">Registrarse</button>
+                <div class="mb-3">
+                    <label for="rePassword" class="form-label">Re-Password:</label>
+                    <input type="password" name="rePassword" id="rePassword" class="form-control" placeholder="Repite tu contraseña" required>
+                    <div class="invalid-feedback">Por favor, repite tu contraseña.</div>
+                </div>
+
+                <legend class="w-auto mt-2">Selecciona tu tipo de usuario:</legend>
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input type="radio" name="usertype" value="1" id="client" class="form-check-input" 
+                        ".($userType === '1' ? 'checked' : '').">
+                        <label for="client" class="form-check-label">Cliente</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" name="usertype" value="2" id="supplier" class="form-check-input" 
+                        ".($userType === '2' ? 'checked' : '').">
+                        <label for="supplier" class="form-check-label">Proveedor</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" name="usertype" value="3" id="trainer" class="form-check-input" 
+                        ".($userType === '3' ? 'checked' : '').">
+                        <label for="trainer" class="form-check-label">Entrenador</label>
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <button type="submit" name="register" class="btn btn-primary w-100">Registrarse</button>
+                </div>
             </fieldset>
         EOF;
 
