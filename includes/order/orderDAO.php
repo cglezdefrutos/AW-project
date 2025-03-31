@@ -65,20 +65,23 @@ class orderDAO extends baseDAO implements IOrder
     }
 
     /**
-     * Optiene todos los Orders
+     * Optiene todos los Orders con los emails de los usuarios
      * 
      * @param none
      * @return array de orders
      */
-    public function getAllOrders() {
+    public function getAllOrdersWithEmail() {
         $orders = array();
     
         try {
             // Tomamos la conexión a la base de datos
             $conn = application::getInstance()->getConnectionDb();
     
-            // Consulta SQL para obtener todos los orders
-            $stmt = $conn->prepare("SELECT * FROM orders");
+            // Consulta SQL con JOIN para incluir el email del usuario
+            $stmt = $conn->prepare("SELECT o.id, o.user_id, u.email, o.address_id, o.total_price, o.status, o.created_at
+                                    FROM orders o
+                                    JOIN users u ON o.user_id = u.id");
+    
             if (!$stmt) {
                 throw new \Exception("Error al preparar la consulta: " . $conn->error);
             }
@@ -89,17 +92,17 @@ class orderDAO extends baseDAO implements IOrder
             }
     
             // Asignamos los resultados a variables
-            $stmt->bind_result($id, $user_id, $address_id, $total_price, $status, $created_at);
+            $stmt->bind_result($id, $user_id, $email, $address_id, $total_price, $status, $created_at);
     
-            // Mientras haya resultados, los guardamos en el array
+            // Guardamos los resultados en el array
             while ($stmt->fetch()) {
-                $order = new orderDTO($id, $user_id, $address_id, $total_price, $status, $created_at);
+                $order = new OrderWithUserDTO($id, $user_id, $email, $address_id, $total_price, $status, $created_at);
                 $orders[] = $order;
             }
     
             // Cerramos la consulta
             $stmt->close();
-
+    
         } catch (\Exception $e) {
             error_log($e->getMessage());
             throw $e;
@@ -107,6 +110,7 @@ class orderDAO extends baseDAO implements IOrder
     
         return $orders;
     }
+    
     
 
     /**
