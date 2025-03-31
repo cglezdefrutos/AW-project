@@ -3,7 +3,7 @@
 require_once __DIR__.'/includes/config.php';
 
 use TheBalance\order\orderAppService;
-use TheBalance\order\orderDTO;
+use TheBalance\order\OrderWithUserDTO;
 use TheBalance\order\manageOrderTable;
 use TheBalance\application;
 
@@ -44,13 +44,14 @@ else
             EOS;
         }
 
-        $ordersData = $orderAppService->getOrdersByUserType();
+        $ordersData = $orderAppService->getAllOrdersWithEmail();
 
         // Convertir los datos en objetos DTO
         $orders = array_map(function($orderData) {
-            return new orderDTO(
+            return new OrderWithUserDTO(
                 $orderData->getId(),
                 $orderData->getUserId(),
+                $orderData->getEmail(),
                 $orderData->getAddressId(),
                 $orderData->getTotalPrice(),
                 $orderData->getStatus(),
@@ -59,7 +60,7 @@ else
         }, $ordersData);
 
         // Definir las columnas de la tabla
-        $columns = ['Precio total', 'Estado', 'Fecha', 'Acciones'];
+        $columns = ['Email del Usuario', 'Precio total', 'Estado', 'Fecha', 'Acciones'];
 
         if (empty($orders)) {
             $mainContent = "<h1>No hay pedidos registrados.</h1>";

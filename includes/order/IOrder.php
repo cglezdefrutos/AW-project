@@ -18,12 +18,12 @@ interface IOrder
     public function getOrderById($orderId);
 
     /**
-     * Optiene todos los Orders
+     * Optiene todos los Orders con los emails de los usuarios
      * 
-     * @param 
+     * @param none
      * @return array de orders
      */
-    public function getAllOrders();
+    public function getAllOrdersWithEmail();
 
     /**
      * Optiene los Orders de un usuario

@@ -24,7 +24,7 @@ if (!$app->isCurrentUserLogged()) {
 
     // Obtenemos la instancia del servicio de pedidos
     $orderAppService = orderAppService::GetSingleton();
-    $ordersData = $orderAppService->getOrdersByUserType();
+    $ordersData = $orderAppService->getClientOrders();
 
     // Convertir los datos en objetos DTO
     $orders = array_map(function($orderData) {
