@@ -23,6 +23,10 @@ class searchEventForm extends baseForm
      */
     protected function CreateFields($initialData)
     {
+        // Obtener las categorías desde la base de datos
+        $eventAppService = eventAppService::GetSingleton();
+        $categories = $eventAppService->getEventCategories();
+
         // Creamos el formulario de búsqueda de eventos
         $html = <<<EOF
             <fieldset class="border p-4 rounded">
@@ -92,36 +96,21 @@ class searchEventForm extends baseForm
         $html .= htmlspecialchars($initialData['location'] ?? '') . '">';
         
         $html .= <<<EOF
-                </div>
+            </div>
 
-                <!-- Campo Categoría -->
-                <div class="mb-3">
-                    <label for="category" class="form-label">Categoría:</label>
-                    <select name="category" id="category" class="form-select">
-                        <option value="">Todas</option>
-                        <option value="Futbol" 
+            <!-- Campo Categoría -->
+            <div class="mb-3">
+                <label for="category" class="form-label">Categoría:</label>
+                <select name="category" id="category" class="form-select">
+                    <option value="">Todas</option>
         EOF;
 
-        $html .= ($initialData['category'] ?? '') == 'Futbol' ? 'selected' : '' . '>Futbol</option>';
-        
-        $html .= <<<EOF
-                        <option value="Baloncesto" 
-        EOF;
+        // Generar dinámicamente las opciones del select con las categorías disponibles
+        foreach ($categories as $category) {
+            $selected = ($initialData['category'] ?? '') == $category->getName() ? 'selected' : '';
+            $html .= "<option value=\"" . htmlspecialchars($category->getName()) . "\" $selected>" . htmlspecialchars($category->getName()) . "</option>";
+        }
 
-        $html .= ($initialData['category'] ?? '') == 'Baloncesto' ? 'selected' : '' . '>Baloncesto</option>';
-        
-        $html .= <<<EOF
-                        <option value="Fitness" 
-        EOF;
-
-        $html .= ($initialData['category'] ?? '') == 'Fitness' ? 'selected' : '' . '>Fitness</option>';
-        
-        $html .= <<<EOF
-                        <option value="Atletismo" 
-        EOF;
-
-        $html .= ($initialData['category'] ?? '') == 'Atletismo' ? 'selected' : '' . '>Atletismo</option>';
-        
         $html .= <<<EOF
                     </select>
                 </div>
