@@ -67,6 +67,7 @@ else
             $productData['price'],
             $productData['stock'],
             $productData['category_id'],
+            $productData['category_name'],
             $productData['image_url'],
             $productData['created_at']
         );

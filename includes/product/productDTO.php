@@ -43,6 +43,11 @@ class productDTO implements \JsonSerializable
     private $category_id;
 
     /**
+     * @var string Nombre de la categoría del producto
+     */
+    private $category_name;
+
+    /**
      * @var string URL de la imagen del producto
      */
     private $image_url;
@@ -60,7 +65,7 @@ class productDTO implements \JsonSerializable
     /**
      * Constructor
      */
-    public function __construct($id, $provider_id, $name, $description, $price, $stock, $category_id, $image_url, $created_at, $sizes = [])
+    public function __construct($id, $provider_id, $name, $description, $price, $stock, $category_id, $category_name, $image_url, $created_at, $sizes = [])
     {
         $this->id = $id;
         $this->provider_id = $provider_id;
@@ -69,6 +74,7 @@ class productDTO implements \JsonSerializable
         $this->price = $price;
         $this->stock = $stock;
         $this->category_id = $category_id;
+        $this->category_name = $category_name;
         $this->image_url = $image_url;
         $this->created_at = $created_at;
         $this->sizes = $sizes;
@@ -110,6 +116,11 @@ class productDTO implements \JsonSerializable
     public function getCategoryId()
     {
         return $this->category_id;
+    }
+
+    public function getCategoryName()
+    {
+        return $this->category_name;
     }
 
     public function getImageUrl()
@@ -173,6 +184,11 @@ class productDTO implements \JsonSerializable
     public function setCreatedAt($created_at)
     {
         $this->created_at = $created_at;
+    }
+
+    public function setCategoryName($category_name)
+    {
+        $this->category_name = $category_name;
     }
 
     public function setSizes($sizes)

@@ -54,7 +54,6 @@ if ($sessionId) {
         // Limpiar el carrito de compras
         unset($_SESSION['cart']);
 
-        // Mostrar un diseño más profesional con Bootstrap
         $mainContent .= <<<EOS
             <div class="container success-page">
                 <div class="card shadow-lg success-card">

@@ -15,6 +15,21 @@ Stripe::setApiKey(STRIPE_SECRET_KEY);
 
 // Obtener los productos del carrito
 $cart = $_SESSION['cart'] ?? [];
+if (empty($cart)) {
+    // Mostrar una alerta y redirigir al catálogo
+    $mainContent .= <<<EOF
+        <div class="alert alert-warning text-center" role="alert">
+            <h4 class="alert-heading">¡Tu carrito está vacío!</h4>
+            <p>No puedes proceder al pago porque no tienes productos en el carrito.</p>
+            <hr>
+            <a href="catalog.php" class="btn btn-primary">Volver al catálogo</a>
+        </div>
+    EOF;
+
+    require_once __DIR__ . '/includes/views/template/template.php';
+    exit();
+}
+
 $lineItems = [];
 
 foreach ($cart as $cartKey => $quantity) 
@@ -26,7 +41,6 @@ foreach ($cart as $cartKey => $quantity)
     $product = productAppService::GetSingleton()->getProductById($productId);
     if ($product) 
     {
-        $categoryName = productAppService::GetSingleton()->getCategoryNameById($product->getCategoryId());
         $lineItems[] = [
             'price_data' => [
                 'currency' => 'eur',
@@ -35,7 +49,7 @@ foreach ($cart as $cartKey => $quantity)
                     'description' => $product->getDescription(),
                     'metadata' => [
                         'product_id' => $productId,
-                        'category' => $categoryName,
+                        'category' => $product->getCategoryName(),
                         'size' => $size,
                     ],
                 ],
