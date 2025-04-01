@@ -98,7 +98,7 @@ INSERT INTO `event_participants` (`user_id`, `event_id`, `user_name`, `user_phon
 
 CREATE TABLE `orders` (
   `id` bigint(20) NOT NULL,
-  `customer_email` varchar(255) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
   `total_price` decimal(11,2) NOT NULL,
   `status` varchar(50) NOT NULL DEFAULT 'En preparación',
   `shipping_address` text NOT NULL,
