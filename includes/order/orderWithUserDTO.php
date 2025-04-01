@@ -19,11 +19,6 @@ class OrderWithUserDTO implements \JsonSerializable {
     private $email;
 
     /**
-     * @var int address_id al que pertenece
-     */
-    private $address_id;
-
-    /**
      * @var float address_id al que pertenece
      */
     private $total_price;
@@ -34,6 +29,11 @@ class OrderWithUserDTO implements \JsonSerializable {
     private $status;
 
     /**
+     * @var string direccion de envio al que pertenece
+     */
+    private $shipping_address;
+
+    /**
      * @var Date Fecha de creacion
      */
     private $created_at;
@@ -41,13 +41,13 @@ class OrderWithUserDTO implements \JsonSerializable {
     /**
      * Constructor
      */
-    public function __construct($id, $userId, $email, $addressId, $totalPrice, $status, $createdAt) {
+    public function __construct($id, $userId, $email, $totalPrice, $status, $shipping_address, $createdAt) {
         $this->id = $id;
         $this->userId = $userId;
         $this->email = $email;
-        $this->addressId = $addressId;
         $this->totalPrice = $totalPrice;
         $this->status = $status;
+        $this->shipping_address = $shipping_address;
         $this->createdAt = $createdAt;
     }
 
@@ -57,9 +57,9 @@ class OrderWithUserDTO implements \JsonSerializable {
     public function getId() { return $this->id; }
     public function getUserId() { return $this->userId; }
     public function getEmail() { return $this->email; }
-    public function getAddressId() { return $this->addressId; }
     public function getTotalPrice() { return $this->totalPrice; }
     public function getStatus() { return $this->status; }
+    public function getShippingAddress() { return $this->shipping_address; }
     public function getCreatedAt() { return $this->createdAt; }
 
     /**

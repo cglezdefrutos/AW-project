@@ -13,6 +13,7 @@ class showOrderTable extends baseTable
         // Generar filas de la tabla
         foreach ($this->data as $order) {
             $html .= '<tr>';
+            $html .= '<td>' . htmlspecialchars($order->getShippingAddress()) . '</td>';
             $html .= '<td>' . htmlspecialchars($order->getTotalPrice()) . '</td>';
             $html .= '<td>' . htmlspecialchars($order->getStatus()) . '</td>';
             $html .= '<td>' . htmlspecialchars($order->getCreatedAt()) . '</td>';

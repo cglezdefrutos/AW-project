@@ -31,15 +31,15 @@ if (!$app->isCurrentUserLogged()) {
         return new orderDTO(
             $orderData->getId(),
             $orderData->getUserId(),
-            $orderData->getAddressId(),
             $orderData->getTotalPrice(),
             $orderData->getStatus(),
+            $orderData->getShippingAddress(),
             $orderData->getCreatedAt()
         );
     }, $ordersData);
 
     // Definir las columnas de la tabla
-    $columns = ['Precio total', 'Estado', 'Fecha', 'Detalles'];
+    $columns = ['Dirección de Envío', 'Precio total', 'Estado', 'Fecha', 'Detalles'];
 
     if (empty($orders)) {
         $mainContent = "<h1>No tienes pedidos registrados.</h1>";

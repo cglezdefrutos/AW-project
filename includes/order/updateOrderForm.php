@@ -37,7 +37,7 @@ class updateOrderForm extends baseForm
         $currentStatus = htmlspecialchars($this->orderInitialData->getStatus());
 
         // Estados disponibles
-        $statuses = ['pendiente', 'pagado', 'enviado', 'entregado', 'cancelado'];
+        $statuses = ['En preparación', 'Enviado', 'Entregado', 'Cancelado'];
 
         // Inicio del formulario
         $html = <<<EOF
@@ -91,7 +91,7 @@ class updateOrderForm extends baseForm
         }
 
         // Validar estado seleccionado
-        $statuses = ['pendiente', 'pagado', 'enviado', 'entregado', 'cancelado'];
+        $statuses = ['En preparación', 'Enviado', 'Entregado', 'Cancelado'];
         $newStatus = trim($data['status'] ?? '');
         if (!in_array($newStatus, $statuses)) {
             $result[] = 'Estado seleccionado no válido.';
@@ -102,9 +102,9 @@ class updateOrderForm extends baseForm
             $updatedOrder = new orderDTO(
                 $this->orderInitialData->getId(),
                 $this->orderInitialData->getUserId(),
-                $this->orderInitialData->getAddressId(),
                 $this->orderInitialData->getTotalPrice(),
                 $newStatus,
+                $this->orderInitialData->getShippingAddress(),
                 $this->orderInitialData->getCreatedAt()
             );
 

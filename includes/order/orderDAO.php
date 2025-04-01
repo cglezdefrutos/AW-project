@@ -47,11 +47,11 @@ class orderDAO extends baseDAO implements IOrder
             }
     
             // Asignar los resultados a variables
-            $stmt->bind_result($id, $user_id, $address_id, $total_price, $status, $created_at);
+            $stmt->bind_result($id, $user_id, $total_price, $status, $shipping_address, $created_at);
     
             // Obtener el resultado
             if ($stmt->fetch()) {
-                $order = new orderDTO($id, $user_id, $address_id, $total_price, $status, $created_at);
+                $order = new orderDTO($id, $user_id, $total_price, $status, $shipping_address, $created_at);
             }
     
             // Cerrar la consulta
@@ -78,7 +78,7 @@ class orderDAO extends baseDAO implements IOrder
             $conn = application::getInstance()->getConnectionDb();
     
             // Consulta SQL con JOIN para incluir el email del usuario
-            $stmt = $conn->prepare("SELECT o.id, o.user_id, u.email, o.address_id, o.total_price, o.status, o.created_at
+            $stmt = $conn->prepare("SELECT o.id, o.user_id, u.email, o.total_price, o.status, o.shipping_address, o.created_at
                                     FROM orders o
                                     JOIN users u ON o.user_id = u.id");
     
@@ -92,11 +92,11 @@ class orderDAO extends baseDAO implements IOrder
             }
     
             // Asignamos los resultados a variables
-            $stmt->bind_result($id, $user_id, $email, $address_id, $total_price, $status, $created_at);
+            $stmt->bind_result($id, $user_id, $email, $total_price, $status, $shipping_address, $created_at);
     
             // Guardamos los resultados en el array
             while ($stmt->fetch()) {
-                $order = new OrderWithUserDTO($id, $user_id, $email, $address_id, $total_price, $status, $created_at);
+                $order = new OrderWithUserDTO($id, $user_id, $email, $total_price, $status, $shipping_address, $created_at);
                 $orders[] = $order;
             }
     
@@ -145,12 +145,12 @@ class orderDAO extends baseDAO implements IOrder
             } 
             
             // Asignamos los resultados a variables
-            $stmt->bind_result($id, $user_id, $address_id, $total_price, $status, $created_at);
+            $stmt->bind_result($id, $user_id, $total_price, $status, $shipping_address, $created_at);
 
             // Mientras haya resultados, los guardamos en el array
             while ($stmt->fetch())
             {
-                $order = new orderDTO($id, $user_id, $address_id, $total_price, $status, $created_at);
+                $order = new orderDTO($id, $user_id, $total_price, $status, $shipping_address, $created_at);
                 $orders[] = $order;
             }
 
@@ -177,20 +177,20 @@ class orderDAO extends baseDAO implements IOrder
         try {
             $conn = application::getInstance()->getConnectionDb();
 
-            $stmt = $conn->prepare("UPDATE orders SET user_id = ?, address_id = ?, total_price = ?, status = ?, created_at = ? WHERE id = ?");
+            $stmt = $conn->prepare("UPDATE orders SET user_id = ?, total_price = ?, status = ?, shipping_address = ?, created_at = ? WHERE id = ?");
             if (!$stmt) {
                 throw new \Exception("Error al preparar la consulta: " . $conn->error);
             }
 
             // Obtener valores del DTO
             $userId = $order->getUserId();
-            $addressId = $order->getAddressId();
             $totalPrice = $order->getTotalPrice();
             $status = $order->getStatus();
+            $shipping_address = $order->getShippingAddress();
             $createdAt = $order->getCreatedAt();
             $orderId = $order->getId();
 
-            $stmt->bind_param("iidssi", $userId, $addressId, $totalPrice, $status, $createdAt, $orderId);
+            $stmt->bind_param("idsssi", $userId, $totalPrice, $status, $shipping_address, $createdAt, $orderId);
 
             if (!$stmt->execute()) {
                 throw new \Exception("Error al ejecutar la actualización: " . $stmt->error);
