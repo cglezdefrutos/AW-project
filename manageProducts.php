@@ -2,9 +2,9 @@
 
 require_once __DIR__.'/includes/config.php';
 
-use TheBalance\event\productAppService;
-use TheBalance\event\productDTO;
-use TheBalance\event\manageProductsTable;
+use TheBalance\product\productAppService;
+use TheBalance\product\productDTO;
+use TheBalance\product\manageProductsTable;
 use TheBalance\application;
 
 $titlePage = "Gestionar productos";
@@ -50,11 +50,11 @@ else
 
         //CAMBIAR LAS COLUMNAS
         // Definir las columnas que se mostrarán en la tabla
-        $columns = ['Nombre', 'Descripción', 'Fecha', 'Lugar', 'Precio', 'Capacidad', 'Categoría', 'Acciones'];
+        $columns = ['Nombre', 'Descripción', 'Precio', 'Stock', 'Categoría', 'Acciones'];
 
         // Generar la tabla de gestión de eventos
         $productable = new manageProductsTable($productDTO, $columns);
-        $html = $peoductTable->generateTable();
+        $html = $productable->generateTable();
 
         $mainContent .= <<<EOS
             <h1>Gestión de productos</h1>
@@ -63,4 +63,4 @@ else
     }
 }
 
-//require_once __DIR__.'/includes/views/template/template.php';
+require_once __DIR__.'/includes/views/template/template.php';

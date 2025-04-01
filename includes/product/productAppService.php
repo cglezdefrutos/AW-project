@@ -3,7 +3,8 @@
 namespace TheBalance\product;
 
 use TheBalance\application;
-use TheBalance\product\Exception;
+use TheBalance\product\productHasOrdersException;
+use TheBalance\product\notProductOwnerException;
 /**
  * Clase que contiene la lógica de la aplicación de productos
  */

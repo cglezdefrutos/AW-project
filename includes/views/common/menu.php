@@ -60,6 +60,16 @@ function mostrarLogin()
                     </ul>
                 </li>
 
+                 <!-- Dropdown Productos -->
+                 <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="productosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Productos
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="productosDropdown">
+                        <li><a class="dropdown-item" href="manageProducts.php">Gestionar</a></li>
+                    </ul>
+                </li>
+
                 <!-- Opción Carrito -->
                 <li class="nav-item">
                     <a class="nav-link" href="index.php">Carrito</a>
