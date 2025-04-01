@@ -67,6 +67,7 @@ function mostrarLogin()
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="productosDropdown">
                         <li><a class="dropdown-item" href="manageProducts.php">Gestionar</a></li>
+                        <li><a class="dropdown-item" href="registerProducts.php">Registrar</a></li>
                     </ul>
                 </li>
 

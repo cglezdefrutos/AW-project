@@ -69,10 +69,10 @@ class productAppService
         else 
         {
             // Tomamos el email del proveedor
-            $userEmail = htmlspecialchars($app->getCurrentUserEmail());
+            $userId = htmlspecialchars($app->getCurrentUserId());
 
             // Pasamos como filtro un array con el email (así solo traerá los productos donde coincida ese email)
-            $productsDTO = $IProductDAO->getProducts(array("email_provider" => $userEmail));
+            $productsDTO = $IProductDAO->getProducts(array("provider_id" => $userId));
         }
 
         return $productsDTO;
@@ -84,11 +84,6 @@ class productAppService
 
         // Si el producto tiene pedidos asociados, no se puede eliminar
         $orders = $IProductDAO->getOrdersByProduct($productId);
-
-        if (count($orders) > 0)
-        {
-            throw new productHasOrdersException("No puedes eliminar un producto que tiene pedidos asociados.");
-        }
 
         // Tomamos la instancia de la aplicación
         $app = application::getInstance();
@@ -117,5 +112,15 @@ class productAppService
             }
         }
     }
+
+    public function registerProduct($productData)
+    {
+        $IProductDAO = productFactory::CreateProduct();
+
+        $productDTO = new productDTO(0, $productData['provider_id'], $productData['name'], $productData['description'], $productData['price'], $productData['stock'], $productData['category_id'], $productData['category_name'], $productData['image_url'], $productData['created_at'], $productData['sizes']);
+
+        return $IProductDAO->registerProduct($productDTO);
+    }
+
 }
 

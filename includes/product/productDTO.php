@@ -43,6 +43,11 @@ class productDTO implements \JsonSerializable
     private $category_id;
 
     /**
+     * @var string Nombre de la categoría del producto
+     */
+    private $category_name;
+
+    /**
      * @var string URL de la imagen del producto
      */
     private $image_url;
@@ -53,9 +58,14 @@ class productDTO implements \JsonSerializable
     private $created_at;
 
     /**
+     * @var array Tallas del producto
+     */
+    private $sizes = [];
+
+    /**
      * Constructor
      */
-    public function __construct($id, $provider_id, $name, $description, $price, $stock, $category_id, $image_url, $created_at)
+    public function __construct($id, $provider_id, $name, $description, $price, $stock, $category_id, $category_name, $image_url, $created_at, $sizes = [])
     {
         $this->id = $id;
         $this->provider_id = $provider_id;
@@ -64,8 +74,10 @@ class productDTO implements \JsonSerializable
         $this->price = $price;
         $this->stock = $stock;
         $this->category_id = $category_id;
+        $this->category_name = $category_name;
         $this->image_url = $image_url;
         $this->created_at = $created_at;
+        $this->sizes = $sizes;
     }
 
     /**
@@ -106,6 +118,11 @@ class productDTO implements \JsonSerializable
         return $this->category_id;
     }
 
+    public function getCategoryName()
+    {
+        return $this->category_name;
+    }
+
     public function getImageUrl()
     {
         return $this->image_url;
@@ -114,6 +131,11 @@ class productDTO implements \JsonSerializable
     public function getCreatedAt()
     {
         return $this->created_at;
+    }
+
+    public function getSizes()
+    {
+        return $this->sizes;
     }
 
     /**
@@ -164,6 +186,16 @@ class productDTO implements \JsonSerializable
         $this->created_at = $created_at;
     }
 
+    public function setCategoryName($category_name)
+    {
+        $this->category_name = $category_name;
+    }
+
+    public function setSizes($sizes)
+    {
+        $this->sizes = $sizes;
+    }
+
     /**
      * Implementación de JsonSerializable
      * @return array Array con los datos del objeto
@@ -173,4 +205,3 @@ class productDTO implements \JsonSerializable
         return get_object_vars($this);
     }
 }
-

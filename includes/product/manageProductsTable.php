@@ -20,6 +20,7 @@ class manageProductsTable extends baseTable
             $html .= '<td>' . htmlspecialchars($product->getStock()) . '</td>';
             $html .= '<td>' . htmlspecialchars($product->getCategoryId()) . '</td>';
             //$html .= '<td>' . htmlspecialchars($product->getImageUrl()) . '</td>';
+            $html .= '<td>' . htmlspecialchars($product->getActive()) . '</td>';
             //$html .= '<td>' . htmlspecialchars($product->getCreatedAt()) . '</td>';
             $html .= '<td>';
             $html .= '<a href="updateProducts.php?productId=' . htmlspecialchars($product->getId()) . '">Editar</a>';

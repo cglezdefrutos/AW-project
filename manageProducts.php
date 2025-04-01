@@ -50,7 +50,7 @@ else
 
         //CAMBIAR LAS COLUMNAS
         // Definir las columnas que se mostrarán en la tabla
-        $columns = ['Nombre', 'Descripción', 'Precio', 'Stock', 'Categoría', 'Acciones'];
+        $columns = ['Nombre', 'Descripción', 'Precio', 'Stock', 'Categoría', 'Acciones', 'Activo'];
 
         // Generar la tabla de gestión de eventos
         $productable = new manageProductsTable($productDTO, $columns);

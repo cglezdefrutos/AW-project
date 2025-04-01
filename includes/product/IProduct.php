@@ -15,8 +15,7 @@ interface IProduct
      * @return array Resultado de la búsqueda
      */
     public function searchProducts($filters);
-    public function getProducts($filters);
     public function deleteProduct($productId);
     public function ownsProduct($productId, $userEmail);
-    public function getOrdersByProduct($productId);
+    public function registerProduct($productDTO);
 }
