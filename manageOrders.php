@@ -52,15 +52,15 @@ else
                 $orderData->getId(),
                 $orderData->getUserId(),
                 $orderData->getEmail(),
-                $orderData->getAddressId(),
                 $orderData->getTotalPrice(),
                 $orderData->getStatus(),
+                $orderData->getShippingAddress(),
                 $orderData->getCreatedAt()
             );
         }, $ordersData);
 
         // Definir las columnas de la tabla
-        $columns = ['Email del Usuario', 'Precio total', 'Estado', 'Fecha', 'Acciones'];
+        $columns = ['Email del Usuario', 'Dirección de Envío','Precio total', 'Estado', 'Fecha', 'Acciones'];
 
         if (empty($orders)) {
             $mainContent = "<h1>No hay pedidos registrados.</h1>";

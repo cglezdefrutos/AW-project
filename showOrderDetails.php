@@ -39,11 +39,12 @@ if (!$app->isCurrentUserLogged()) {
                 $detailData->getProductName(),
                 $detailData->getImageUrl(),
                 $detailData->getQuantity(),
-                $detailData->getPrice()
+                $detailData->getPrice(),
+                $detailData->getSize()
             );
         }, $detailsData);
 
-        $columns = ['Nombre Producto', 'Imagen Producto', 'Cantidad', 'Precio Unitario', 'Subtotal'];
+        $columns = ['Nombre Producto', 'Imagen Producto', 'Talla', 'Cantidad', 'Precio Unitario', 'Subtotal'];
 
         if (empty($details)) {
             $mainContent = "<h1>No se encontraron detalles para este pedido.</h1>";
