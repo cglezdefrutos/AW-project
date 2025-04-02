@@ -28,6 +28,11 @@ class orderDTO implements \JsonSerializable
     private $status;
 
     /**
+     * @var string Direccion de envio al que pertenece
+     */
+    private $shipping_address;
+
+    /**
      * @var Date Fecha de creacion
      */
     private $created_at;
@@ -35,12 +40,13 @@ class orderDTO implements \JsonSerializable
     /**
      * Constructor
      */
-    public function __construct($id, $user_email, $total_price, $status, $created_at)
+    public function __construct($id, $user_email, $total_price, $status, $shipping_address, $created_at)
     {
         $this->id = $id;
         $this->user_email = $user_email;
         $this->total_price = $total_price;
         $this->status = $status;
+        $this->shipping_address = $shipping_address;
         $this->created_at = $created_at;
     }
 
@@ -65,6 +71,11 @@ class orderDTO implements \JsonSerializable
     public function getStatus()
     {
         return $this->status;
+    }
+
+    public function getShippingAddress()
+    {
+        return $this->shipping_address;
     }
 
     public function getCreatedAt()
@@ -93,6 +104,11 @@ class orderDTO implements \JsonSerializable
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    public function setShippingAddress($shipping_address)
+    {
+        $this->shipping_address = $shipping_address;
     }
 
     public function setCreatedAt($created_at)

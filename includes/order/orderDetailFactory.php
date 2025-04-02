@@ -15,7 +15,7 @@ class orderDetailFactory
     public static function createOrderDetail() : IOrderDetail
     {
         $orderDetailDAO = false;
-        $config = ""; // Podría leerse de configuración
+        $config = "DAO"; // Podría leerse de configuración
 
         if ($config === "DAO") {
             $orderDetailDAO = new orderDetailDAO();

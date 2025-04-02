@@ -55,8 +55,8 @@ function mostrarLogin()
                         Pedidos
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="pedidosDropdown">
-                        <li><a class="dropdown-item" href="index.php">Mis Pedidos</a></li>
-                        <li><a class="dropdown-item" href="index.php">Gestionar</a></li>
+                        <li><a class="dropdown-item" href="showOrders.php">Mis Pedidos</a></li>
+                        <li><a class="dropdown-item" href="manageOrders.php">Gestionar</a></li>
                     </ul>
                 </li>
 

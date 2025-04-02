@@ -58,27 +58,37 @@ class orderAppService
      * 
      * @return array Resultado de la búsqueda
      */
-    public function getOrdersByUserType()
+    public function getAllOrdersWithEmail()
+    {
+        $IOrderDAO = orderFactory::CreateOrder();
+        $ordersWithEmailDTO = null;
+
+        $app = application::getInstance();
+
+        $ordersWithEmailDTO = $IOrderDAO->getAllOrdersWithEmail();
+
+        return $ordersWithEmailDTO;
+    }
+
+    /**
+     * Devuelve los orders asociados al tipo de usuario
+     * 
+     * @param string $user_type Tipo de usuario
+     * 
+     * @return array Resultado de la búsqueda
+     */
+    public function getClientOrders()
     {
         $IOrderDAO = orderFactory::CreateOrder();
         $ordersDTO = null;
 
         $app = application::getInstance();
 
-        // Si es administrador, tomamos todos los orders
-        if ($app->isCurrentUserAdmin())
-        {
-            $ordersDTO = $IOrderDAO->getAllOrders();
-        }
-        // Si es cliente, tomamos SOLO los orders del cliente
-        else
-        {
-            // Tomamos el id del cliente
-            $userId = htmlspecialchars($app->getCurrentUserId());
+        // Tomamos el id del cliente
+        $userId = htmlspecialchars($app->getCurrentUserId());
 
-            // Pasamos como filtro el id del cliente
-            $ordersDTO = $IOrderDAO->getOrdersByUserId($userId);
-        }
+        // Pasamos como filtro el id del cliente
+        $ordersDTO = $IOrderDAO->getOrdersByUserId($userId);
 
         return $ordersDTO;
     }
@@ -94,10 +104,8 @@ class orderAppService
         $IOrderDAO = orderFactory::CreateOrder();
 
         try {
-
-        // Intentar actualizar el pedido en la base de datos
-        return $IOrderDAO->updateOrder($order);
-
+            // Intentar actualizar el pedido en la base de datos
+            return $IOrderDAO->updateOrder($order);
         } catch (\Exception $e) {
             error_log("Error actualizando el pedido: " . $e->getMessage());
             return false;

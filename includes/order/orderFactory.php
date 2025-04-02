@@ -15,7 +15,7 @@ class orderFactory
     public static function CreateOrder() : IOrder
     {
         $orderDAO = false;
-        $config = "";
+        $config = "DAO";
 
         if ($config === "DAO")
         {

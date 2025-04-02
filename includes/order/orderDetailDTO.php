@@ -18,6 +18,11 @@ class orderDetailDTO implements \JsonSerializable
     private $product_name;
 
     /**
+     * @var int ID del producto
+     */
+    private $image_url;
+
+    /**
      * @var int Cantidad del producto
      */
     private $quantity;
@@ -35,10 +40,11 @@ class orderDetailDTO implements \JsonSerializable
     /**
      * Constructor
      */
-    public function __construct($order_id, $product_name, $quantity, $price, $size)
+    public function __construct($order_id, $product_name, $image_url, $quantity, $price, $size)
     {
         $this->order_id = $order_id;
         $this->product_name = $product_name;
+        $this->image_url = $image_url;
         $this->quantity = $quantity;
         $this->price = $price;
         $this->size = $size;
@@ -55,6 +61,11 @@ class orderDetailDTO implements \JsonSerializable
     public function getProductName()
     {
         return $this->product_name;
+    }
+
+    public function getImageUrl()
+    {
+        return $this->image_url;
     }
 
     public function getQuantity()
