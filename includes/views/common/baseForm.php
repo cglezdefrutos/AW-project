@@ -106,7 +106,7 @@ abstract class baseForm
         $html .= '<input type="hidden" name="action" value="'.$this->formId.'" />';
         
         // Llama al método abstracto para crear los campos, que será implementado por cada subclase 
-        $html .= '<div class="row g-3">'; // Añade un contenedor de filas con espacio entre campos
+        $html .= '<div class="row g-2">'; // Añade un contenedor de filas con espacio entre campos
         $html .= $this->CreateFields($data);
         $html .= '</div>';
 

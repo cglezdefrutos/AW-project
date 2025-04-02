@@ -59,12 +59,12 @@ class eventDAO extends baseDAO implements IEvent
             }
 
             // Asignamos los resultados a variables
-            $stmt->bind_result($Id, $Name, $Description, $Price, $Location, $Date, $Capacity, $Category, $EmailProvider);
+            $stmt->bind_result($Id, $Name, $Description, $Price, $Location, $Date, $Capacity, $CategoryId, $EmailProvider, $CategoryName);
 
             // Mientras haya resultados, los guardamos en el array
             while ($stmt->fetch())
             {
-                $event = new eventDTO($Id, $Name, $Description, $Date, $Price, $Location, $Category, $Capacity, $EmailProvider);
+                $event = new eventDTO($Id, $Name, $Description, $Date, $Price, $Location, $Capacity, $CategoryId, $CategoryName, $EmailProvider);
                 $events[] = $event;
             }
 
@@ -94,7 +94,7 @@ class eventDAO extends baseDAO implements IEvent
             $conn = application::getInstance()->getConnectionDb();
     
             // Preparar la consulta SQL para insertar un nuevo evento
-            $stmt = $conn->prepare("INSERT INTO events (name, description, price, location, date, capacity, category, email_provider) 
+            $stmt = $conn->prepare("INSERT INTO events (name, description, price, location, date, capacity, category_id, email_provider) 
                                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             if (!$stmt) {
                 throw new \Exception("Error al preparar la consulta: " . $conn->error);
@@ -107,10 +107,10 @@ class eventDAO extends baseDAO implements IEvent
             $location = $this->realEscapeString($eventDTO->getLocation());
             $date = $this->realEscapeString($eventDTO->getDate());
             $capacity = $this->realEscapeString($eventDTO->getCapacity());
-            $category = $this->realEscapeString($eventDTO->getCategory());
+            $categoryId = $this->realEscapeString($eventDTO->getCategoryId());
             $emailProvider = $this->realEscapeString($eventDTO->getEmailProvider());
 
-            $stmt->bind_param("ssdssiss", $name, $description, $price, $location, $date, $capacity, $category, $emailProvider);
+            $stmt->bind_param("ssdssiis", $name, $description, $price, $location, $date, $capacity, $categoryId, $emailProvider);
     
             // Ejecutar la consulta
             if (!$stmt->execute()) {
@@ -243,7 +243,12 @@ class eventDAO extends baseDAO implements IEvent
             $conn = application::getInstance()->getConnectionDb();
 
             // Implementar la logica de acceso a la base de datos para obtener un evento por su id
-            $stmt = $conn->prepare("SELECT * FROM events WHERE id = ?");
+            $stmt = $conn->prepare(
+                "SELECT e.*, c.name AS category_name
+                 FROM events e
+                 INNER JOIN event_categories c ON e.category_id = c.id
+                 WHERE e.id = ?"
+            );
             if(!$stmt)
             {
                 throw new \Exception("Error al preparar la consulta: " . $conn->error);
@@ -260,12 +265,12 @@ class eventDAO extends baseDAO implements IEvent
             }
 
             // Asignamos los resultados a variables
-            $stmt->bind_result($Id, $Name, $Description, $Price, $Location, $Date, $Capacity, $Category, $EmailProvider);
+            $stmt->bind_result($Id, $Name, $Description, $Price, $Location, $Date, $Capacity, $CategoryId, $EmailProvider, $CategoryName);
 
             // Si hay resultados, los guardamos en la variable $event
             if ($stmt->fetch())
             {
-                $event = new eventDTO($Id, $Name, $Description, $Date, $Price, $Location, $Capacity, $Category, $EmailProvider);
+                $event = new eventDTO($Id, $Name, $Description, $Date, $Price, $Location, $Capacity, $CategoryId, $CategoryName, $EmailProvider);
             }
 
             // Cerramos la consulta
@@ -400,7 +405,7 @@ class eventDAO extends baseDAO implements IEvent
             $conn = application::getInstance()->getConnectionDb();
 
             // Implementar la logica de acceso a la base de datos para actualizar un evento
-            $stmt = $conn->prepare("UPDATE events SET name = ?, description = ?, price = ?, location = ?, date = ?, capacity = ?, category = ? WHERE id = ?");
+            $stmt = $conn->prepare("UPDATE events SET name = ?, description = ?, price = ?, location = ?, date = ?, capacity = ?, category_id = ? WHERE id = ?");
             if(!$stmt)
             {
                 throw new Exception("Error al preparar la consulta: " . $conn->error);
@@ -413,10 +418,10 @@ class eventDAO extends baseDAO implements IEvent
             $location = $this->realEscapeString($eventDTO->getLocation());
             $date = $this->realEscapeString($eventDTO->getDate());
             $capacity = $this->realEscapeString($eventDTO->getCapacity());
-            $category = $this->realEscapeString($eventDTO->getCategory());
+            $categoryId = $this->realEscapeString($eventDTO->getCategoryId());
             $id = $this->realEscapeString($eventDTO->getId());
 
-            $stmt->bind_param("ssdssisi", $name, $desc, $price, $location, $date, $capacity, $category, $id);
+            $stmt->bind_param("ssdssiii", $name, $desc, $price, $location, $date, $capacity, $categoryId, $id);
 
             // Ejecutamos la consulta
             if(!$stmt->execute())
@@ -477,6 +482,199 @@ class eventDAO extends baseDAO implements IEvent
     }
 
     /**
+     * Obtiene el id de una categoria por su nombre
+     * 
+     * @param string $categoryName Nombre de la categoria
+     * 
+     * @return int Id de la categoria|-1 si no se encuentra
+     */
+    public function getCategoryId($categoryName)
+    {
+        $categoryId = null;
+
+        try {
+            // Tomamos la conexion a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Implementar la logica de acceso a la base de datos para obtener el id de una categoria por su nombre
+            $stmt = $conn->prepare("SELECT id FROM event_categories WHERE name = ?");
+            if(!$stmt)
+            {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Asignamos los parametros
+            $escCategoryName = $this->realEscapeString($categoryName);
+            $stmt->bind_param("s", $escCategoryName);
+
+            // Ejecutamos la consulta
+            if(!$stmt->execute())
+            {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            // Asignamos los resultados a variables
+            $stmt->bind_result($categoryId);
+
+            // Almacenar el resultado para verificar el número de filas
+            $stmt->store_result();
+
+            // Si no se encontraron filas, la categoria no existe
+            if ($stmt->num_rows === 0)
+            {
+                $categoryId = -1;
+            }
+            // Si se encontró, obtenemos el id
+            else
+            {
+                $stmt->fetch();
+            }
+
+            $stmt->close();            
+
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+
+        return $categoryId;
+    }
+
+    /**
+     * Registra una nueva categoria
+     * 
+     * @param string $categoryName Nombre de la categoria
+     * 
+     * @return int Id de la categoria registrada
+     */
+    public function registerCategory($categoryName)
+    {
+        $categoryId = null;
+
+        try {
+            // Tomamos la conexion a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Implementar la logica de acceso a la base de datos para registrar una nueva categoria
+            $stmt = $conn->prepare("INSERT INTO event_categories (name) VALUES (?)");
+            if(!$stmt)
+            {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Asignamos los parametros
+            $escCategoryName = $this->realEscapeString($categoryName);
+            $stmt->bind_param("s", $escCategoryName);
+
+            // Ejecutamos la consulta
+            if(!$stmt->execute())
+            {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            // Obtenemos el id de la categoria registrada
+            $categoryId = $stmt->insert_id;
+
+            // Cerramos la consulta
+            $stmt->close();
+
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+
+        return $categoryId;
+    }
+
+    /**
+     * Obtiene todas las categorias
+     * 
+     * @return array Categorias
+     */
+    public function getCategories()
+    {
+        $categories = array();
+
+        try {
+            // Tomamos la conexion a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Implementar la logica de acceso a la base de datos para obtener todas las categorias
+            $stmt = $conn->prepare("SELECT * FROM event_categories");
+            if(!$stmt)
+            {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Ejecutamos la consulta
+            if(!$stmt->execute())
+            {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            // Asignamos los resultados a variables
+            $stmt->bind_result($id, $name);
+
+            // Mientras haya resultados, los guardamos en el array
+            while ($stmt->fetch())
+            {
+                $category = new eventCategoryDTO($id, $name);
+                $categories[] = $category;
+            }
+
+            // Cerramos la consulta
+            $stmt->close();
+
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+
+        return $categories;
+    }
+
+    /**
+     * Borra una categoria
+     * 
+     * @param int $categoryId Id de la categoria
+     * 
+     * @return bool Resultado de la operación
+     */
+    public function deleteCategory($categoryId)
+    {
+        try {
+            // Tomamos la conexion a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Implementar la logica de acceso a la base de datos para borrar una categoria
+            $stmt = $conn->prepare("DELETE FROM event_categories WHERE id = ?");
+            if(!$stmt)
+            {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Asignamos los parametros
+            $escCategoryId = $this->realEscapeString($categoryId);
+            $stmt->bind_param("i", $escCategoryId);
+
+            // Ejecutamos la consulta
+            if(!$stmt->execute())
+            {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            // Cerramos la consulta
+            $stmt->close();
+
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+
+        return true;
+    }
+    
+    /**
      * Construye la consulta SQL para buscar eventos en función de los filtros
      * 
      * @param array $filters Filtros de búsqueda
@@ -485,7 +683,11 @@ class eventDAO extends baseDAO implements IEvent
      */
     private function constructSearchQuery($filters)
     {
-        $query = "SELECT * FROM events WHERE ";
+        // Iniciar la consulta con un JOIN para incluir el nombre de la categoría
+        $query = "SELECT e.*, c.name AS category_name 
+                  FROM events e 
+                  INNER JOIN event_categories c ON e.category_id = c.id 
+                  WHERE ";
         $args = array();
         $types = '';
 
@@ -498,47 +700,47 @@ class eventDAO extends baseDAO implements IEvent
         
             switch ($key) {
                 case 'name':
-                    $query .= "name LIKE ? AND ";
+                    $query .= "e.name LIKE ? AND ";
                     $args[] = "%" . $this->realEscapeString($value) . "%";
                     $types .= 's';
                     break;
                 case 'start_date':  
-                    $query .= "date >= ? AND ";
+                    $query .= "e.date >= ? AND ";
                     $args[] = $this->realEscapeString($value);
                     $types .= 's';
                     break;  
                 case 'end_date':            
-                    $query .= "date <= ? AND ";
+                    $query .= "e.date <= ? AND ";
                     $args[] = $this->realEscapeString($value);
                     $types .= 's';
                     break;
                 case 'min_price':
-                    $query .= "price >= ? AND ";
+                    $query .= "e.price >= ? AND ";
                     $args[] = $this->realEscapeString($value);
                     $types .= 'd';
                     break;
                 case 'max_price':
-                    $query .= "price <= ? AND ";
+                    $query .= "e.price <= ? AND ";
                     $args[] = $this->realEscapeString($value);
                     $types .= 'd';
                     break;
                 case 'location':
-                    $query .= "location LIKE ? AND ";
+                    $query .= "e.location LIKE ? AND ";
                     $args[] = "%" . $this->realEscapeString($value) . "%";
                     $types .= 's';
                     break;
                 case 'capacity':
-                    $query .= "capacity >= ? AND ";
+                    $query .= "e.capacity >= ? AND ";
                     $args[] = $this->realEscapeString($value);
                     $types .= 'i';
                     break;
                 case 'category':
-                    $query .= "category = ? AND ";
+                    $query .= "c.name = ? AND "; // Filtrar por el nombre de la categoría
                     $args[] = $this->realEscapeString($value);
                     $types .= 's';
                     break;
                 case 'email_provider':
-                    $query .= "email_provider = ? AND ";
+                    $query .= "e.email_provider = ? AND ";
                     $args[] = $this->realEscapeString($value);
                     $types .= 's';
                     break;
@@ -553,7 +755,9 @@ class eventDAO extends baseDAO implements IEvent
         // Si no hay filtros, eliminar la cláusula WHERE
         else 
         {
-            $query = "SELECT * FROM events";
+            $query = "SELECT e.*, c.name AS category_name 
+                      FROM events e 
+                      INNER JOIN event_categories c ON e.category_id = c.id";
         }
 
         return array('query' => $query, 'params' => $args, 'types' => $types);

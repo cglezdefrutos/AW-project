@@ -8,29 +8,29 @@ namespace TheBalance\order;
 class orderDTO implements \JsonSerializable
 {
     /**
-     * @var int Identificador del usuario
+     * @var int Identificador del pedido
      */
     private $id;
 
     /**
-     * @var int Id del usuario al que pertenece
+     * @var int Identificador del usuario
      */
     private $user_id;
 
     /**
-     * @var int address_id al que pertenece
-     */
-    private $address_id;
-
-    /**
-     * @var float address_id al que pertenece
+     * @var float Precio total del pedido
      */
     private $total_price;
 
     /**
-     * @var string estado actual del pedido
+     * @var string Estado del pedido
      */
     private $status;
+
+    /**
+     * @var string Direccion de envio al que pertenece
+     */
+    private $shipping_address;
 
     /**
      * @var Date Fecha de creacion
@@ -40,13 +40,13 @@ class orderDTO implements \JsonSerializable
     /**
      * Constructor
      */
-    public function __construct($id, $user_id, $address_id, $total_price, $status, $created_at)
+    public function __construct($id, $user_id, $total_price, $status, $shipping_address, $created_at)
     {
         $this->id = $id;
         $this->user_id = $user_id;
-        $this->address_id = $address_id;
         $this->total_price = $total_price;
         $this->status = $status;
+        $this->shipping_address = $shipping_address;
         $this->created_at = $created_at;
     }
 
@@ -63,11 +63,6 @@ class orderDTO implements \JsonSerializable
         return $this->user_id;
     }
 
-    public function getAddressId()
-    {
-        return $this->address_id;
-    }
-
     public function getTotalPrice()
     {
         return $this->total_price;
@@ -76,6 +71,11 @@ class orderDTO implements \JsonSerializable
     public function getStatus()
     {
         return $this->status;
+    }
+
+    public function getShippingAddress()
+    {
+        return $this->shipping_address;
     }
 
     public function getCreatedAt()
@@ -96,11 +96,6 @@ class orderDTO implements \JsonSerializable
         $this->user_id = $user_id;
     }
 
-    public function setAddressId($address_id)
-    {
-        $this->address_id = $address_id;
-    }
-
     public function setTotalPrice($total_price)
     {
         $this->total_price = $total_price;
@@ -109,6 +104,11 @@ class orderDTO implements \JsonSerializable
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    public function setShippingAddress($shipping_address)
+    {
+        $this->shipping_address = $shipping_address;
     }
 
     public function setCreatedAt($created_at)

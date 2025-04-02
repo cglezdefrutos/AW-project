@@ -50,7 +50,20 @@ class productAppService
     {
         $IProduct = productFactory::CreateProduct();
 
-        return $IProduct->searchProducts($filters);
+        // Creamos el array de productDTOs
+        $productDTOs = $IProduct->searchProducts($filters);
+
+        // Para cada producto, tomamos sus tallas
+        foreach ($productDTOs as $productDTO) 
+        {
+            $productSizesDTO = $IProduct->getProductSizes($productDTO->getId());
+
+            // Asignamos las tallas al producto
+            $productDTO->setSizesDTO($productSizesDTO);
+        }
+
+        // Devolvemos el array de productDTOs
+        return $productDTOs;
     }
 
     public function getProductsByUserType()
@@ -123,4 +136,39 @@ class productAppService
     }
 
 }
+    /**
+     * Busca un producto por su ID
+     * 
+     * @param int $id ID del producto
+     * 
+     * @return productDTO Detalles del producto
+     */
+    public function getProductById($id)
+    {
+        $IProduct = productFactory::CreateProduct();
+
+        $productDTO = $IProduct->getProductById($id);
+
+        // Tomamos las tallas del producto
+        $productSizesDTO = $IProduct->getProductSizes($id);
+
+        $productDTO->setSizesDTO($productSizesDTO);
+
+        // Retornamos el productDTO
+        return $productDTO;
+    }
+
+    /**
+     * Busca las categorías de productos
+     * 
+     * @return array Categorías de productos
+     */
+    public function getCategories()
+    {
+        $IProduct = productFactory::CreateProduct();
+
+        return $IProduct->getCategories();
+    }
+}
+    
 

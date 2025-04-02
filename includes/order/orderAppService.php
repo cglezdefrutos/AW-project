@@ -93,22 +93,24 @@ class orderAppService
         return $ordersDTO;
     }
 
+    /**
+     * Actualiza un pedido existente en la base de datos
+     *
+     * @param orderDTO $order Objeto que contiene los datos del pedido a crear
+     * @return bool resultado de la operación
+     */
     public function updateOrder($order)
     {
         $IOrderDAO = orderFactory::CreateOrder();
 
         try {
-
-        // Intentar actualizar el pedido en la base de datos
-        return $IOrderDAO->updateOrder($order);
-
+            // Intentar actualizar el pedido en la base de datos
+            return $IOrderDAO->updateOrder($order);
         } catch (\Exception $e) {
             error_log("Error actualizando el pedido: " . $e->getMessage());
             return false;
         }
-
     }    
-
 
     /**
      * Elimina un pedido y sus detalles asociados
@@ -138,5 +140,47 @@ class orderAppService
         }
     }
 
+    /**
+     * Devuelve los detalles de un pedido
+     *
+     * @param int $orderId ID del pedido
+     * @return orderDetailDTO[] Array de objetos orderDetailDTO
+     * @throws \Exception Si ocurre un error
+     */
+    public function getDetailsByOrderId($orderId)
+    {
+        $IOrderDetailDAO = orderDetailFactory::createOrderDetail();
+        $detailsDTO = null;
 
+
+        $app = application::getInstance();
+
+
+        try {
+            $detailsDTO = $IOrderDetailDAO->getDetailsByOrderId($orderId);
+        } catch (\Exception $e) {
+            error_log("Error obteniendo detalles del pedido ID $orderId: " . $e->getMessage());
+            throw $e;
+        }
+
+
+        return $detailsDTO;
+    }
+
+    /*
+     * Crea un nuevo pedido en la base de datos
+     *
+     * @param orderDTO $order Objeto que contiene los datos del pedido a crear
+     * @return int ID del nuevo pedido creado, o -1 si hubo un error
+     */
+    public function createOrder($order)
+    {
+        $IOrderDAO = orderFactory::CreateOrder();
+
+        try {
+            return $IOrderDAO->createOrder($order);
+        } catch (\Exception $e) {
+            throw new \Exception("Error al crear el pedido: " . $e->getMessage());
+        }
+    }
 }

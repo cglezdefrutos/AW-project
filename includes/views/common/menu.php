@@ -73,7 +73,7 @@ function mostrarLogin()
 
                 <!-- Opción Carrito -->
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php">Carrito</a>
+                    <a class="nav-link" href="cart.php">Carrito</a>
                 </li>
             </ul>
         </div>

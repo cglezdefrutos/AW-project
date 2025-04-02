@@ -79,4 +79,23 @@ class orderDetailAppService
 
         return $detailsDTO;
     }
+
+    /**
+    * Crea un nuevo detalle de pedido
+    * 
+    * @param orderDetailDTO $orderDetailDTO Detalle del pedido a crear
+    * @return bool Resultado de la creación
+    */
+    public function createOrderDetail($orderDetailDTO)
+    {
+        $IOrderDetailDAO = orderDetailFactory::createOrderDetail();
+        try
+        {
+            return $IOrderDetailDAO->createOrderDetail($orderDetailDTO);
+        }
+        catch (\Exception $e)
+        {
+            throw new \Exception("Error al crear el detalle del pedido: " . $e->getMessage());
+        }
+    }
 }

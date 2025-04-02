@@ -18,4 +18,29 @@ interface IProduct
     public function deleteProduct($productId);
     public function ownsProduct($productId, $userEmail);
     public function registerProduct($productDTO);
+
+    /**
+     * Busca un producto por su ID
+     * 
+     * @param int $id ID del producto
+     * 
+     * @return productDTO Producto encontrado
+     */
+    public function getProductById($id);
+
+    /**
+     * Busca las tallas de un producto por su ID
+     * 
+     * @param int $id ID del producto
+     * 
+     * @return array Tallas del producto
+     */
+    public function getProductSizes($productId);
+
+    /**
+     * Busca las categorías de productos
+     * 
+     * @return array Categorías de productos
+     */
+    public function getCategories();
 }

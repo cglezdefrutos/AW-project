@@ -7,7 +7,6 @@ namespace TheBalance\order;
  */
 interface IOrder
 {
-
     /**
      * Devuelve el pedido asociado a ese id
      * 
@@ -18,7 +17,7 @@ interface IOrder
     public function getOrderById($orderId);
 
     /**
-     * Optiene todos los Orders con los emails de los usuarios
+     * Obtiene todos los Orders con los emails de los usuarios
      * 
      * @param none
      * @return array de orders
@@ -26,7 +25,7 @@ interface IOrder
     public function getAllOrdersWithEmail();
 
     /**
-     * Optiene los Orders de un usuario
+     * Obtiene los Orders de un usuario
      * 
      * @param int id del usuario
      * @return array de orders del usuario
@@ -49,4 +48,11 @@ interface IOrder
      */
     public function deleteOrder($orderId);
 
+    /**
+     * Crea un nuevo pedido
+     * 
+     * @param orderDTO $order el dto del pedido a crear
+     * @return int ID del nuevo pedido creado
+     */
+    public function createOrder($order);
 }

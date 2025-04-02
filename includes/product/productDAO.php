@@ -62,13 +62,13 @@ class productDAO extends baseDAO implements IProduct
                 $Active,
                 $ProviderEmail,
                 $CategoryName, 
-                $TotalStock // Stock total calculado con SUM(ps.stock)
             );
 
             // Mientras haya resultados, los guardamos en el array
             while ($stmt->fetch())
             {
-                $product = new productDTO($Id, $ProviderId, $Name, $Description, $Price, $TotalStock, $CategoryId, $CategoryName, $ImageUrl, $CreatedAt, array(), $Active);
+                $ProductCategoryDTO = new productCategoryDTO($CategoryId, $CategoryName);
+                $product = new productDTO($Id, $ProviderId, $Name, $Description, $Price, $ProductCategoryDTO, $ImageUrl, $CreatedAt, null, $Active);
                 $products[] = $product;
             }
 
@@ -88,7 +88,7 @@ class productDAO extends baseDAO implements IProduct
      * 
      * @param int $id ID del producto
      * 
-     * @return productDTO Detalles del producto
+     * @return productDTO Detalles del producto (sin tallas)
      */
     public function getProductById($id)
     {
@@ -125,7 +125,8 @@ class productDAO extends baseDAO implements IProduct
             // Si hay resultados, los guardamos en el objeto productDTO
             if ($stmt->fetch())
             {
-                $productDTO = new productDTO($Id, $ProviderEmail, $Name, $Description, $Price, 0, $CategoryId, $CategoryName, $ImageUrl, $CreatedAt, array(), $Active);
+                $ProductCategoryDTO = new productCategoryDTO($CategoryId, $CategoryName);
+                $productDTO = new productDTO($Id, $ProviderEmail, $Name, $Description, $Price, $ProductCategoryDTO, $ImageUrl, $CreatedAt, null, $Active);
             }
 
             // Cerramos la consulta
@@ -144,7 +145,7 @@ class productDAO extends baseDAO implements IProduct
      * 
      * @return array Tallas del producto
      */
-    public function getSizes($productId)
+    public function getProductSizes($productId)
     {
         $productSizesDTO = null;
         $sizes = array();
@@ -154,7 +155,10 @@ class productDAO extends baseDAO implements IProduct
             $conn = application::getInstance()->getConnectionDb();
 
             // Preparamos la consulta SQL
-            $query = "SELECT s.name, ps.stock FROM product_sizes ps INNER JOIN sizes s ON ps.size_id = s.id WHERE ps.product_id = ?";
+            $query = "SELECT s.name, ps.stock 
+                      FROM product_sizes ps 
+                      INNER JOIN sizes s ON ps.size_id = s.id 
+                      WHERE ps.product_id = ?";
             $stmt = $conn->prepare($query);
             if(!$stmt)
             {
@@ -171,12 +175,12 @@ class productDAO extends baseDAO implements IProduct
             }
 
             // Asignamos los resultados a variables
-            $stmt->bind_result($size, $stock);
+            $stmt->bind_result($sizeName, $stock);
 
             // Mientras haya resultados, los guardamos en el array
             while ($stmt->fetch())
             {
-                $sizes[$size] = $stock;
+                $sizes[$sizeName] = $stock;
             }
 
             // Creamos el DTO de tallas del producto
@@ -245,11 +249,9 @@ class productDAO extends baseDAO implements IProduct
      */    
     private function buildSearchQuery($filters)
     {
-        // Iniciar la consulta con un JOIN para incluir el email del proveedor
-    // Iniciar la consulta con JOINs para incluir el email del proveedor y el nombre de la categoría
+        // Inicializamos la consulta SQL y los parámetros
         $query = "SELECT p.*, u.email AS provider_email, 
                     c.name AS category_name, 
-                    SUM(ps.stock) AS total_stock 
                   FROM products p 
                   INNER JOIN users u ON p.provider_id = u.id 
                   INNER JOIN product_categories c ON p.category_id = c.id 
@@ -323,7 +325,6 @@ class productDAO extends baseDAO implements IProduct
             // Si no hay filtros, eliminar la cláusula WHERE
             $query = "SELECT p.*, u.email AS provider_email, 
                         c.name AS category_name, 
-                        SUM(ps.stock) AS total_stock 
                       FROM products p 
                       INNER JOIN users u ON p.provider_id = u.id 
                       INNER JOIN product_categories c ON p.category_id = c.id 
