@@ -251,7 +251,7 @@ class productDAO extends baseDAO implements IProduct
     {
         // Inicializamos la consulta SQL y los parámetros
         $query = "SELECT p.*, u.email AS provider_email, 
-                    c.name AS category_name, 
+                    c.name AS category_name
                   FROM products p 
                   INNER JOIN users u ON p.provider_id = u.id 
                   INNER JOIN product_categories c ON p.category_id = c.id 
@@ -324,7 +324,7 @@ class productDAO extends baseDAO implements IProduct
         {
             // Si no hay filtros, eliminar la cláusula WHERE
             $query = "SELECT p.*, u.email AS provider_email, 
-                        c.name AS category_name, 
+                        c.name AS category_name
                       FROM products p 
                       INNER JOIN users u ON p.provider_id = u.id 
                       INNER JOIN product_categories c ON p.category_id = c.id 
