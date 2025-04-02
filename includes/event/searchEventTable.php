@@ -19,7 +19,7 @@ class searchEventTable extends baseTable
             $html .= '<td>' . htmlspecialchars($event->getLocation()) . '</td>';
             $html .= '<td>' . htmlspecialchars($event->getPrice()) . '</td>';
             $html .= '<td>' . htmlspecialchars($event->getCapacity()) . '</td>';
-            $html .= '<td>' . htmlspecialchars($event->getCategory()) . '</td>';
+            $html .= '<td>' . htmlspecialchars($event->getCategoryName()) . '</td>';
             $html .= '<td>' . htmlspecialchars($event->getEmailProvider()) . '</td>';
             $html .= '<td><a href="joinEvent.php?id=' . htmlspecialchars($event->getId()) . '">Apuntarse</a></td>';
             $html .= '</tr>';

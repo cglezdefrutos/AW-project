@@ -33,7 +33,7 @@ class orderDetailDTO implements \JsonSerializable
     private $price;
 
     /**
-     * @var float Precio unitario
+     * @var string Talla del producto
      */
     private $size;
 
@@ -81,6 +81,34 @@ class orderDetailDTO implements \JsonSerializable
     public function getSize()
     {
         return $this->size;
+    }
+
+    /**
+     * Setters
+     */
+    public function setOrderId($order_id)
+    {
+        $this->order_id = $order_id;
+    }
+
+    public function setProductName($product_name)
+    {
+        $this->product_name = $product_name;
+    }
+
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+    }
+
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    }
+
+    public function setSize($size)
+    {
+        $this->size = $size;
     }
 
     /**

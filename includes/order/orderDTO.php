@@ -8,27 +8,27 @@ namespace TheBalance\order;
 class orderDTO implements \JsonSerializable
 {
     /**
-     * @var int Identificador del usuario
+     * @var int Identificador del pedido
      */
     private $id;
 
     /**
-     * @var int Id del usuario al que pertenece
+     * @var int Email del usuario
      */
-    private $user_id;
+    private $user_email;
 
     /**
-     * @var float address_id al que pertenece
+     * @var float Precio total del pedido
      */
     private $total_price;
 
     /**
-     * @var string estado actual del pedido
+     * @var string Estado del pedido
      */
     private $status;
 
     /**
-     * @var string direccion de envio al que pertenece
+     * @var string Direccion de envio al que pertenece
      */
     private $shipping_address;
 
@@ -40,10 +40,10 @@ class orderDTO implements \JsonSerializable
     /**
      * Constructor
      */
-    public function __construct($id, $user_id, $total_price, $status, $shipping_address,$created_at)
+    public function __construct($id, $user_email, $total_price, $status, $shipping_address, $created_at)
     {
         $this->id = $id;
-        $this->user_id = $user_id;
+        $this->user_email = $user_email;
         $this->total_price = $total_price;
         $this->status = $status;
         $this->shipping_address = $shipping_address;
@@ -58,9 +58,9 @@ class orderDTO implements \JsonSerializable
         return $this->id;
     }
 
-    public function getUserId()
+    public function getUserEmail()
     {
-        return $this->user_id;
+        return $this->user_email;
     }
 
     public function getTotalPrice()
@@ -91,9 +91,9 @@ class orderDTO implements \JsonSerializable
         $this->id = $id;
     }
 
-    public function setUserId($user_id)
+    public function setUserEmail($user_email)
     {
-        $this->user_id = $user_id;
+        $this->user_email = $user_email;
     }
 
     public function setTotalPrice($total_price)

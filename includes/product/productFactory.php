@@ -15,7 +15,7 @@ class productFactory
     public static function CreateProduct() : IProduct
     {
         $productDAO = false;
-        $config = "Mock";
+        $config = "DAO";
 
         if ($config === "DAO")
         {

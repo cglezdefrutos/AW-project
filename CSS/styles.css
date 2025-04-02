@@ -34,6 +34,26 @@ h2 {
     margin-bottom: 1.5rem;
 }
 
+/* Página de éxito */
+.success-page {
+    margin-top: 20px; /* Margen superior */
+    margin-bottom: 20px; /* Margen inferior */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Tarjeta de éxito */
+.success-card {
+    max-width: 600px;
+    width: 100%;
+}
+
+/* Logo en la tarjeta */
+.success-logo {
+    max-width: 150px;
+}
+
 /* Tarjetas */
 .card {
     border: none; /* Elimina el borde predeterminado */
@@ -65,7 +85,6 @@ h2 {
 
 .btn-primary:hover {
     background-color: #0056b3; /* Azul más oscuro */
-    transform: scale(1.05); /* Efecto de zoom al pasar el ratón */
 }
 
 /* Imagen del logo */
@@ -221,31 +240,6 @@ button:hover {
 
 .mb-20 {
     margin-bottom: 20px;
-}
-
-/* Estilos para las tablas */
-.table-container {
-    width: 100%;
-    overflow-x: auto; /* Permite desplazamiento horizontal si es necesario */
-}
-
-.table-container table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 18px;
-    text-align: left;
-}
-
-.table-container th, .table-container td {
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-}
-
-.table-container th {
-    background-color: #0056b3; /* Azul estilo Decathlon */
-    color: white;
-    font-weight: bold;
 }
 
 /* Alerta de éxito */

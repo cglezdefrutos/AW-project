@@ -40,7 +40,7 @@ class updateEventForm extends baseForm
         // Creamos el formulario de actualización de eventos
         $html = <<<EOF
             <fieldset class="border p-4 rounded">
-                <legend class="w-auto">Actualizar Evento</legend>
+                <legend class="w-auto">Actualizar Evento</legend> <br>
 
                 <input type="hidden" name="eventId" id="eventId" value="
         EOF;
@@ -113,7 +113,7 @@ class updateEventForm extends baseForm
                     <input type="text" name="category" id="category" class="form-control" placeholder="Ej: Deportes" value="
         EOF;
 
-        $html .= htmlspecialchars($this->eventInitialData->getCategory()) . '" required>';
+        $html .= htmlspecialchars($this->eventInitialData->getCategoryName()) . '" required>';
         
         $html .= <<<EOF
                 </div>
@@ -173,15 +173,15 @@ class updateEventForm extends baseForm
             $result[] = 'La capacidad no puede estar vacía ni ser negativa.';
         }
 
-        $category = trim($data['category'] ?? '');
-        $category = filter_var($category, FILTER_SANITIZE_STRING);
-        if (empty($category) || strlen($category) > 50) {
+        $categoryName = trim($data['category'] ?? '');
+        $categoryName = filter_var($categoryName, FILTER_SANITIZE_STRING);
+        if (empty($categoryName) || strlen($categoryName) > 50) {
             $result[] = 'La categoría no puede estar vacía ni superar los 50 caracteres.';
         }
 
         if (count($result) === 0) {
             // Crear un DTO con los datos actualizados del formulario
-            $updatedEventDTO = new eventDTO($this->eventInitialData->getId(), $eventName, $description, $date, $price, $location, $capacity, $category, $this->eventInitialData->getEmailProvider());
+            $updatedEventDTO = new eventDTO($this->eventInitialData->getId(), $eventName, $description, $date, $price, $location, $capacity, null, $categoryName, $this->eventInitialData->getEmailProvider());
             
             // Actualizar el evento
             $eventAppService = eventAppService::GetSingleton();

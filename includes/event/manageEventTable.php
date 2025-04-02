@@ -19,7 +19,7 @@ class manageEventTable extends baseTable
             $html .= '<td>' . htmlspecialchars($event->getLocation()) . '</td>';
             $html .= '<td>' . htmlspecialchars($event->getPrice()) . '</td>';
             $html .= '<td>' . htmlspecialchars($event->getCapacity()) . '</td>';
-            $html .= '<td>' . htmlspecialchars($event->getCategory()) . '</td>';
+            $html .= '<td>' . htmlspecialchars($event->getCategoryName()) . '</td>';
             $html .= '<td>';
             $html .= '<a href="updateEvents.php?eventId=' . htmlspecialchars($event->getId()) . '">Editar</a>';
             $html .= ' o ';

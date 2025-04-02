@@ -24,6 +24,10 @@ class catalogFilterForm extends baseForm
      */
     protected function CreateFields($initialData)
     {
+        // Obtener las categorías desde el servicio de productos
+        $productAppService = productAppService::GetSingleton();
+        $categories = $productAppService->getCategories();
+
         $html = <<<EOF
             <fieldset class="border p-4 rounded">
                 <legend class="w-auto">Filtrar Productos</legend>
@@ -40,32 +44,31 @@ class catalogFilterForm extends baseForm
 
                 <div class="mb-3">
                     <label for="category" class="form-label">Categoría:</label>
-                    <input type="text" name="category" id="category" class="form-control" placeholder="Buscar por categoría" value="
+                    <select name="category" id="category" class="form-control">
+                        <option value="">Seleccionar categoría</option>
         EOF;
 
-        $html .= htmlspecialchars($initialData['category'] ?? '') . '">';
+        // Añadir las categorías como opciones
+        foreach ($categories as $category) {
+            // Acceder a las propiedades del objeto productCategoryDTO
+            $categoryId = htmlspecialchars($category->getId());
+            $categoryName = htmlspecialchars($category->getName());
+            $selected = (isset($initialData['category']) && $initialData['category'] == $categoryName) ? 'selected' : '';
+            $html .= '<option value="' . $categoryName . '" ' . $selected . '>' . $categoryName . '</option>';
+        }
 
         $html .= <<<EOF
+                    </select>
                 </div>
 
                 <div class="mb-3">
                     <label for="minPrice" class="form-label">Precio mínimo:</label>
-                    <input type="number" name="minPrice" id="minPrice" class="form-control" step="0.01" placeholder="Ej: 0" value="
-        EOF;
-
-        $html .= htmlspecialchars($initialData['minPrice'] ?? '') . '">';
-
-        $html .= <<<EOF
+                    <input type="number" name="minPrice" id="minPrice" class="form-control" step="0.50" min="0" placeholder="Ej: 0" value="0">
                 </div>
 
                 <div class="mb-3">
                     <label for="maxPrice" class="form-label">Precio máximo:</label>
-                    <input type="number" name="maxPrice" id="maxPrice" class="form-control" step="0.01" placeholder="Ej: 100" value="
-        EOF;
-
-        $html .= htmlspecialchars($initialData['maxPrice'] ?? '') . '">';
-
-        $html .= <<<EOF
+                    <input type="number" name="maxPrice" id="maxPrice" class="form-control" step="0.50" placeholder="Ej: 100" value="0">
                 </div>
 
                 <div class="mt-3">
@@ -92,22 +95,22 @@ class catalogFilterForm extends baseForm
         // Filtrado y sanitización de los datos recibidos
         $name = trim($data['name'] ?? '');
         $name = filter_var($name, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if (empty($name) || strlen($name) > 50) {
+        if (strlen($name) > 50) {
             $result[] = 'El nombre del producto no puede estar vacío ni superar los 50 caracteres.';
         }
 
         $category = trim($data['category'] ?? '');
         $category = filter_var($category, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if (empty($category) || strlen($category) > 50) {
+        if (strlen($category) > 50) {
             $result[] = 'La categoría del producto no puede estar vacía ni superar los 50 caracteres.';
         }
 
-        $minPrice = filter_var($data['minPrice'] ?? '', FILTER_VALIDATE_FLOAT);
+        $minPrice = filter_var($data['minPrice'] ?? 0.0, FILTER_VALIDATE_FLOAT);
         if (!is_numeric($minPrice ) || $minPrice  < 0) {
             $result[] = 'El precio debe ser un número positivo.';
         }
 
-        $maxPrice = filter_var($data['maxPrice'] ?? '', FILTER_VALIDATE_FLOAT);
+        $maxPrice = filter_var($data['maxPrice'] ?? 1000.0, FILTER_VALIDATE_FLOAT);
         if (!is_numeric($maxPrice ) || $maxPrice  < 0) {
             $result[] = 'El precio debe ser un número positivo.';
         }
@@ -120,6 +123,7 @@ class catalogFilterForm extends baseForm
             $filters['category'] = $category;
             $filters['minPrice'] = $minPrice;
             $filters['maxPrice'] = $maxPrice;
+            $filters['active'] = 1;
 
             // Llamamos a la instancia de SA de productos
             $productAppService = productAppService::GetSingleton();
@@ -144,5 +148,7 @@ class catalogFilterForm extends baseForm
                 $result = 'catalog.php?search=true';
             }
         }
+
+        return $result;
     }
 }
