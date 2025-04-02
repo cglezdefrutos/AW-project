@@ -244,15 +244,52 @@ class orderDAO extends baseDAO implements IOrder
         return true;
     }
 
-        /**
-     * Simula la creación de un pedido en la base de datos.
+    /**
+     * Crea un nuevo pedido
      * 
-     * @param orderDTO $order Objeto que contiene los datos del pedido a crear.
-     * 
-     * @return int ID del nuevo pedido creado.
+     * @param orderDTO $order el dto del pedido a crear
+     * @return int ID del nuevo pedido creado
      */
-    public function createOrder($order)
-    {
-        return true;
-    }   
+    public function createOrder($order) {
+        $orderId = null;
+    
+        try {
+            // Obtener la conexión a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+    
+            // Consulta SQL para insertar un nuevo pedido
+            $stmt = $conn->prepare("INSERT INTO orders (user_id, total_price, status, shipping_address, created_at)
+                                    VALUES (?, ?, ?, ?, NOW())");
+    
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+    
+            // Obtener datos del DTO
+            $userId = $order->getUserId();
+            $totalPrice = $order->getTotalPrice();
+            $status = $order->getStatus();
+            $shipping_address = $order->getShippingAddress();
+    
+            // Bind de parámetros
+            $stmt->bind_param("idss", $userId, $totalPrice, $status, $shipping_address);
+    
+            // Ejecutar la consulta
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+    
+            // Obtener el ID del nuevo pedido creado
+            $orderId = $stmt->insert_id;
+    
+            // Cerrar la consulta
+            $stmt->close();
+    
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+    
+        return $orderId;
+    }
 }

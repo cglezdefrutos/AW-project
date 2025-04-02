@@ -141,6 +141,33 @@ class orderAppService
     }
 
     /**
+     * Devuelve los detalles de un pedido
+     *
+     * @param int $orderId ID del pedido
+     * @return orderDetailDTO[] Array de objetos orderDetailDTO
+     * @throws \Exception Si ocurre un error
+     */
+    public function getDetailsByOrderId($orderId)
+    {
+        $IOrderDetailDAO = orderDetailFactory::createOrderDetail();
+        $detailsDTO = null;
+
+
+        $app = application::getInstance();
+
+
+        try {
+            $detailsDTO = $IOrderDetailDAO->getDetailsByOrderId($orderId);
+        } catch (\Exception $e) {
+            error_log("Error obteniendo detalles del pedido ID $orderId: " . $e->getMessage());
+            throw $e;
+        }
+
+
+        return $detailsDTO;
+    }
+
+    /*
      * Crea un nuevo pedido en la base de datos
      *
      * @param orderDTO $order Objeto que contiene los datos del pedido a crear

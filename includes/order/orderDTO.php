@@ -13,7 +13,7 @@ class orderDTO implements \JsonSerializable
     private $id;
 
     /**
-     * @var int Email del usuario
+     * @var int Identificador del usuario
      */
     private $user_id;
 
@@ -60,7 +60,7 @@ class orderDTO implements \JsonSerializable
 
     public function getUserId()
     {
-        return $this->user_email;
+        return $this->user_id;
     }
 
     public function getTotalPrice()
