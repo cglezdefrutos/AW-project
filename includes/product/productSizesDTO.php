@@ -48,6 +48,11 @@ class productSizesDTO implements \JsonSerializable
         return $totalStock;
     }
 
+    public function getStockBySize($size)
+    {
+        return $this->sizes[$size];
+    }
+
     /**
      * Setters
      */

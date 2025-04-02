@@ -17,11 +17,11 @@ class manageProductsTable extends baseTable
 
             // Botón Editar (siempre visible)
             $editButton = <<<HTML
-                <a href="?action=edit&productId={$product->getId()}" 
-                   class="btn btn-primary btn-sm mr-2">
-                   Editar
+                <a href="updateProducts.php?productId={$product->getId()}" 
+                class="btn btn-primary btn-sm mr-2">
+                Editar
                 </a>
-            HTML;
+             HTML;
 
             // Botón Eliminar (solo para productos activos)
             $deleteButton = '';

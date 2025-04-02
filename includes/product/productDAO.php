@@ -333,7 +333,6 @@ class productDAO extends baseDAO implements IProduct
             throw $e;
         }
     }
-
     public function registerProduct($productDTO, $provider_id) {
         $conn = null;
         $productStmt = null;
@@ -342,29 +341,34 @@ class productDAO extends baseDAO implements IProduct
             $conn = application::getInstance()->getConnectionDb();
             $conn->begin_transaction();
     
-            // 1. Extraer valores a variables individuales
-            $name = $productDTO->getName();
-            $description = $productDTO->getDescription();
-            $price = $productDTO->getPrice();
-            $category_id = $productDTO->getCategoryId();
-            $image_url = $productDTO->getImageUrl();
-            $createdAt = $productDTO->getCreatedAt();
+            // 1. Extraer y escapar valores
+            $name = $this->realEscapeString($productDTO->getName());
+            $description = $this->realEscapeString($productDTO->getDescription());
+            $price = $this->realEscapeString($productDTO->getPrice());
+            $category_id = $this->realEscapeString($productDTO->getCategoryId());
+            $image_url = $this->realEscapeString($productDTO->getImageUrl());
+            $createdAt = $this->realEscapeString($productDTO->getCreatedAt());
             $active = $productDTO->getActive() ? 1 : 0;
+            $provider_id = $this->realEscapeString($provider_id);
     
-            // 2. Insertar producto (sin especificar ID)
+            // 2. Insertar producto
             $productStmt = $conn->prepare("INSERT INTO products 
                                         (provider_id, name, description, price, category_id, image_url, created_at, active) 
                                         VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             
+            if (!$productStmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+    
             $productStmt->bind_param("issdsssi", 
-                $provider_id,    // Variable
-                $name,          // Variable
-                $description,   // Variable
-                $price,         // Variable
-                $category_id,   // Variable
-                $image_url,     // Variable
-                $createdAt,     // Variable
-                $active         // Variable
+                $provider_id,    // i (integer)
+                $name,          // s (string)
+                $description,   // s (string)
+                $price,         // d (double)
+                $category_id,   // s (string - aunque es ID, se escapa como string)
+                $image_url,     // s (string)
+                $createdAt,     // s (string)
+                $active         // i (integer)
             );
     
             if (!$productStmt->execute()) {
@@ -377,7 +381,7 @@ class productDAO extends baseDAO implements IProduct
             // 4. Registrar tallas
             if ($productDTO->getSizesDTO() !== null) {
                 $sizesDTO = $productDTO->getSizesDTO();
-                $sizesDTO->setProductId($product_id); // Actualizar el ID en el DTO
+                $sizesDTO->setProductId($product_id);
                 
                 $this->registerProductSizes($conn, $product_id, $sizesDTO);
             }
@@ -394,6 +398,61 @@ class productDAO extends baseDAO implements IProduct
         }
     }
 
+    public function updateProduct(productDTO $productDTO) 
+    {
+        $conn = null;
+        $stmt = null;
+        
+        try {
+            $conn = application::getInstance()->getConnectionDb();
+            $conn->begin_transaction();
+
+            // 1. Preparar variables escapadas
+            $name = $this->realEscapeString($productDTO->getName());
+            $description = $this->realEscapeString($productDTO->getDescription());
+            $price = (float)$this->realEscapeString($productDTO->getPrice());
+            $category_id = (int)$this->realEscapeString($productDTO->getCategoryId());
+            $image_url = $this->realEscapeString($productDTO->getImageUrl());
+            $id = (int)$this->realEscapeString($productDTO->getId());
+
+            // 2. Actualizar producto principal
+            $stmt = $conn->prepare("UPDATE products SET 
+                                name = ?, 
+                                description = ?, 
+                                price = ?, 
+                                category_id = ?, 
+                                image_url = ? 
+                                WHERE id = ?");
+            
+            $stmt->bind_param("ssdisi", 
+                $name,
+                $description,
+                $price,
+                $category_id,
+                $image_url,
+                $id
+            );
+
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al actualizar producto: " . $stmt->error);
+            }
+
+            // 3. Actualizar tallas
+            if ($productDTO->getSizesDTO() !== null) {
+                $this->updateProductSizes($conn, $id, $productDTO->getSizesDTO());
+            }
+
+            $conn->commit();
+            return true;
+
+        } catch (\Exception $e) {
+            if ($conn !== null) $conn->rollback();
+            error_log("Error en updateProduct: " . $e->getMessage());
+            throw $e;
+        } finally {
+            if ($stmt !== null) $stmt->close();
+        }
+    }
    
     public function getCategoryId($categoryName)
     {
@@ -487,7 +546,6 @@ class productDAO extends baseDAO implements IProduct
         try {
             $sizes = $sizesDTO->getSizes();
             
-            // Cambiar a size_id si es el nombre correcto en tu tabla
             $sizeStmt = $conn->prepare("INSERT INTO product_sizes (product_id, size_id, stock) VALUES (?, ?, ?)");
             
             if (!$sizeStmt) {
@@ -495,21 +553,32 @@ class productDAO extends baseDAO implements IProduct
             }
             
             foreach ($sizes as $size => $stock) {
-                // Primero obtener el ID de la talla desde la tabla de tamaños
-                $size_id = $this->getSizeIdByName($size);
+                // Escapar el nombre de la talla antes de buscarlo
+                $escapedSize = $this->realEscapeString($size);
+                $size_id = $this->getSizeIdByName($escapedSize);
                 
                 if ($size_id === null) {
                     throw new \Exception("Talla '$size' no encontrada en la base de datos");
                 }
                 
-                $escapedStock = (int)$stock;
+                // Escapar y validar el stock
+                $escapedStock = (int)$this->realEscapeString($stock);
+                $escapedProductId = (int)$this->realEscapeString($product_id);
+                $escapedSizeId = (int)$this->realEscapeString($size_id);
                 
-                $sizeStmt->bind_param("iii", $product_id, $size_id, $escapedStock);
+                $sizeStmt->bind_param("iii", 
+                    $escapedProductId,  // product_id (integer)
+                    $escapedSizeId,     // size_id (integer)
+                    $escapedStock       // stock (integer)
+                );
                 
                 if (!$sizeStmt->execute()) {
                     throw new \Exception("Error al insertar talla $size: " . $sizeStmt->error);
                 }
             }
+        } catch (\Exception $e) {
+            error_log("Error en registerProductSizes: " . $e->getMessage());
+            throw $e;
         } finally {
             if ($sizeStmt !== null) {
                 $sizeStmt->close();
@@ -630,6 +699,64 @@ class productDAO extends baseDAO implements IProduct
         $query .= " GROUP BY p.id";
 
         return array('query' => $query, 'params' => $args, 'types' => $types);
+    }
+
+    /**
+     * Actualiza las tallas de un producto
+     * 
+     * @param mysqli $conn Conexión a la base de datos
+     * @param int $product_id ID del producto
+     * @param productSizesDTO $sizesDTO DTO con las tallas y stock
+     */
+    private function updateProductSizes($conn, $product_id, productSizesDTO $sizesDTO)
+    {
+        $deleteStmt = null;
+        $insertStmt = null;
+        
+        try {
+            // 1. Eliminar tallas existentes para este producto
+            $deleteStmt = $conn->prepare("DELETE FROM product_sizes WHERE product_id = ?");
+            $escapedProductId = (int)$this->realEscapeString($product_id);
+            $deleteStmt->bind_param("i", $escapedProductId);
+            
+            if (!$deleteStmt->execute()) {
+                throw new \Exception("Error al eliminar tallas existentes: " . $deleteStmt->error);
+            }
+    
+            // 2. Insertar las nuevas tallas
+            $sizes = $sizesDTO->getSizes();
+            $insertStmt = $conn->prepare("INSERT INTO product_sizes (product_id, size_id, stock) VALUES (?, ?, ?)");
+            
+            foreach ($sizes as $size => $stock) {
+                // Escapar y validar parámetros
+                $escapedSize = $this->realEscapeString($size);
+                $size_id = $this->getSizeIdByName($escapedSize);
+                
+                if ($size_id === null) {
+                    throw new \Exception("Talla '$size' no encontrada en la base de datos");
+                }
+                
+                $escapedSizeId = (int)$this->realEscapeString($size_id);
+                $escapedStockValue = (int)$this->realEscapeString($stock);
+                $escapedCurrentProductId = (int)$this->realEscapeString($product_id);
+    
+                $insertStmt->bind_param("iii", 
+                    $escapedCurrentProductId,  // product_id (integer)
+                    $escapedSizeId,          // size_id (integer)
+                    $escapedStockValue       // stock (integer)
+                );
+                
+                if (!$insertStmt->execute()) {
+                    throw new \Exception("Error al insertar talla $size: " . $insertStmt->error);
+                }
+            }
+        } catch (\Exception $e) {
+            error_log("Error en updateProductSizes: " . $e->getMessage());
+            throw $e;
+        } finally {
+            if ($deleteStmt !== null) $deleteStmt->close();
+            if ($insertStmt !== null) $insertStmt->close();
+        }
     }
 
 }

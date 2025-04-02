@@ -214,6 +214,7 @@ class registerProductForm extends baseForm
 
             // Intentamos registrar el nuevo producto
             $registrationResult = $productAppService->registerProduct($productData);
+            
 
             if (!$registrationResult) {
                 $result[] = 'Error al registrar el producto. Por favor, verifica los datos.';
