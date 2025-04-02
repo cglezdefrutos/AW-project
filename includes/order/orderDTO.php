@@ -13,9 +13,9 @@ class orderDTO implements \JsonSerializable
     private $id;
 
     /**
-     * @var int Email del usuario
+     * @var int Identificador del usuario
      */
-    private $user_email;
+    private $user_id;
 
     /**
      * @var float Precio total del pedido
@@ -40,10 +40,10 @@ class orderDTO implements \JsonSerializable
     /**
      * Constructor
      */
-    public function __construct($id, $user_email, $total_price, $status, $shipping_address, $created_at)
+    public function __construct($id, $user_id, $total_price, $status, $shipping_address, $created_at)
     {
         $this->id = $id;
-        $this->user_email = $user_email;
+        $this->user_id = $user_id;
         $this->total_price = $total_price;
         $this->status = $status;
         $this->shipping_address = $shipping_address;
@@ -58,9 +58,9 @@ class orderDTO implements \JsonSerializable
         return $this->id;
     }
 
-    public function getUserEmail()
+    public function getUserId()
     {
-        return $this->user_email;
+        return $this->user_id;
     }
 
     public function getTotalPrice()
@@ -91,9 +91,9 @@ class orderDTO implements \JsonSerializable
         $this->id = $id;
     }
 
-    public function setUserEmail($user_email)
+    public function setUserId($user_id)
     {
-        $this->user_email = $user_email;
+        $this->user_id = $user_id;
     }
 
     public function setTotalPrice($total_price)
