@@ -111,8 +111,6 @@ class orderDAO extends baseDAO implements IOrder
         return $orders;
     }
     
-    
-
     /**
      * Optiene los Orders de un usuario
      * 
@@ -246,5 +244,15 @@ class orderDAO extends baseDAO implements IOrder
         return true;
     }
 
-
+        /**
+     * Simula la creación de un pedido en la base de datos.
+     * 
+     * @param orderDTO $order Objeto que contiene los datos del pedido a crear.
+     * 
+     * @return int ID del nuevo pedido creado.
+     */
+    public function createOrder($order)
+    {
+        return true;
+    }   
 }
