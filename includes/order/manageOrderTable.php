@@ -21,7 +21,7 @@ class manageOrderTable extends baseTable
             $html .= '<td>';
             $html .= '<a href="showOrderDetails.php?id=' . htmlspecialchars($order->getId()) . '">Ver Detalles</a>';
             $html .= ' o ';
-            $html .= '<a href="updateOrders.php?orderId=' . htmlspecialchars($order->getId()) . '">Cambiar estado</a>';
+            $html .= '<a href="updateOrders.php?orderId=' . htmlspecialchars($order->getId()) . '">Cambiar Estado</a>';
             $html .= ' o ';
             $html .= '<a href="manageOrders.php?orderId=' . htmlspecialchars($order->getId()) . '" onclick="return confirm(\'¿Estás seguro de que deseas eliminar este pedido?\');">Eliminar</a>';
             $html .= '</td>';

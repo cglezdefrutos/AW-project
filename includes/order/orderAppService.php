@@ -141,7 +141,6 @@ class orderAppService
     }
 
     /**
-<<<<<<< HEAD
      * Devuelve los detalles de un pedido
      *
      * @param int $orderId ID del pedido
@@ -167,7 +166,8 @@ class orderAppService
 
         return $detailsDTO;
     }
-=======
+
+    /*
      * Crea un nuevo pedido en la base de datos
      *
      * @param orderDTO $order Objeto que contiene los datos del pedido a crear
@@ -176,7 +176,6 @@ class orderAppService
     public function createOrder($order)
     {
         $IOrderDAO = orderFactory::CreateOrder();
->>>>>>> dev
 
         try {
             return $IOrderDAO->createOrder($order);
