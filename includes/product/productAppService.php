@@ -66,37 +66,59 @@ class productAppService
         return $productDTOs;
     }
 
+    /**
+     * Busca productos por su ID
+     * 
+     * @param int $id ID del producto
+     * 
+     * @return productDTO Producto encontrado
+     */
+
     public function getProductsByUserType()
     {
         $IProductDAO = productFactory::CreateProduct();
-        $productsDTO = null;
+        $productsDTOs = null;
 
         $app = application::getInstance();
 
         // Si es administrador, tomamos todos los productos
         if ($app->isCurrentUserAdmin())
         {
-            $productsDTO = $IProductDAO->getProducts();
+            $productsDTOs = $IProductDAO->searchProducts();
         }
         // Si es proveedor, tomamos SOLO los productos del proveedor
         else 
         {
-            // Tomamos el email del proveedor
+            // Tomamos el id del proveedor
             $userId = htmlspecialchars($app->getCurrentUserId());
 
             // Pasamos como filtro un array con el email (así solo traerá los productos donde coincida ese email)
-            $productsDTO = $IProductDAO->getProducts(array("provider_id" => $userId));
+            $productsDTOs = $IProductDAO->searchProducts(array("provider_id" => $userId));
         }
 
-        return $productsDTO;
+        // Para cada producto, tomamos sus tallas
+        foreach ($productsDTOs as $productDTO) 
+        {
+            $productSizesDTO = $IProductDAO->getProductSizes($productDTO->getId());
+
+            // Asignamos las tallas al producto
+            $productDTO->setSizesDTO($productSizesDTO);
+        }
+
+        return $productsDTOs;
     }
+
+    /**
+     * Desactiva productos por su ID
+     * 
+     * @param int $id ID del producto
+     * 
+     * @return productDTO Producto encontrado
+     */
 
     public function deleteProduct($productId)
     {
         $IProductDAO = productFactory::CreateProduct();
-
-        // Si el producto tiene pedidos asociados, no se puede eliminar
-        $orders = $IProductDAO->getOrdersByProduct($productId);
 
         // Tomamos la instancia de la aplicación
         $app = application::getInstance();
@@ -118,6 +140,7 @@ class productAppService
             if ($owner)
             {
                 return $IProductDAO->deleteProduct($productId);
+            
             }
             else
             {
@@ -126,16 +149,84 @@ class productAppService
         }
     }
 
+    /**
+     * Activa productos por su ID
+     * 
+     * @param int $id ID del producto
+     * 
+     * @return productDTO Producto encontrado
+     */
+    public function activateProduct($productId)
+    {
+        $IProductDAO = productFactory::CreateProduct();
+
+        // Tomamos la instancia de la aplicación
+        $app = application::getInstance();
+
+        // Si es administrador, se permite activar cualquier producto
+        if ($app->isCurrentUserAdmin())
+        {
+            return $IProductDAO->activateProduct($productId);
+        }
+        // Si es proveedor, solo puede activar sus productos
+        else 
+        {
+            // Tomamos el email del proveedor
+            $userEmail = htmlspecialchars($app->getCurrentUserEmail());
+
+            // Comprobamos si el producto pertenece al proveedor
+            $owner = $IProductDAO->ownsProduct($productId, $userEmail);
+
+            if ($owner)
+            {
+                return $IProductDAO->activateProduct($productId);
+            
+            }
+            else
+            {
+                throw new notProductOwnerException("No puedes activar un producto que no te pertenece.");
+            }
+        }
+    }
+
+
+    
+    /**
+     * Registra un producto
+     * 
+     * @param array $productData Datos del producto
+     * 
+     * @return bool Resultado de la operación
+     */
     public function registerProduct($productData)
     {
         $IProductDAO = productFactory::CreateProduct();
 
-        $productDTO = new productDTO(0, $productData['provider_id'], $productData['name'], $productData['description'], $productData['price'], $productData['stock'], $productData['category_id'], $productData['category_name'], $productData['image_url'], $productData['created_at'], $productData['sizes']);
+         // Comprobamos si la categoria ya existe
+         $categoryId = $IProductDAO->getCategoryId($productData['category']);
 
-        return $IProductDAO->registerProduct($productDTO);
+         if ($categoryId === -1)
+        {
+            // Si no existe, lo registramos
+            $categoryId = $IProductDAO->registerCategory($productData['category']);
+        }
+
+        $productDTO = new productDTO(
+            null,
+            $productData['provider_email'],
+            $productData['name'],
+            $productData['description'],
+            $productData['price'],
+            new productCategoryDTO($categoryId, $productData['category']),
+            $productData['image_url'],
+            $productData['created_at'],
+            new productSizesDTO(null, $productData['stock']),
+            true
+        );
+        return $IProductDAO->registerProduct($productDTO, $productData['provider_id']);
     }
 
-}
+
     /**
      * Busca un producto por su ID
      * 

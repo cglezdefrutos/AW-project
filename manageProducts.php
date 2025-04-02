@@ -12,49 +12,77 @@ $mainContent = "";
 
 $app = application::getInstance();
 
-
-if(!$app->isCurrentUserLogged())
-{
+if(!$app->isCurrentUserLogged()) {
     $mainContent = <<<EOS
         <h1>No es posible gestionar productos si no has iniciado sesión.</h1>
     EOS;
 }
-else
-{
+else {
     // Comprobar si el usuario es proveedor o administrador
-    if ( ! $app->isCurrentUserProvider() && ! $app->isCurrentUserAdmin() )
-    { 
+    if (!$app->isCurrentUserProvider() && !$app->isCurrentUserAdmin()) { 
         $mainContent = <<<EOS
             <h1>No es posible gestionar productos si no se es proveedor o administrador.</h1>
         EOS;
     }
-    else
-    {
-        // Obtenemos la instancia del servicio de eventos
+    else {
+        // Obtenemos la instancia del servicio de productos
         $productAppService = productAppService::GetSingleton();
 
-        // Manejar la eliminación del evento si se proporciona un eventId en la URL
-        if (isset($_GET['productId'])) {
-            $productId = $_GET['productId'];
-            $productAppService->deleteProduct($productId);
-            $mainContent .= <<<EOS
-                <div class="alert-success">
-                    Producto eliminado correctamente.
-                </div>
-            EOS;
+        // Manejar las acciones sobre productos
+        if (isset($_GET['action']) && isset($_GET['productId'])) {
+            $productId = (int)$_GET['productId'];
+            $action = $_GET['action'];
+            $successMessage = '';
+            $errorMessage = '';
+
+            try {
+                switch ($action) {
+                    case 'activate':
+                        $productAppService->activateProduct($productId);
+                        $successMessage = 'Producto activado correctamente.';
+                        break;
+                        
+                        
+                    case 'delete':
+                        $productAppService->deleteProduct($productId);
+                        $successMessage = 'Producto eliminado correctamente.';
+                        break;
+                        
+                    default:
+                        $errorMessage = 'Acción no válida.';
+                        break;
+                }
+            } catch (Exception $e) {
+                $errorMessage = 'Error al procesar la acción: ' . $e->getMessage();
+            }
+
+            // Mostrar mensajes de feedback
+            if (!empty($successMessage)) {
+                $mainContent .= <<<EOS
+                    <div class="alert alert-success">
+                        $successMessage
+                    </div>
+                EOS;
+            }
+            
+            if (!empty($errorMessage)) {
+                $mainContent .= <<<EOS
+                    <div class="alert alert-danger">
+                        $errorMessage
+                    </div>
+                EOS;
+            }
         }
 
-        // Cogemos los eventos correspondientes al usuario
+        // Obtener los productos según el tipo de usuario
         $productDTO = $productAppService->getProductsByUserType();
 
+        // Definir las columnas de la tabla
+        $columns = ['Imagen', 'Nombre', 'Descripción', 'Precio', 'Stock', 'Categoría', 'Activo', 'Fecha de creación', 'Acciones'];
 
-        //CAMBIAR LAS COLUMNAS
-        // Definir las columnas que se mostrarán en la tabla
-        $columns = ['Nombre', 'Descripción', 'Precio', 'Stock', 'Categoría', 'Acciones', 'Activo'];
-
-        // Generar la tabla de gestión de eventos
-        $productable = new manageProductsTable($productDTO, $columns);
-        $html = $productable->generateTable();
+        // Generar la tabla de gestión de productos
+        $productTable = new manageProductsTable($productDTO, $columns);
+        $html = $productTable->generateTable();
 
         $mainContent .= <<<EOS
             <h1>Gestión de productos</h1>

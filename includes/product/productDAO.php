@@ -240,7 +240,302 @@ class productDAO extends baseDAO implements IProduct
         return $categories;
     }
 
-    /**
+    public function deleteProduct($productId)
+    {
+        try {
+            // Obtener conexión a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+    
+            // Preparar consulta para desactivar el producto (actualizar active a 0)
+            $stmt = $conn->prepare("UPDATE products SET active = 0 WHERE id = ?");
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+    
+            // Enlazar parámetro
+            $stmt->bind_param('i', $productId);
+    
+            // Ejecutar la actualización
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al desactivar el producto: " . $stmt->error);
+            }
+    
+            // Verificar si realmente se actualizó algún registro
+            if ($stmt->affected_rows === 0) {
+                throw new \Exception("No se encontró el producto con ID: " . $productId);
+            }
+    
+            // Cerrar statement
+            $stmt->close();
+            
+            return true; // Indicar éxito en la operación
+            
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function activateProduct($productId)
+    {
+        try {
+            $conn = application::getInstance()->getConnectionDb();
+            $stmt = $conn->prepare("UPDATE products SET active = 1 WHERE id = ?");
+            
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            $stmt->bind_param('i', $productId);
+            
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al activar el producto: " . $stmt->error);
+            }
+
+            return $stmt->affected_rows > 0;
+            
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function ownsProduct($productId, $userEmail)
+    {
+        try {
+            // Tomamos la conexión a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Preparamos la consulta SQL para verificar si el producto pertenece al proveedor
+            $stmt = $conn->prepare("SELECT COUNT(*) FROM products WHERE id = ? AND provider_id = (SELECT id FROM users WHERE email = ?)");
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Enlazamos los parámetros
+            $stmt->bind_param('is', $productId, $userEmail);
+
+            // Ejecutamos la consulta
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            // Obtenemos el resultado
+            $stmt->bind_result($count);
+            $stmt->fetch();
+
+            // Cerramos la consulta
+            $stmt->close();
+
+            return $count > 0;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function registerProduct($productDTO, $provider_id) {
+        $conn = null;
+        $productStmt = null;
+        
+        try {
+            $conn = application::getInstance()->getConnectionDb();
+            $conn->begin_transaction();
+    
+            // 1. Extraer valores a variables individuales
+            $name = $productDTO->getName();
+            $description = $productDTO->getDescription();
+            $price = $productDTO->getPrice();
+            $category_id = $productDTO->getCategoryId();
+            $image_url = $productDTO->getImageUrl();
+            $createdAt = $productDTO->getCreatedAt();
+            $active = $productDTO->getActive() ? 1 : 0;
+    
+            // 2. Insertar producto (sin especificar ID)
+            $productStmt = $conn->prepare("INSERT INTO products 
+                                        (provider_id, name, description, price, category_id, image_url, created_at, active) 
+                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            
+            $productStmt->bind_param("issdsssi", 
+                $provider_id,    // Variable
+                $name,          // Variable
+                $description,   // Variable
+                $price,         // Variable
+                $category_id,   // Variable
+                $image_url,     // Variable
+                $createdAt,     // Variable
+                $active         // Variable
+            );
+    
+            if (!$productStmt->execute()) {
+                throw new \Exception("Error al registrar producto: " . $productStmt->error);
+            }
+    
+            // 3. Obtener ID generado
+            $product_id = $conn->insert_id;
+            
+            // 4. Registrar tallas
+            if ($productDTO->getSizesDTO() !== null) {
+                $sizesDTO = $productDTO->getSizesDTO();
+                $sizesDTO->setProductId($product_id); // Actualizar el ID en el DTO
+                
+                $this->registerProductSizes($conn, $product_id, $sizesDTO);
+            }
+    
+            $conn->commit();
+            return $product_id;
+    
+        } catch (\Exception $e) {
+            if ($conn !== null) $conn->rollback();
+            error_log("Error en registerProduct: " . $e->getMessage());
+            throw $e;
+        } finally {
+            if ($productStmt !== null) $productStmt->close();
+        }
+    }
+
+   
+    public function getCategoryId($categoryName)
+    {
+        $categoryId = null;
+
+        try {
+            // Get database connection
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Prepare SQL query to get product category ID by name
+            $stmt = $conn->prepare("SELECT id FROM product_categories WHERE name = ?");
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Sanitize and bind parameters
+            $escCategoryName = $this->realEscapeString($categoryName);
+            $stmt->bind_param("s", $escCategoryName);
+
+            // Execute query
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            // Bind result variable
+            $stmt->bind_result($categoryId);
+
+            // Store result to check number of rows
+            $stmt->store_result();
+
+            // If no rows found, category doesn't exist
+            if ($stmt->num_rows === 0) {
+                $categoryId = -1;
+            } 
+            // If found, get the ID
+            else {
+                $stmt->fetch();
+            }
+
+            $stmt->close();            
+
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+
+        return $categoryId;
+    }
+
+    public function registerCategory($categoryName)
+    {
+        $categoryId = null;
+
+        try {
+            // Get database connection
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Prepare SQL to insert new product category
+            $stmt = $conn->prepare("INSERT INTO product_categories (name) VALUES (?)");
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Sanitize and bind parameters
+            $escCategoryName = $this->realEscapeString($categoryName);
+            $stmt->bind_param("s", $escCategoryName);
+
+            // Execute query
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            // Get the ID of the newly created category
+            $categoryId = $stmt->insert_id;
+
+            // Close statement
+            $stmt->close();
+
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+
+        return $categoryId;
+    }
+
+    private function registerProductSizes($conn, $product_id, productSizesDTO $sizesDTO)
+    {
+        $sizeStmt = null;
+        
+        try {
+            $sizes = $sizesDTO->getSizes();
+            
+            // Cambiar a size_id si es el nombre correcto en tu tabla
+            $sizeStmt = $conn->prepare("INSERT INTO product_sizes (product_id, size_id, stock) VALUES (?, ?, ?)");
+            
+            if (!$sizeStmt) {
+                throw new \Exception("Error al preparar la consulta de tallas: " . $conn->error);
+            }
+            
+            foreach ($sizes as $size => $stock) {
+                // Primero obtener el ID de la talla desde la tabla de tamaños
+                $size_id = $this->getSizeIdByName($size);
+                
+                if ($size_id === null) {
+                    throw new \Exception("Talla '$size' no encontrada en la base de datos");
+                }
+                
+                $escapedStock = (int)$stock;
+                
+                $sizeStmt->bind_param("iii", $product_id, $size_id, $escapedStock);
+                
+                if (!$sizeStmt->execute()) {
+                    throw new \Exception("Error al insertar talla $size: " . $sizeStmt->error);
+                }
+            }
+        } finally {
+            if ($sizeStmt !== null) {
+                $sizeStmt->close();
+            }
+        }
+    }
+
+    private function getSizeIdByName($sizeName)
+    {
+        $conn = application::getInstance()->getConnectionDb();
+        $stmt = $conn->prepare("SELECT id FROM sizes WHERE name = ?");
+        
+        if (!$stmt) {
+            throw new \Exception("Error al preparar consulta de tallas: " . $conn->error);
+        }
+        
+        $stmt->bind_param("s", $sizeName);
+        $stmt->execute();
+        $stmt->bind_result($size_id);
+        $stmt->fetch();
+        $stmt->close();
+        
+        return $size_id;
+    }
+
+     /**
      * Construye la consulta SQL para buscar productos en función de los filtros
      * 
      * @param array $filters Filtros de búsqueda
@@ -251,7 +546,7 @@ class productDAO extends baseDAO implements IProduct
     {
         // Inicializamos la consulta SQL y los parámetros
         $query = "SELECT p.*, u.email AS provider_email, 
-                    c.name AS category_name, 
+                    c.name AS category_name 
                   FROM products p 
                   INNER JOIN users u ON p.provider_id = u.id 
                   INNER JOIN product_categories c ON p.category_id = c.id 
@@ -324,7 +619,7 @@ class productDAO extends baseDAO implements IProduct
         {
             // Si no hay filtros, eliminar la cláusula WHERE
             $query = "SELECT p.*, u.email AS provider_email, 
-                        c.name AS category_name, 
+                        c.name AS category_name
                       FROM products p 
                       INNER JOIN users u ON p.provider_id = u.id 
                       INNER JOIN product_categories c ON p.category_id = c.id 
@@ -335,147 +630,6 @@ class productDAO extends baseDAO implements IProduct
         $query .= " GROUP BY p.id";
 
         return array('query' => $query, 'params' => $args, 'types' => $types);
-    }
-
-    public function deleteProduct($productId)
-    {
-        try {
-            // Tomamos la conexión a la base de datos
-            $conn = application::getInstance()->getConnectionDb();
-
-            // Preparamos la consulta SQL para eliminar el producto
-            $stmt = $conn->prepare("DELETE FROM products WHERE id = ?");
-            if (!$stmt) {
-                throw new \Exception("Error al preparar la consulta: " . $conn->error);
-            }
-
-            // Enlazamos el parámetro
-            $stmt->bind_param('i', $productId);
-
-            // Ejecutamos la consulta
-            if (!$stmt->execute()) {
-                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
-            }
-
-            // Cerramos la consulta
-            $stmt->close();
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            throw $e;
-        }
-    }
-
-    public function ownsProduct($productId, $userEmail)
-    {
-        try {
-            // Tomamos la conexión a la base de datos
-            $conn = application::getInstance()->getConnectionDb();
-
-            // Preparamos la consulta SQL para verificar si el producto pertenece al proveedor
-            $stmt = $conn->prepare("SELECT COUNT(*) FROM products WHERE id = ? AND provider_id = (SELECT id FROM users WHERE email = ?)");
-            if (!$stmt) {
-                throw new \Exception("Error al preparar la consulta: " . $conn->error);
-            }
-
-            // Enlazamos los parámetros
-            $stmt->bind_param('is', $productId, $userEmail);
-
-            // Ejecutamos la consulta
-            if (!$stmt->execute()) {
-                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
-            }
-
-            // Obtenemos el resultado
-            $stmt->bind_result($count);
-            $stmt->fetch();
-
-            // Cerramos la consulta
-            $stmt->close();
-
-            return $count > 0;
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            throw $e;
-        }
-    }
-
-    public function registerProduct($productDTO)
-    {
-        try {
-            // Obtener la conexión a la base de datos
-            $conn = application::getInstance()->getConnectionDb();
-
-            // Preparar la consulta SQL para insertar un nuevo producto
-            $stmt = $conn->prepare("INSERT INTO products (provider_id, name, description, price, category_id, image_url, created_at, active) 
-                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            if (!$stmt) {
-                throw new \Exception("Error al preparar la consulta: " . $conn->error);
-            }
-
-            // Asignar los parámetros
-            $provider_id = $this->realEscapeString($productDTO->getProviderId());
-            $name = $this->realEscapeString($productDTO->getName());
-            $description = $this->realEscapeString($productDTO->getDescription());
-            $price = $this->realEscapeString($productDTO->getPrice());
-            $category_id = $this->realEscapeString($productDTO->getCategoryId());
-            $image_url = $this->realEscapeString($productDTO->getImageUrl());
-            $created_at = date('Y-m-d H:i:s'); // Fecha actual
-            $active = $this->realEscapeString($productDTO->getActive() ?? 1); // Valor por defecto 1 si no se especifica
-
-            $stmt->bind_param("issdisis", $provider_id, $name, $description, $price, $category_id, $image_url, $created_at, $active);
-
-            // Ejecutar la consulta
-            if (!$stmt->execute()) {
-                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
-            }
-
-            // Obtener el ID del producto recién insertado
-            //$product_id = $stmt->insert_id;
-
-            // Cerrar la consulta
-            $stmt->close();
-            /*
-            // Si hay tamaños asociados, insertarlos en product_sizes
-            if (method_exists($productDTO, 'getSizes') && !empty($productDTO->getSizes())) {
-                $this->registerProductSizes($product_id, $productDTO->getSizes());
-            }
-                */
-
-            return true;
-
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            throw $e;
-        }
-    }
-
-    private function registerProductSizes($product_id, $sizes)
-    {
-        try {
-            $conn = application::getInstance()->getConnectionDb();
-
-            // Preparar la consulta para insertar tamaños
-            $stmt = $conn->prepare("INSERT INTO product_sizes (product_id, size_id, stock) VALUES (?, ?, ?)");
-            if (!$stmt) {
-                throw new \Exception("Error al preparar la consulta de tamaños: " . $conn->error);
-            }
-
-            foreach ($sizes as $size) {
-                $size_id = $this->realEscapeString($size['size_id']);
-                $stock = $this->realEscapeString($size['stock']);
-                
-                $stmt->bind_param("iii", $product_id, $size_id, $stock);
-                
-                if (!$stmt->execute()) {
-                    throw new \Exception("Error al insertar tamaño: " . $stmt->error);
-                }
-            }
-
-            $stmt->close();
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            throw $e;
-        }
     }
 
 }

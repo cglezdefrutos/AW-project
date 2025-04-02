@@ -44,7 +44,8 @@ else
         else
         {
             $provider_id = $app->getCurrentUserId();
-            $form = new registerProductForm($provider_id);
+            $provider_email = $app->getCurrentUserEmail();
+            $form = new registerProductForm($provider_id, $provider_email);
             $htmlRegisterProductForm = $form->Manage();
 
             $mainContent = <<<EOS

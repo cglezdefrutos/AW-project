@@ -15,16 +15,25 @@ class registerProductForm extends baseForm
      * @var int
      */
     private $provider_id;
+    
+    /**
+     * Email del proveedor
+     * 
+     * @var string
+     */
+    private $provider_email;
 
     /**
      * Constructor
      * 
      * @param int $provider_id ID del proveedor
+     * @param string $provider_email Email del proveedor
      */
-    public function __construct($provider_id)
+    public function __construct($provider_id, $provider_email)
     {
         parent::__construct('registerProductForm');
         $this->provider_id = $provider_id;
+        $this->provider_email = $provider_email;
     }
 
     /**
@@ -79,8 +88,8 @@ class registerProductForm extends baseForm
 
                 <!-- Campo Categoría -->
                 <div class="mb-3">
-                    <label for="category_id" class="form-label">ID de Categoría:</label>
-                    <input type="number" name="category_id" id="category_id" class="form-control" min="1" placeholder="Ej: 1 (Ropa), 2 (Accesorios)" value="
+                    <label for="category_id" class="form-label">Categoría:</label>
+                    <input type="text" name="category_id" id="category_id" class="form-control" min="1" placeholder="Ej: Fútbol, Baloncesto" value="
         EOF;
 
         $html .= htmlspecialchars($initialData['category_id'] ?? '') . '" required>';
@@ -161,9 +170,10 @@ class registerProductForm extends baseForm
             $result[] = 'El precio debe ser un número positivo.';
         }
 
-        $category_id = trim($data['category_id'] ?? '');
-        if (!is_numeric($category_id) || $category_id < 1) {
-            $result[] = 'La categoría debe ser un número válido.';
+        $category = trim($data['category_id'] ?? '');
+        $category = filter_var($category, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (empty($category) || strlen($category) > 50) {
+            $result[] = 'La categoría es obligatoria y no debe exceder los 50 caracteres.';
         }
 
         $image_url = trim($data['image_url'] ?? '');
@@ -187,15 +197,17 @@ class registerProductForm extends baseForm
 
         if (count($result) === 0) {
             // Creamos un array con los datos del nuevo producto
-            $productData = array(
-                'provider_id' => $this->provider_id,
-                'name' => $name,
-                'description' => $description,
-                'price' => $price,
-                'category_id' => $category_id,
-                'image_url' => $image_url,
-                'sizes' => $sizeData
-            );
+            $productData = array();
+            $productData['provider_id'] = $this->provider_id;
+            $productData['provider_email'] = $this->provider_email;
+            $productData['name'] = $name;
+            $productData['description'] = $description;
+            $productData['price'] = $price;
+            $productData['category'] = $category;
+            $productData['image_url'] = $image_url;
+            $productData['stock'] = $sizeData;
+            $productData['created_at'] = date('Y-m-d H:i:s');
+            $productData['active'] = true;
 
             // Obtenemos la instancia del servicio de productos
             $productAppService = productAppService::GetSingleton();
@@ -211,5 +223,5 @@ class registerProductForm extends baseForm
         }
 
         return $result;
-    }
+    }   
 }
