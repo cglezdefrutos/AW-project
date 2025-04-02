@@ -28,17 +28,21 @@ if (!$app->isCurrentUserLogged()) {
 } else {
     $orderId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
+    $orderAppService = orderAppService::GetSingleton();
+    $detailsData = $orderAppService->getDetailsByOrderId($orderId);
+
+    $order = $orderAppService->getOrderById($orderId);
 
     if ($orderId <= 0) {
         $mainContent = <<<EOS
             <h1>Pedido no especificado o inválido.</h1>
         EOS;
-    } else {
-        $orderAppService = orderAppService::GetSingleton();
-        $detailsData = $orderAppService->getDetailsByOrderId($orderId);
-
-
-
+    } else if ($app->isCurrentUserClient() && ($order->getUserId() != $app->getCurrentUserId())) {
+            $mainContent = <<<EOS
+            <h1>No tienes permiso para ver este pedido</h1>
+            EOS;
+    }
+    else {
 
         // Convertir los datos en objetos DTO
         $details = array_map(function($detailData) {
