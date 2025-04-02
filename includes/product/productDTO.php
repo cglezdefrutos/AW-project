@@ -13,9 +13,9 @@ class productDTO implements \JsonSerializable
     private $id;
 
     /**
-     * @var int Identificador del proveedor propietario del producto
+     * @var int Email del proveedor propietario del producto
      */
-    private $provider_id;
+    private $provider_email;
 
     /**
      * @var string Nombre del producto
@@ -33,14 +33,10 @@ class productDTO implements \JsonSerializable
     private $price;
 
     /**
-     * @var int Stock del producto
+     * @var productCategoryDTO Objeto que contiene la categoría del producto
+     * @see productCategoryDTO
      */
-    private $stock;
-
-    /**
-     * @var int Identificador de la categoría del producto
-     */
-    private $category_id;
+    private $category_DTO;
 
     /**
      * @var string URL de la imagen del producto
@@ -53,19 +49,31 @@ class productDTO implements \JsonSerializable
     private $created_at;
 
     /**
+     * @var productSizesDTO Objeto que contiene las tallas del producto
+     * @see productSizesDTO
+     */
+    private $sizes_DTO;
+
+    /**
+     * @var bool Variable que controla si esta activo o no el producto
+     */
+    private $active;
+
+    /**
      * Constructor
      */
-    public function __construct($id, $provider_id, $name, $description, $price, $stock, $category_id, $image_url, $created_at)
+    public function __construct($id, $provider_email, $name, $description, $price, $category_DTO, $image_url, $created_at, $sizes_DTO, $active)
     {
         $this->id = $id;
-        $this->provider_id = $provider_id;
+        $this->provider_email = $provider_email;
         $this->name = $name;
         $this->description = $description;
         $this->price = $price;
-        $this->stock = $stock;
-        $this->category_id = $category_id;
+        $this->category_DTO = $category_DTO;
         $this->image_url = $image_url;
         $this->created_at = $created_at;
+        $this->sizes_DTO = $sizes_DTO;
+        $this->active = $active;
     }
 
     /**
@@ -76,9 +84,9 @@ class productDTO implements \JsonSerializable
         return $this->id;
     }
 
-    public function getProviderId()
+    public function getProviderEmail()
     {
-        return $this->provider_id;
+        return $this->provider_email;
     }
 
     public function getName()
@@ -96,14 +104,14 @@ class productDTO implements \JsonSerializable
         return $this->price;
     }
 
-    public function getStock()
-    {
-        return $this->stock;
-    }
-
     public function getCategoryId()
     {
-        return $this->category_id;
+        return $this->category_DTO->getId();
+    }
+
+    public function getCategoryName()
+    {
+        return $this->category_DTO->getName();
     }
 
     public function getImageUrl()
@@ -116,6 +124,21 @@ class productDTO implements \JsonSerializable
         return $this->created_at;
     }
 
+    public function getSizesDTO()
+    {
+        return $this->sizes_DTO;
+    }
+
+    public function getTotalStock()
+    {
+        return $this->sizes_DTO->getTotalStock();
+    }
+
+    public function getActive()
+    {
+        return $this->active;
+    }
+
     /**
      * Setters
      */
@@ -124,9 +147,9 @@ class productDTO implements \JsonSerializable
         $this->id = $id;
     }
 
-    public function setProviderId($provider_id)
+    public function setProviderEmail($provider_email)
     {
-        $this->provider_id = $provider_id;
+        $this->provider_email = $provider_email;
     }
 
     public function setName($name)
@@ -144,14 +167,14 @@ class productDTO implements \JsonSerializable
         $this->price = $price;
     }
 
-    public function setStock($stock)
-    {
-        $this->stock = $stock;
-    }
-
     public function setCategoryId($category_id)
     {
-        $this->category_id = $category_id;
+        $this->category_DTO->setId($category_id);
+    }
+
+    public function setCategoryName($category_name)
+    {
+        $this->category_DTO->setName($category_name);
     }
 
     public function setImageUrl($image_url)
@@ -164,6 +187,16 @@ class productDTO implements \JsonSerializable
         $this->created_at = $created_at;
     }
 
+    public function setSizesDTO($sizes_DTO)
+    {
+        $this->sizes_DTO = $sizes_DTO;
+    }
+
+    public function setActive($active)
+    {
+        $this->active = $active;
+    }
+
     /**
      * Implementación de JsonSerializable
      * @return array Array con los datos del objeto
@@ -171,5 +204,18 @@ class productDTO implements \JsonSerializable
     public function jsonSerialize()
     {
         return get_object_vars($this);
+
+        /* return [
+            'id' => $this->id,
+            'provider_email' => $this->provider_email,
+            'name' => $this->name,
+            'description' => $this->description,
+            'price' => $this->price,
+            'category_DTO' => $this->category_DTO ? $this->category_DTO->jsonSerialize() : null, // Serializar el objeto category
+            'image_url' => $this->image_url,
+            'sizes_DTO' => $this->sizes_DTO ? $this->sizes_DTO->jsonSerialize() : null, // Serializar el objeto sizesDTO
+            'created_at' => $this->created_at,
+            'active' => $this->active
+        ]; */
     }
 }

@@ -49,7 +49,8 @@ else
             $eventData['price'],
             $eventData['location'],
             $eventData['capacity'],
-            $eventData['category'],
+            $eventData['categoryId'],
+            $eventData['categoryName'],
             $eventData['email_provider']
         );
     }, $foundedEventsDTO);

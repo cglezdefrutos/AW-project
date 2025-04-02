@@ -50,7 +50,16 @@ class eventAppService
     {
         $IEventDAO = eventFactory::CreateEvent();
 
-        $eventsDTO = new eventDTO(0, $eventData['name'], $eventData['description'], $eventData['date'], $eventData['price'], $eventData['location'], $eventData['capacity'], $eventData['category'], $eventData['provider']);
+        // Comprobamos si el evento ya existe la categoria ya existe
+        $categoryId = $IEventDAO->getCategoryId($eventData['category']);
+
+        if ($categoryId === -1)
+        {
+            // Si no existe, lo registramos
+            $categoryId = $IEventDAO->registerCategory($eventData['category']);
+        }
+
+        $eventsDTO = new eventDTO(0, $eventData['name'], $eventData['description'], $eventData['date'], $eventData['price'], $eventData['location'], $eventData['capacity'], $categoryId, $eventData['category'], $eventData['provider']);
 
         return $IEventDAO->registerEvent($eventsDTO);
     }
@@ -152,6 +161,18 @@ class eventAppService
     {
         $IEventDAO = eventFactory::CreateEvent();
 
+        // Obtener el ID de la categoría a partir del nombre de la categoría
+        $categoryId = $IEventDAO->getCategoryId($updatedEventDTO->getCategoryName());
+
+        if ($categoryId === -1)
+        {
+            // Si no existe, la creamos
+            $categoryId = $IEventDAO->registerCategory($eventData['category']);
+        }
+
+        // Actualizamos el ID de la categoría en el DTO
+        $updatedEventDTO->setCategoryId($categoryId);
+
         return $IEventDAO->updateEvent($updatedEventDTO);
     }
 
@@ -200,5 +221,39 @@ class eventAppService
                 throw new notEventOwnerException("No puedes eliminar un evento que no te pertenece.");
             }
         }
+    }
+
+    /**
+     * Retorna las categorías de eventos
+     * 
+     * @return eventCategoryDTO[] Lista de categorías de eventos
+     */
+    public function getEventCategories()
+    {
+        $IEventDAO = eventFactory::CreateEvent();
+
+        return $IEventDAO->getCategories();
+    }
+
+    /**
+     * Elimina una categoría de evento
+     * 
+     * @param string $categoryId ID de la categoría
+     * 
+     * @return bool Resultado de la eliminación
+     */
+    public function deleteEventCategory($categoryId)
+    {
+        $IEventDAO = eventFactory::CreateEvent();
+
+        // Comprobamos si la categoría tiene eventos asociados
+        $events = $IEventDAO->getEvents(array("category_id" => $categoryId));
+
+        if (count($events) > 0)
+        {
+            throw new eventCategoryHasEventsException("No puedes eliminar una categoría que tiene eventos asociados.");
+        }
+
+        return $IEventDAO->deleteEventCategory($categoryId);
     }
 }

@@ -29,4 +29,3 @@ class orderFactory
         return $orderDAO;
     }
 }
-?>

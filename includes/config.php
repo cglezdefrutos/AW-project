@@ -33,6 +33,15 @@ define('RUTA_CSS', RUTA_APP.'/css');
 define('RUTA_JS', RUTA_APP.'/js');
 
 /**
+ * Parámetros de configuración de Stripe
+ * 
+ * @see https://stripe.com/docs/keys
+ */
+define('STRIPE_SECRET_KEY', 'sk_test_51R7x6U9DyzOhuTL3kJyeV8AMQCRPV9MLDaYRlaQxE403NLLUq9HpEMoPjQqRVrA8SOeAGKlA8l7AkqYdtd15lbCS00KQYgmwIq'); // Reemplaza con tu clave real
+define('STRIPE_PUBLIC_KEY', 'pk_test_51R7x6U9DyzOhuTL31NiHXH9x47iAXtetYn98Xmj053HpGFP27xb03rRe828ZWZoCL9o0vnjw7m1MIkWvngFFSZbk00LQf8rlvR');
+
+
+/**
  * Función para autocargar clases PHP.
  *
  * @see http://www.php-fig.org/psr/psr-4/

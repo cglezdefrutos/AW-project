@@ -39,9 +39,14 @@ class eventDTO implements \JsonSerializable
     private $location;
 
     /**
-     * @var string Categoría del evento
+     * @var string ID de la categoría del evento
      */
-    private $category;
+    private $categoryId;
+
+    /**
+     * @var string Nombre de la categoría del evento
+     */
+    private $categoryName;
 
     /**
      * @var int Capacidad del evento
@@ -56,7 +61,7 @@ class eventDTO implements \JsonSerializable
     /**
      * Constructor
      */
-    public function __construct($id, $name, $desc, $date, $price, $location, $capacity, $category, $email_provider)
+    public function __construct($id, $name, $desc, $date, $price, $location, $capacity, $categoryId, $categoryName, $email_provider)
     {
         $this->id = $id;
         $this->name = $name;
@@ -65,7 +70,8 @@ class eventDTO implements \JsonSerializable
         $this->price = $price;
         $this->location = $location;
         $this->capacity = $capacity;
-        $this->category = $category;
+        $this->categoryId = $categoryId;
+        $this->categoryName = $categoryName;
         $this->email_provider = $email_provider;
     }
 
@@ -102,9 +108,14 @@ class eventDTO implements \JsonSerializable
         return $this->location;
     }
 
-    public function getCategory()
+    public function getCategoryId()
     {
-        return $this->category;
+        return $this->categoryId;
+    }
+
+    public function getCategoryName()
+    {
+        return $this->categoryName;
     }
 
     public function getCapacity()
@@ -150,10 +161,15 @@ class eventDTO implements \JsonSerializable
         $this->location = $location;
     }
 
-    public function setCategory($category)
+    public function setCategoryId($categoryId)
     {
-        $this->category = $category;
-    }        
+        $this->categoryId = $categoryId;
+    }
+    
+    public function setCategoryName($categoryName)
+    {
+        $this->categoryName = $categoryName;
+    }   
 
     public function setCapacity($capacity)
     {

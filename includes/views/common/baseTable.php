@@ -19,8 +19,9 @@ abstract class baseTable
     // Método para generar la tabla completa
     public function generateTable()
     {
-        $html = '<div class="table-container">';
-        $html .= '<table>';
+        $html = '<div class="table-responsive">';
+        $html .= '<table class="table table-bordered">';
+        $html .= '<thead class="table-primary">';
         $html .= '<tr>';
 
         // Generar encabezados de la tabla
@@ -29,10 +30,13 @@ abstract class baseTable
         }
 
         $html .= '</tr>';
+        $html .= '</thead>';
+        $html .= '<tbody>';
 
         // Generar contenido de la tabla
         $html .= $this->generateTableContent();
 
+        $html .= '</tbody>';
         $html .= '</table>';
         $html .= '</div>';
 

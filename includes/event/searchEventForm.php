@@ -23,6 +23,10 @@ class searchEventForm extends baseForm
      */
     protected function CreateFields($initialData)
     {
+        // Obtener las categorías desde la base de datos
+        $eventAppService = eventAppService::GetSingleton();
+        $categories = $eventAppService->getEventCategories();
+
         // Creamos el formulario de búsqueda de eventos
         $html = <<<EOF
             <fieldset class="border p-4 rounded">
@@ -92,36 +96,21 @@ class searchEventForm extends baseForm
         $html .= htmlspecialchars($initialData['location'] ?? '') . '">';
         
         $html .= <<<EOF
-                </div>
+            </div>
 
-                <!-- Campo Categoría -->
-                <div class="mb-3">
-                    <label for="category" class="form-label">Categoría:</label>
-                    <select name="category" id="category" class="form-select">
-                        <option value="">Todas</option>
-                        <option value="Futbol" 
+            <!-- Campo Categoría -->
+            <div class="mb-3">
+                <label for="category" class="form-label">Categoría:</label>
+                <select name="category" id="category" class="form-select">
+                    <option value="">Todas</option>
         EOF;
 
-        $html .= ($initialData['category'] ?? '') == 'Futbol' ? 'selected' : '' . '>Futbol</option>';
-        
-        $html .= <<<EOF
-                        <option value="Baloncesto" 
-        EOF;
+        // Generar dinámicamente las opciones del select con las categorías disponibles
+        foreach ($categories as $category) {
+            $selected = ($initialData['category'] ?? '') == $category->getName() ? 'selected' : '';
+            $html .= "<option value=\"" . htmlspecialchars($category->getName()) . "\" $selected>" . htmlspecialchars($category->getName()) . "</option>";
+        }
 
-        $html .= ($initialData['category'] ?? '') == 'Baloncesto' ? 'selected' : '' . '>Baloncesto</option>';
-        
-        $html .= <<<EOF
-                        <option value="Fitness" 
-        EOF;
-
-        $html .= ($initialData['category'] ?? '') == 'Fitness' ? 'selected' : '' . '>Fitness</option>';
-        
-        $html .= <<<EOF
-                        <option value="Atletismo" 
-        EOF;
-
-        $html .= ($initialData['category'] ?? '') == 'Atletismo' ? 'selected' : '' . '>Atletismo</option>';
-        
         $html .= <<<EOF
                     </select>
                 </div>
@@ -151,16 +140,40 @@ class searchEventForm extends baseForm
         // Filtrado y sanitización de los datos
         $eventName = trim($data['name'] ?? '');
         $eventName = filter_var($eventName, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (empty($eventName) || strlen($eventName) > 50)
+        {
+            $result[] = 'El nombre del evento es obligatorio y no debe exceder los 50 caracteres.';
+        }
 
         $startDate = trim($data['start_date'] ?? '');
+        $startDate = filter_var($startDate, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
         $endDate = trim($data['end_date'] ?? '');
+        $endDate = filter_var($endDate, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
         $minPrice = trim($data['min_price'] ?? '');
+        $minPrice = filter_var($minPrice, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (!is_numeric($minPrice) || $minPrice < 0) {
+            $result[] = 'El precio debe ser un número positivo.';
+        }
+
         $maxPrice = trim($data['max_price'] ?? '');
+        $maxPrice = filter_var($maxPrice, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (!is_numeric($maxPrice) || $maxPrice < 0) {
+            $result[] = 'El precio debe ser un número positivo.';
+        }
 
         $location = trim($data['location'] ?? '');
         $location = filter_var($location, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (empty($location) || strlen($location) > 100) {
+            $result[] = 'La localización es obligatoria y no debe exceder los 100 caracteres.';
+        }
 
         $category = trim($data['category'] ?? '');
+        $category = filter_var($category, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (empty($category) || strlen($category) > 50) {
+            $result[] = 'La categoría es obligatoria y no debe exceder los 50 caracteres.';
+        }
 
         if(count($result) === 0)
         {

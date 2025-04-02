@@ -22,4 +22,12 @@ interface IOrderDetail
      * @return bool True si se eliminaron correctamente, False si falló
      */
     public function deleteOrderDetailsByOrderId($orderId);
+
+    /**
+    * Crea un nuevo detalle de pedido
+    * 
+    * @param orderDetailDTO $orderDetailDTO Objeto que contiene los datos del detalle de pedido a crear
+    * @return bool resultado de la operación
+    */
+    public function createOrderDetail($orderDetailDTO);
 }

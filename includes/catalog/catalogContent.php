@@ -30,14 +30,14 @@ class catalogContent
                 <div class="col-sm-6 col-md-4 mb-4">
                     <div class="card h-100">
                         <img src="{$product->getImageUrl()}" class="card-img-top" alt="{$product->getName()}">
-                        <div class="card-body">
+                        
+                        <div class="card-body text-center">
+                            <!-- Nombre del producto -->
                             <h5 class="card-title">{$product->getName()}</h5>
-                            <p class="card-text"><strong>Descripción:</strong> {$product->getDescription()}</p>
-                            <p class="card-text"><strong>Categoría:</strong> {$product->getCategoryId()}</p>
-                            <p class="card-text"><strong>Precio:</strong> {$product->getPrice()} €</p>
-                            <p class="card-text"><strong>Stock:</strong> {$product->getStock()}</p>
-                            <p class="card-text"><strong>Fecha de creación:</strong> {$product->getCreatedAt()}</p>
-                            <a href="productDetails.php?id={$product->getId()}" class="btn btn-primary btn-block">Ver Detalles</a>
+                            
+                            <p class="card-text text-success"><strong>{$product->getPrice()} €</strong></p>
+                            
+                            <a href="productDetails.php?id={$product->getId()}" class="btn btn-primary">Ver Detalles</a>
                         </div>
                     </div>
                 </div>
