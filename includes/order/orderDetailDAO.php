@@ -96,4 +96,49 @@ class orderDetailDAO extends baseDAO implements IOrderDetail
         return true;
     }
 
+    /**
+     * Crea un nuevo detalle de pedido
+     * 
+     * @param orderDetailDTO $orderDetailDTO Objeto que contiene los datos del detalle de pedido a crear
+     * @return bool True si se creó correctamente, False si falló
+     * @throws \Exception Si ocurre un error en la base de datos
+     */
+    public function createOrderDetail($orderDetailDTO)
+    {
+        try {
+            $conn = application::getInstance()->getConnectionDb();
+
+            $stmt = $conn->prepare("INSERT INTO order_details 
+                                (order_id, product_id, quantity, price, size) 
+                                VALUES (?, ?, ?, ?, ?)");
+            
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Obtener valores del DTO
+            $orderId = $orderDetailDTO->getOrderId();
+            $productId = $orderDetailDTO->getProductId();
+            $quantity = $orderDetailDTO->getQuantity();
+            $price = $orderDetailDTO->getPrice();
+            $size = $orderDetailDTO->getSize();
+
+            $stmt->bind_param("iiids", $orderId, $productId, $quantity, $price, $size);
+
+            $result = $stmt->execute();
+            
+            if (!$result) {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            $stmt->close();
+            
+            return true;
+
+        } catch (\Exception $e) {
+            error_log("Error al crear detalle de pedido: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
 }

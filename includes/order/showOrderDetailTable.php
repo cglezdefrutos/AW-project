@@ -17,12 +17,12 @@ class showOrderDetailTable extends baseTable
             $total += $subtotal;
             
             $html .= '<tr>';
-            $html .= '<td class="align-middle text-center">' . htmlspecialchars($detail->getProductName()) . '</td>'; //antes getProductId()
+            $html .= '<td>' . htmlspecialchars($detail->getProductName()) . '</td>'; //antes getProductId()
             $html .= '<td class="align-middle text-center"><img src="'.htmlspecialchars($detail->getImageUrl()).'" class="product-image"></td>';
-            $html .= '<td class="align-middle text-center">' . htmlspecialchars($detail->getSize()) . '</td>';
-            $html .= '<td class="align-middle text-center">' . htmlspecialchars($detail->getQuantity()) . '</td>';
-            $html .= '<td class="align-middle text-center">' . htmlspecialchars(number_format($detail->getPrice(), 2)) . ' €</td>';
-            $html .= '<td class="align-middle text-center">' . htmlspecialchars(number_format($subtotal, 2)) . ' €</td>';
+            $html .= '<td>' . htmlspecialchars($detail->getSize()) . '</td>';
+            $html .= '<td>' . htmlspecialchars($detail->getQuantity()) . '</td>';
+            $html .= '<td>' . htmlspecialchars(number_format($detail->getPrice(), 2)) . ' €</td>';
+            $html .= '<td>' . htmlspecialchars(number_format($subtotal, 2)) . ' €</td>';
             $html .= '</tr>';
         }
 
