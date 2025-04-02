@@ -24,6 +24,10 @@ class catalogFilterForm extends baseForm
      */
     protected function CreateFields($initialData)
     {
+        // Obtener las categorías desde el servicio de productos
+        $productAppService = productAppService::GetSingleton();
+        $categories = $productAppService->getCategories();
+
         $html = <<<EOF
             <fieldset class="border p-4 rounded">
                 <legend class="w-auto">Filtrar Productos</legend>
@@ -40,28 +44,31 @@ class catalogFilterForm extends baseForm
 
                 <div class="mb-3">
                     <label for="category" class="form-label">Categoría:</label>
-                    <input type="text" name="category" id="category" class="form-control" placeholder="Buscar por categoría" value="
+                    <select name="category" id="category" class="form-control">
+                        <option value="">Seleccionar categoría</option>
         EOF;
 
-        $html .= htmlspecialchars($initialData['category'] ?? '') . '">';
+        // Añadir las categorías como opciones
+        foreach ($categories as $category) {
+            // Acceder a las propiedades del objeto productCategoryDTO
+            $categoryId = htmlspecialchars($category->getId());
+            $categoryName = htmlspecialchars($category->getName());
+            $selected = (isset($initialData['category']) && $initialData['category'] == $categoryName) ? 'selected' : '';
+            $html .= '<option value="' . $categoryName . '" ' . $selected . '>' . $categoryName . '</option>';
+        }
 
         $html .= <<<EOF
+                    </select>
                 </div>
 
                 <div class="mb-3">
                     <label for="minPrice" class="form-label">Precio mínimo:</label>
                     <input type="number" name="minPrice" id="minPrice" class="form-control" step="0.50" min="0" placeholder="Ej: 0" value="0">
-        EOF;
-
-        $html .= <<<EOF
                 </div>
 
                 <div class="mb-3">
                     <label for="maxPrice" class="form-label">Precio máximo:</label>
-                    <input type="number" name="maxPrice" id="maxPrice" class="form-control" step="0.01" placeholder="Ej: 100" value="0">
-        EOF;
-
-        $html .= <<<EOF
+                    <input type="number" name="maxPrice" id="maxPrice" class="form-control" step="0.50" placeholder="Ej: 100" value="0">
                 </div>
 
                 <div class="mt-3">
@@ -116,6 +123,7 @@ class catalogFilterForm extends baseForm
             $filters['category'] = $category;
             $filters['minPrice'] = $minPrice;
             $filters['maxPrice'] = $maxPrice;
+            $filters['active'] = 1;
 
             // Llamamos a la instancia de SA de productos
             $productAppService = productAppService::GetSingleton();

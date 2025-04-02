@@ -17,7 +17,7 @@ $mainContent = "";
 $form = new catalogFilterForm();
 $htmlFilterForm = $form->Manage();
 
-// Creamos el diccionario de productos
+// Creamos el array de productDTOs
 $productsDTO = array();
 
 // Tomamos la instancia del servicio de productos
@@ -61,15 +61,15 @@ else
     $productsDTO = array_map(function($productData) {
         return new productDTO(
             $productData['id'],
-            $productData['provider_id'],
+            $productData['provider_email'],
             $productData['name'],
             $productData['description'],
             $productData['price'],
-            $productData['stock'],
-            $productData['category_id'],
-            $productData['category_name'],
+            $productData['category_DTO'],
             $productData['image_url'],
-            $productData['created_at']
+            $productData['created_at'],
+            $productData['sizes_DTO'],
+            $productData['active'],
         );
     }, $foundedProductsJSON);
 }

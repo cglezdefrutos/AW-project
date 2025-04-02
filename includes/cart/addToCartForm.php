@@ -22,13 +22,16 @@ class addToCartForm extends baseForm
      */
     protected function CreateFields($initialData)
     {
-        // Obtener las tallas del producto
-        $sizes = $this->productDTO->getSizes();
+        // Obtener las tallas del producto desde productSizesDTO
+        $sizesDTO = $this->productDTO->getSizesDTO();
+        $sizes = $sizesDTO->getSizes(); // Obtener el array ['talla' => stock]
         $sizeOptions = '';
 
         // Generar las opciones del select para las tallas
-        foreach ($sizes as $size) {
-            $sizeOptions .= "<option value=\"{$size}\">{$size}</option>";
+        foreach ($sizes as $size => $stock) {
+            $disabled = ($stock <= 0) ? 'disabled' : ''; // Deshabilitar si no hay stock
+            $stockMessage = ($stock <= 0) ? ' (Sin stock)' : ''; // Mostrar mensaje si no hay stock
+            $sizeOptions .= "<option value=\"{$size}\" {$disabled}>{$size}{$stockMessage}</option>";
         }
 
         // Generar el HTML del formulario

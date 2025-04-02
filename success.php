@@ -7,6 +7,8 @@ use TheBalance\order\orderAppService;
 use TheBalance\order\orderDetailAppService;
 use TheBalance\order\orderDTO;
 use TheBalance\order\orderDetailDTO;
+use TheBalance\product\ProductAppService;
+use TheBalance\product\ProductDTO;
 
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
@@ -26,7 +28,8 @@ if ($sessionId) {
     // Obtener detalles del cliente y productos
     $customerEmail = $session->customer_details->email;
 
-    $lineItems = \Stripe\Checkout\Session::allLineItems($sessionId)->data;
+    //$lineItems = \Stripe\Checkout\Session::allLineItems($sessionId)->data;
+    $lineItems = Session::allLineItems($sessionId)->data;
 
     $totalPrice = $session->amount_total / 100; // Convertir de céntimos a euros
 
@@ -49,6 +52,10 @@ if ($sessionId) {
             // Crear un nuevo detalle de pedido
             $orderDetailDTO = new orderDetailDTO($orderId, $productName, $quantity, $productPrice, $size);
             orderDetailAppService::GetSingleton()->createOrderDetail($orderDetailDTO);
+
+            // Aquí puedes agregar la lógica para actualizar el stock del producto en tu base de datos
+            // Por ejemplo, si tienes un método en tu ProductAppService para actualizar el stock:
+            // TODO: Actualizar el stock del producto en la base de datos
         }
 
         // Limpiar el carrito de compras

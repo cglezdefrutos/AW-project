@@ -28,15 +28,6 @@ class productDetailsContent
         // Limpiar la sesión para que el Offcanvas no se muestre en la siguiente recarga
         unset($_SESSION['show_offcanvas']);
 
-        // Obtener las tallas del producto
-        $sizes = $this->productDTO->getSizes();
-        $sizeOptions = '';
-
-        // Generar las opciones del select para las tallas
-        foreach ($sizes as $size) {
-            $sizeOptions .= "<option value=\"{$size}\">{$size}</option>";
-        }
-
         $html .= <<<EOF
             <div class="row">
                 <div class="col-md-6 d-flex justify-content-center align-items-center">
