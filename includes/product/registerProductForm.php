@@ -45,6 +45,8 @@ class registerProductForm extends baseForm
      */
     protected function CreateFields($initialData)
     {
+        $html = '<form method="post" enctype="multipart/form-data">';
+
         // Definimos las tallas disponibles
         $sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
         
@@ -97,13 +99,13 @@ class registerProductForm extends baseForm
         $html .= <<<EOF
                 </div>
 
-                <!-- Campo URL de la imagen -->
+                <!--Imagen -->
                 <div class="mb-3">
-                    <label for="image_url" class="form-label">URL de la imagen:</label>
-                    <input type="url" name="image_url" id="image_url" class="form-control" placeholder="https://ejemplo.com/imagen.jpg" value="
+                    <label for="image" class="form-label">Imagen del producto:</label>
+                    <input type="file" name="image" id="image" class="form-control" accept="image/*" 
         EOF;
 
-        $html .= htmlspecialchars($initialData['image_url'] ?? '') . '" required>';
+        $html .= htmlspecialchars($initialData['image'] ?? '') . '" required>';
         
         $html .= <<<EOF
                 </div>
@@ -176,10 +178,21 @@ class registerProductForm extends baseForm
             $result[] = 'La categoría es obligatoria y no debe exceder los 50 caracteres.';
         }
 
-        $image_url = trim($data['image_url'] ?? '');
-        $image_url = filter_var($image_url, FILTER_SANITIZE_URL);
-        if (empty($image_url) || !filter_var($image_url, FILTER_VALIDATE_URL)) {
-            $result[] = 'La URL de la imagen no es válida.';
+            // Validación de la imagen
+        if (!isset($_FILES['image']) || $_FILES['image']['error'] === UPLOAD_ERR_NO_FILE) {
+            $result[] = 'La imagen del producto es obligatoria.';
+        } elseif ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+            $result[] = 'Error al subir la imagen: ' . $this->getUploadError($_FILES['image']['error']);
+        } else {
+            // Validar tipo de archivo
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mimeType = finfo_file($fileInfo, $_FILES['image']['tmp_name']);
+            finfo_close($fileInfo);
+            
+            if (!in_array($mimeType, $allowedTypes)) {
+                $result[] = 'El archivo debe ser una imagen (JPEG, PNG o GIF).';
+            }
         }
 
         // Procesamiento del stock por tallas
@@ -204,7 +217,7 @@ class registerProductForm extends baseForm
             $productData['description'] = $description;
             $productData['price'] = $price;
             $productData['category'] = $category;
-            $productData['image_url'] = $image_url;
+            $productData['image'] = $_FILES['image']; 
             $productData['stock'] = $sizeData;
             $productData['created_at'] = date('Y-m-d H:i:s');
             $productData['active'] = true;

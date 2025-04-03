@@ -5,6 +5,7 @@ namespace TheBalance\product;
 use TheBalance\application;
 use TheBalance\product\productHasOrdersException;
 use TheBalance\product\notProductOwnerException;
+use Ramsey\Uuid\Uuid;
 /**
  * Clase que contiene la lógica de la aplicación de productos
  */
@@ -223,6 +224,20 @@ class productAppService
      */
     public function registerProduct($productData)
     {
+
+        $guid = Uuid::uuid4()->toString();
+
+        //guardar la imagen en el sistema de archivos
+        $uploadDir = __DIR__ . '/../../img/';
+        $extension = pathinfo($productData['image'], PATHINFO_EXTENSION);
+        $filename = $guid . '.' . $extension;
+        $uploadPath = $uploadDir . $filename;
+
+        if (!move_uploaded_file($productData['image'], $uploadPath)) {
+            throw new \Exception('Error al subir la imagen del producto.');
+        }
+
+
         $IProductDAO = productFactory::CreateProduct();
 
          // Comprobamos si la categoria ya existe
@@ -241,7 +256,7 @@ class productAppService
             $productData['description'],
             $productData['price'],
             new productCategoryDTO($categoryId, $productData['category']),
-            $productData['image_url'],
+            $guid,
             $productData['created_at'],
             new productSizesDTO(null, $productData['stock']),
             true

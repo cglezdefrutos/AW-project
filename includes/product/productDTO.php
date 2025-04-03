@@ -41,7 +41,7 @@ class productDTO implements \JsonSerializable
     /**
      * @var string URL de la imagen del producto
      */
-    private $image_url;
+    private $image_guid;
 
     /**
      * @var string Fecha de creación del producto
@@ -62,7 +62,7 @@ class productDTO implements \JsonSerializable
     /**
      * Constructor
      */
-    public function __construct($id, $provider_email, $name, $description, $price, $category_DTO, $image_url, $created_at, $sizes_DTO, $active)
+    public function __construct($id, $provider_email, $name, $description, $price, $category_DTO, $image_guid, $created_at, $sizes_DTO, $active)
     {
         $this->id = $id;
         $this->provider_email = $provider_email;
@@ -70,7 +70,7 @@ class productDTO implements \JsonSerializable
         $this->description = $description;
         $this->price = $price;
         $this->category_DTO = $category_DTO;
-        $this->image_url = $image_url;
+        $this->image_guid = $image_guid;
         $this->created_at = $created_at;
         $this->sizes_DTO = $sizes_DTO;
         $this->active = $active;
@@ -114,9 +114,9 @@ class productDTO implements \JsonSerializable
         return $this->category_DTO->getName();
     }
 
-    public function getImageUrl()
+    public function getImageGuid()
     {
-        return $this->image_url;
+        return $this->image_guid;
     }
 
     public function getCreatedAt()

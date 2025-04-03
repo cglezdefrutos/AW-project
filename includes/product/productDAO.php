@@ -333,48 +333,50 @@ class productDAO extends baseDAO implements IProduct
             throw $e;
         }
     }
-    public function registerProduct($productDTO, $provider_id) {
+
+    public function registerProduct($productDTO, $provider_id) 
+    {
         $conn = null;
         $productStmt = null;
         
         try {
             $conn = application::getInstance()->getConnectionDb();
             $conn->begin_transaction();
-    
+
             // 1. Extraer y escapar valores
             $name = $this->realEscapeString($productDTO->getName());
             $description = $this->realEscapeString($productDTO->getDescription());
             $price = $this->realEscapeString($productDTO->getPrice());
             $category_id = $this->realEscapeString($productDTO->getCategoryId());
-            $image_url = $this->realEscapeString($productDTO->getImageUrl());
+            $image_guid = $this->realEscapeString($productDTO->getImageGuid()); 
             $createdAt = $this->realEscapeString($productDTO->getCreatedAt());
             $active = $productDTO->getActive() ? 1 : 0;
             $provider_id = $this->realEscapeString($provider_id);
-    
+
             // 2. Insertar producto
             $productStmt = $conn->prepare("INSERT INTO products 
-                                        (provider_id, name, description, price, category_id, image_url, created_at, active) 
+                                        (provider_id, name, description, price, category_id, image_guid, created_at, active) 
                                         VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             
             if (!$productStmt) {
                 throw new \Exception("Error al preparar la consulta: " . $conn->error);
             }
-    
+
             $productStmt->bind_param("issdsssi", 
                 $provider_id,    // i (integer)
                 $name,          // s (string)
                 $description,   // s (string)
                 $price,         // d (double)
-                $category_id,   // s (string - aunque es ID, se escapa como string)
-                $image_url,     // s (string)
+                $category_id,   // s (string)
+                $image_guid,    // s (string) - Ahora es el GUID
                 $createdAt,     // s (string)
-                $active         // i (integer)
+                $active        // i (integer)
             );
-    
+
             if (!$productStmt->execute()) {
                 throw new \Exception("Error al registrar producto: " . $productStmt->error);
             }
-    
+
             // 3. Obtener ID generado
             $product_id = $conn->insert_id;
             
@@ -385,10 +387,10 @@ class productDAO extends baseDAO implements IProduct
                 
                 $this->registerProductSizes($conn, $product_id, $sizesDTO);
             }
-    
+
             $conn->commit();
             return $product_id;
-    
+
         } catch (\Exception $e) {
             if ($conn !== null) $conn->rollback();
             error_log("Error en registerProduct: " . $e->getMessage());
