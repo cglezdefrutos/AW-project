@@ -13,6 +13,22 @@ $mainContent = "";
 // Configurar la clave secreta de Stripe
 Stripe::setApiKey(STRIPE_SECRET_KEY);
 
+// Recuperar los datos del pedido y la dirección desde la sesión
+$orderDetails = $_SESSION['order_details'] ?? null;
+$shippingAddress = $_SESSION['shipping_address'] ?? null;
+
+if (!$orderDetails || !$shippingAddress) {
+    throw new Exception('Error: No se encontraron los datos del pedido o la dirección de envío.');
+}
+
+// Extraer los datos del pedido
+$subtotal = $orderDetails['subtotal'];
+$shippingCost = $orderDetails['shipping_cost'];
+$total = $orderDetails['total'];
+
+// Crear los line_items para Stripe
+$lineItems = [];
+
 // Obtener los productos del carrito
 $cart = $_SESSION['cart'] ?? [];
 if (empty($cart)) {
@@ -29,8 +45,6 @@ if (empty($cart)) {
     require_once __DIR__ . '/includes/views/template/template.php';
     exit();
 }
-
-$lineItems = [];
 
 foreach ($cart as $cartKey => $quantity) 
 {
@@ -53,12 +67,28 @@ foreach ($cart as $cartKey => $quantity)
                         'size' => $size,
                     ],
                 ],
-                'unit_amount' => $product->getPrice() * 100,
+                'unit_amount' => $product->getPrice() * 100,  // Convertir a céntimos
             ],
             'quantity' => $quantity,
         ];
     }
 }
+
+// Añadir los gastos de envío como un elemento adicional en los line_items
+if ($shippingCost > 0) {
+    $lineItems[] = [
+        'price_data' => [
+            'currency' => 'eur',
+            'product_data' => [
+                'name' => 'Gastos de envío',
+                'description' => 'Coste de envío estándar',
+            ],
+            'unit_amount' => $shippingCost * 100,   // Convertir a céntimos
+        ],
+        'quantity' => 1,
+    ];
+}
+
 
 // Crear una sesión de pago
 $checkoutSession = Session::create([
@@ -67,6 +97,17 @@ $checkoutSession = Session::create([
     'mode' => 'payment',
     'success_url' => 'http://localhost/AW-project/success.php?session_id={CHECKOUT_SESSION_ID}',
     'cancel_url' => 'http://localhost/AW-project/success.php',
+    'metadata' => [
+        'shipping_address' => implode(', ', [
+            $shippingAddress['street'],
+            $shippingAddress['floor'],
+            $shippingAddress['postal_code'],
+            $shippingAddress['city'],
+        ]),
+        'subtotal' => $subtotal,
+        'shipping_cost' => $shippingCost,
+        'total' => $total,
+    ],
 ]);
 
 // Redirigir al usuario a la página de pago de Stripe

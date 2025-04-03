@@ -9,6 +9,7 @@ use TheBalance\order\orderDTO;
 use TheBalance\order\orderDetailDTO;
 use TheBalance\product\ProductAppService;
 use TheBalance\product\ProductDTO;
+use TheBalance\application;
 
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
@@ -26,26 +27,40 @@ if ($sessionId) {
     $session = Session::retrieve($sessionId);
 
     // Obtener detalles del cliente y productos
-    $customerEmail = $session->customer_details->email;
-
-    //$lineItems = \Stripe\Checkout\Session::allLineItems($sessionId)->data;
     $lineItems = Session::allLineItems($sessionId)->data;
 
-    $totalPrice = $session->amount_total / 100; // Convertir de céntimos a euros
+    // Recuperar los metadatos desde la sesión de Stripe
+    $metadata = $session->metadata;
+
+    // Extraer los datos del pedido desde los metadatos
+    $subtotal = $metadata->subtotal;
+    $shippingCost = $metadata->shipping_cost;
+    $total = $metadata->total;
+
+    // Reconstruir la dirección de envío desde los metadatos
+    $address = $metadata->shipping_address;
 
     // Tomamos la instancia del servicio de pedidos
     $orderAppService = orderAppService::GetSingleton();
 
+    // Tomar el id de usuario
+    $customer_id = application::GetSingleton()->getCurrentUserId();
+
     // Crear un nuevo pedido
-    $orderDTO = new orderDTO(null, $customerEmail, $totalPrice, "En preparación", date('Y-m-d H:i:s'));
+    $orderDTO = new orderDTO(null, $customer_id, $total, "En preparación", $address, date('Y-m-d H:i:s'));
     $orderId = $orderAppService->createOrder($orderDTO);
 
     if ($orderId) 
     {
         // Crear detalles del pedido
         foreach ($lineItems as $item) {
-            $productName = $item->description;
-            $productPrice = $item->amount / 100; // Convertir de céntimos a euros
+            // Si son los gastos de envío, no crear un detalle de pedido
+            if ($item->description === 'Gastos de envío') {
+                continue;
+            }
+
+            $productId = $item->price->product_data->metadata->product_id;
+            $productPrice = $item->price->unit_amount / 100; // Convertir de céntimos a euros
             $quantity = $item->quantity;
             $size = $item->price->product_data->metadata->size ?? 'N/A'; // Obtener la talla desde los metadatos
 
@@ -53,13 +68,22 @@ if ($sessionId) {
             $orderDetailDTO = new orderDetailDTO($orderId, $productName, $quantity, $productPrice, $size);
             orderDetailAppService::GetSingleton()->createOrderDetail($orderDetailDTO);
 
-            // Aquí puedes agregar la lógica para actualizar el stock del producto en tu base de datos
-            // Por ejemplo, si tienes un método en tu ProductAppService para actualizar el stock:
-            // TODO: Actualizar el stock del producto en la base de datos
+            // Actualizar el stock del producto en la base de datos
+/*             $productAppService = ProductAppService::GetSingleton();
+            $product = $productAppService->getProductByName($productName);
+            if ($product) {
+                $sizesDTO = $product->getSizesDTO();
+                $currentStock = $sizesDTO->getSizes()[$size] ?? 0;
+                $newStock = max(0, $currentStock - $quantity);
+                $sizesDTO->updateSizeStock($size, $newStock);
+                $productAppService->updateProductSizes($product->getId(), $sizesDTO);
+            } */
         }
 
-        // Limpiar el carrito de compras
+        // Limpiar el carrito de compras y la dirección de envío
         unset($_SESSION['cart']);
+        unset($_SESSION['order_details']);
+        unset($_SESSION['shipping_address']);
 
         $mainContent .= <<<EOS
             <div class="container success-page">
