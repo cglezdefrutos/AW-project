@@ -37,10 +37,13 @@ class cartTable extends baseTable
             // Calcular el subtotal
             $subtotal = $product->getPrice() * $quantity;
 
+            // Construir la URL de la imagen
+            $imageUrl = '/AW-project/img/' . $product->getImageGuid() . '.png';
+
             $html .= <<<EOF
                 <tr>
                     <td class="text-center align-middle">
-                        <img src="{$product->getImageUrl()}" alt="{$product->getName()}" class="img-fluid" style="max-width: 80px; max-height: 80px;">
+                        <img src="{$imageUrl}" alt="{$product->getName()}" class="img-fluid" style="max-width: 80px; max-height: 80px;">
                     </td>
                     
                     <td class="text-center align-middle">{$product->getName()}</td>

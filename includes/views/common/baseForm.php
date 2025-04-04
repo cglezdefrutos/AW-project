@@ -22,6 +22,13 @@ abstract class baseForm
     private $action;
 
     /**
+     * Tipo de codificación del formulario
+     * 
+     * @var string
+     */
+    private $enctype;
+
+    /**
      * Constructor
      * 
      * @param string $formId Identificador único para el formulario
@@ -30,11 +37,15 @@ abstract class baseForm
     public function __construct($formId, $options = array() )
     {
         $this->formId = $formId;
-        $defaultOptions = array( 'action' => null, );
+        $defaultOptions = array( 
+            'action' => null, 
+            'enctype' => 'application/x-www-form-urlencoded',
+        );
 
         $options = array_merge($defaultOptions, $options);
 
         $this->action = $options['action'];
+        $this->enctype = $options['enctype'];
 
         if(!$this->action)
         {
@@ -102,7 +113,7 @@ abstract class baseForm
         $html= $this->CreateErrors($errors);
 
         // Se genera el formulario
-        $html .= '<form method="POST" action="'.$this->action.'" id="'.$this->formId.'" class="needs-validation" novalidate>';
+        $html .= '<form method="POST" action="' . $this->action . '" enctype="' . $this->enctype . '" id="' . $this->formId . '" class="needs-validation" novalidate>';
         $html .= '<input type="hidden" name="action" value="'.$this->formId.'" />';
         
         // Llama al método abstracto para crear los campos, que será implementado por cada subclase 

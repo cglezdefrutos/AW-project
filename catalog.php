@@ -66,7 +66,7 @@ else
             $productData['description'],
             $productData['price'],
             $productData['category_DTO'],
-            $productData['image_url'],
+            $productData['image_guid'],
             $productData['created_at'],
             $productData['sizes_DTO'],
             $productData['active'],

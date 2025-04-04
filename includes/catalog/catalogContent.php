@@ -25,11 +25,18 @@ class catalogContent
         $html .= '<h2 class="text-center mb-4">Catálogo de Productos</h2>';
         $html .= '<div class="row">';
 
-        foreach ($this->products as $product) {
+        foreach ($this->products as $product) 
+        {
+            // Construir la URL de la imagen usando el GUID
+            $imageUrl = '/AW-project/img/' . $product->getImageGuid() . '.png';
+            /* if (!file_exists($imagePath)) {
+                $imagePath = 'img/default.png'; // Imagen predeterminada
+            } */
+
             $html .= <<<EOS
                 <div class="col-sm-6 col-md-4 mb-4">
                     <div class="card h-100">
-                        <img src="{$product->getImageUrl()}" class="card-img-top" alt="{$product->getName()}">
+                        <img src="{$imageUrl}" class="card-img-top" alt="{$product->getName()}">
                         
                         <div class="card-body text-center">
                             <!-- Nombre del producto -->
