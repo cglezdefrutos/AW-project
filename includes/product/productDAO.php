@@ -388,7 +388,7 @@ class productDAO extends baseDAO implements IProduct
         return $product_id;
     }
 
-    public function updateProduct(productDTO $productDTO) 
+    public function updateProduct(productDTO $productDTO): bool 
     {
         $conn = null;
         $stmt = null;
@@ -396,45 +396,44 @@ class productDAO extends baseDAO implements IProduct
         try {
             $conn = application::getInstance()->getConnectionDb();
             $conn->begin_transaction();
-
+    
             // 1. Preparar variables escapadas
             $name = $this->realEscapeString($productDTO->getName());
             $description = $this->realEscapeString($productDTO->getDescription());
             $price = (float)$this->realEscapeString($productDTO->getPrice());
             $category_id = (int)$this->realEscapeString($productDTO->getCategoryId());
-            $image_url = $this->realEscapeString($productDTO->getImageUrl());
+            $image_guid = $this->realEscapeString($productDTO->getImageGuid());
             $id = (int)$this->realEscapeString($productDTO->getId());
-
-            // 2. Actualizar producto principal
+    
+            // 2. Actualizar solo los datos principales del producto
             $stmt = $conn->prepare("UPDATE products SET 
                                 name = ?, 
                                 description = ?, 
                                 price = ?, 
                                 category_id = ?, 
-                                image_url = ? 
+                                image_guid = ? 
                                 WHERE id = ?");
             
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+    
             $stmt->bind_param("ssdisi", 
                 $name,
                 $description,
                 $price,
                 $category_id,
-                $image_url,
+                $image_guid,
                 $id
             );
-
+    
             if (!$stmt->execute()) {
                 throw new \Exception("Error al actualizar producto: " . $stmt->error);
             }
-
-            // 3. Actualizar tallas
-            if ($productDTO->getSizesDTO() !== null) {
-                $this->updateProductSizes($conn, $id, $productDTO->getSizesDTO());
-            }
-
+    
             $conn->commit();
             return true;
-
+    
         } catch (\Exception $e) {
             if ($conn !== null) $conn->rollback();
             error_log("Error en updateProduct: " . $e->getMessage());
@@ -721,55 +720,56 @@ class productDAO extends baseDAO implements IProduct
      * @param int $product_id ID del producto
      * @param productSizesDTO $sizesDTO DTO con las tallas y stock
      */
-    private function updateProductSizes($conn, $product_id, productSizesDTO $sizesDTO)
+    public function updateProductSizes($product_id, $sizesDTO)
     {
-        $deleteStmt = null;
-        $insertStmt = null;
-        
         try {
-            // 1. Eliminar tallas existentes para este producto
-            $deleteStmt = $conn->prepare("DELETE FROM product_sizes WHERE product_id = ?");
-            $escapedProductId = (int)$this->realEscapeString($product_id);
-            $deleteStmt->bind_param("i", $escapedProductId);
-            
-            if (!$deleteStmt->execute()) {
-                throw new \Exception("Error al eliminar tallas existentes: " . $deleteStmt->error);
-            }
-    
-            // 2. Insertar las nuevas tallas
+            // Tomamos la conexión a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Tomamos las tallas registradas del producto
             $sizes = $sizesDTO->getSizes();
-            $insertStmt = $conn->prepare("INSERT INTO product_sizes (product_id, size_id, stock) VALUES (?, ?, ?)");
             
             foreach ($sizes as $size => $stock) {
-                // Escapar y validar parámetros
+                // Escapar el nombre de la talla antes de buscar el ID
                 $escapedSize = $this->realEscapeString($size);
+
+                // Buscar el ID de la talla en la base de datos
                 $size_id = $this->getSizeId($escapedSize);
                 
                 if ($size_id === null) {
-                    throw new \Exception("Talla '$size' no encontrada en la base de datos");
+                    throw new \Exception("Talla {$size} no encontrada en la base de datos");
                 }
                 
-                $escapedSizeId = (int)$this->realEscapeString($size_id);
-                $escapedStockValue = (int)$this->realEscapeString($stock);
-                $escapedCurrentProductId = (int)$this->realEscapeString($product_id);
-    
-                $insertStmt->bind_param("iii", 
-                    $escapedCurrentProductId,  // product_id (integer)
-                    $escapedSizeId,          // size_id (integer)
-                    $escapedStockValue       // stock (integer)
+                // Escapar y validar el stock
+                $escapedStock = $this->realEscapeString($stock);
+                $escapedProductId = $this->realEscapeString($product_id);
+                $escapedSizeId = $this->realEscapeString($size_id);
+
+                // Preparamos la consulta SQL para actualizar las tallas (UPDATE)
+                $stmt = $conn->prepare("UPDATE product_sizes SET stock = ? WHERE product_id = ? AND size_id = ?");
+                if (!$stmt) {
+                    throw new \Exception("Error al preparar la consulta de tallas: " . $conn->error);
+                }
+                
+                $stmt->bind_param("iii", 
+                    $escapedStock,       // stock (integer)
+                    $escapedProductId,  // product_id (integer)
+                    $escapedSizeId,     // size_id (integer)
                 );
                 
-                if (!$insertStmt->execute()) {
-                    throw new \Exception("Error al insertar talla $size: " . $insertStmt->error);
+                if (!$stmt->execute()) {
+                    throw new \Exception("Error al actualizar la talla $size: " . $sizeStmt->error);
                 }
+
+                // Cerrar statement
+                $stmt->close();
             }
         } catch (\Exception $e) {
             error_log("Error en updateProductSizes: " . $e->getMessage());
             throw $e;
-        } finally {
-            if ($deleteStmt !== null) $deleteStmt->close();
-            if ($insertStmt !== null) $insertStmt->close();
         }
+        
+        return true;
     }
 
 }

@@ -181,11 +181,11 @@ class productDTO implements \JsonSerializable
         $this->category_DTO->setName($category_name);
     }
 
-    public function setImageUrl($image_url)
+    public function setImageGuid($image_guid)
     {
-        $this->image_url = $image_url;
+        $this->image_guid = $image_guid;
     }
-
+   
     public function setCreatedAt($created_at)
     {
         $this->created_at = $created_at;

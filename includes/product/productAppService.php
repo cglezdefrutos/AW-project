@@ -199,25 +199,31 @@ class productAppService
      * 
      * @return bool Resultado de la operación
      */
-    public function updateProduct($productData)
+    public function updateProduct($productDTO)
     {
         $IProductDAO = productFactory::CreateProduct();
-
-        
+    
         // Obtener el ID de la categoría a partir del nombre de la categoría
-        $categoryId = $IProductDAO->getCategoryId(($productData->getCategoryName()));
-
-        if ($categoryId === -1)
-       {
-           // Si no existe, lo registramos
-           $categoryId = $IProductDAO->registerCategory($productData->getCategoryName());
-       }
-
+        $categoryId = $IProductDAO->getCategoryId($productDTO->getCategoryName());
+    
+        if ($categoryId === -1) {
+            // Si no existe, lo registramos
+            $categoryId = $IProductDAO->registerCategory($productDTO->getCategoryName());
+        }
+    
         // Actualizamos el ID de la categoría en el DTO
-        $productData->setCategoryId($categoryId);
-
-        return $IProductDAO->updateProduct($productData);
-    }  
+        $productDTO->setCategoryId($categoryId);
+    
+        // Actualizar el producto
+        $updateResult = $IProductDAO->updateProduct($productDTO);
+    
+        // Actualizar las tallas del producto
+        if ($updateResult) {
+            $IProductDAO->updateProductSizes($productDTO->getId(), $productDTO->getSizesDTO());
+        }
+    
+        return $updateResult;
+    }
     /**
      * Registra un producto
      * 
