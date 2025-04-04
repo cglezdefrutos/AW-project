@@ -240,6 +240,90 @@ class productDAO extends baseDAO implements IProduct
         return $categories;
     }
 
+    public function getSizeId($size)
+    {
+        $sizeId = null;
+
+        try {
+            // Tomamos la conexión a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Preparamos la consulta SQL
+            $query = "SELECT id FROM sizes WHERE name = ?";
+            $stmt = $conn->prepare($query);
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Enlazamos el parámetro
+            $stmt->bind_param('s', $size);
+
+            // Ejecutamos la consulta
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            // Asignamos el resultado a una variable
+            $stmt->bind_result($sizeId);
+
+            // Si hay resultados, los guardamos en el objeto productDTO
+            if (!$stmt->fetch()) {
+                return null;
+            }
+
+            // Cerramos la consulta
+            $stmt->close();
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+        }
+
+        return $sizeId;
+    }
+
+
+    /**
+     * Actualiza el stock de un producto
+     * 
+     * @param int $productId ID del producto 
+     * @param int $quantity Cantidad a actualizar
+     * @param string $size Talla del producto
+     * 
+     * @return bool Resultado de la operación
+     */
+    public function updateProductStock($productId, $quantity, $sizeId)
+    {
+        $result = false;
+
+        try {
+            // Tomamos la conexión a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Preparamos la consulta SQL
+            $query = "UPDATE product_sizes SET stock = stock - ? WHERE product_id = ? AND size_id = ?";
+            $stmt = $conn->prepare($query);
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Enlazamos los parámetros
+            $stmt->bind_param('iis', $quantity, $productId, $sizeId);
+
+            // Ejecutamos la consulta
+            if ($stmt->execute()) {
+                $result = true;
+            } else {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            // Cerramos la consulta
+            $stmt->close();
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+        }
+
+        return $result;
+    }
+
     /**
      * Construye la consulta SQL para buscar productos en función de los filtros
      * 

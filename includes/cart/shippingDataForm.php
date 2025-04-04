@@ -29,31 +29,37 @@ class shippingDataForm extends baseForm
         $floor = htmlspecialchars($initialData['floor'] ?? '');
 
         // Obtener los valores de subtotal, shipping_cost y total del formulario enviado
-        $subtotal = htmlspecialchars($initialData['subtotal'] ?? '0');
-        $shippingCost = htmlspecialchars($initialData['shipping_cost'] ?? '0');
-        $total = htmlspecialchars($initialData['total'] ?? '0');
+        $subtotal = htmlspecialchars($_POST['subtotal'] ?? '0');
+        $shippingCost = htmlspecialchars($_POST['shipping_cost'] ?? '0');
+        $total = htmlspecialchars($_POST['total'] ?? '0');
         
 
         $html = <<<EOF
-            <div class="mb-3">
-                <label for="city" class="form-label">Ciudad:</label>
-                <input type="text" name="city" id="city" class="form-control" value="{$city}" required>
-            </div>
-            <div class="mb-3">
-                <label for="postal_code" class="form-label">Código postal:</label>
-                <input type="text" name="postal_code" id="postal_code" class="form-control" value="{$postalCode}" required>
-            </div>
-            <div class="mb-3">
-                <label for="street" class="form-label">Calle:</label>
-                <input type="text" name="street" id="street" class="form-control" value="{$street}" required>
-            </div>
-            <div class="mb-3">
-                <label for="floor" class="form-label">Piso (opcional):</label>
-                <input type="text" name="floor" id="floor" class="form-control" value="{$floor}">
-            </div>
-            <input type="hidden" name="subtotal" value="{$subtotal}">
-            <input type="hidden" name="shipping_cost" value="{$shippingCost}">
-            <input type="hidden" name="total" value="{$total}">
+            <fieldset class="border p-4 rounded">
+                <legend class="w-auto">Datos de envío</legend>
+                <div class="mb-3">
+                    <label for="city" class="form-label">Ciudad:</label>
+                    <input type="text" name="city" id="city" class="form-control" value="{$city}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="postal_code" class="form-label">Código postal:</label>
+                    <input type="text" name="postal_code" id="postal_code" class="form-control" value="{$postalCode}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="street" class="form-label">Calle:</label>
+                    <input type="text" name="street" id="street" class="form-control" value="{$street}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="floor" class="form-label">Piso (opcional):</label>
+                    <input type="text" name="floor" id="floor" class="form-control" value="{$floor}">
+                </div>
+                <input type="hidden" name="subtotal" value="{$subtotal}">
+                <input type="hidden" name="shipping_cost" value="{$shippingCost}">
+                <input type="hidden" name="total" value="{$total}">
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Continuar al pago</button>
+                </div>
+            </fieldset>
         EOF;
 
         return $html;

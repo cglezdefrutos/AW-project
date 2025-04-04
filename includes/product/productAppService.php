@@ -96,6 +96,28 @@ class productAppService
 
         return $IProduct->getCategories();
     }
+
+    /**
+     * Actualiza el stock de un producto
+     * 
+     * @param int $id ID del producto 
+     * @param int $quantity Cantidad a actualizar
+     * @param string $size Talla del producto
+     * 
+     * @return bool Resultado de la operación
+     */
+    public function updateProductStock($productId, $quantity, $size)
+    {
+        $IProduct = productFactory::CreateProduct();
+
+        // Tomamos el id de la talla
+        $sizeId = $IProduct->getSizeId($size);
+
+        // Actualizamos el stock del producto
+        $result = $IProduct->updateProductStock($productId, $quantity, $sizeId);
+
+        return $result;
+    }
 }
     
 

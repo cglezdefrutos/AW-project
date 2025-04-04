@@ -58,16 +58,11 @@ foreach ($cart as $cartKey => $quantity)
         $lineItems[] = [
             'price_data' => [
                 'currency' => 'eur',
+                'unit_amount' => $product->getPrice() * 100,
                 'product_data' => [
                     'name' => $product->getName(),
                     'description' => $product->getDescription(),
-                    'metadata' => [
-                        'product_id' => $productId,
-                        'category' => $product->getCategoryName(),
-                        'size' => $size,
-                    ],
                 ],
-                'unit_amount' => $product->getPrice() * 100,  // Convertir a céntimos
             ],
             'quantity' => $quantity,
         ];
@@ -88,7 +83,6 @@ if ($shippingCost > 0) {
         'quantity' => 1,
     ];
 }
-
 
 // Crear una sesión de pago
 $checkoutSession = Session::create([

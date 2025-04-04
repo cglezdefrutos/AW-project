@@ -100,8 +100,7 @@ class orderDetailDAO extends baseDAO implements IOrderDetail
      * Crea un nuevo detalle de pedido
      * 
      * @param orderDetailDTO $orderDetailDTO Objeto que contiene los datos del detalle de pedido a crear
-     * @return bool True si se creó correctamente, False si falló
-     * @throws \Exception Si ocurre un error en la base de datos
+     * @return int ID del nuevo detalle de pedido creado
      */
     public function createOrderDetail($orderDetailDTO)
     {
@@ -131,14 +130,17 @@ class orderDetailDAO extends baseDAO implements IOrderDetail
                 throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
             }
 
+            // Obtener el ID del nuevo detalle de pedido creado
+            $orderDetailId = $stmt->insert_id;
+
             $stmt->close();
-            
-            return true;
 
         } catch (\Exception $e) {
             error_log("Error al crear detalle de pedido: " . $e->getMessage());
             throw $e;
         }
+
+        return $orderDetailId;
     }
 
 }
