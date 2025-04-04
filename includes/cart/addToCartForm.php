@@ -74,16 +74,6 @@ class addToCartForm extends baseForm
         // Si no es cliente, mostrar una alerta de que no se puede añadir al carrito
         if (!application::getInstance()->isCurrentUserClient()) 
         {
-            // Mostrar un mensaje de error si no se pudo crear el pedido y un botón para volver al carrito
-            /* $mainContent .= <<<EOS
-                <div class="alert alert-danger d-flex flex-column flex-md-row align-items-center justify-content-between" role="alert">
-                    <div>
-                        <strong>¡Atención!</strong> No puedes añadir productos al carrito porque no has iniciado sesión como cliente.
-                    </div>
-                    <a href="login.php" class="btn btn-primary mt-3 mt-md-0">Iniciar sesión</a>
-                </div>
-            EOS; */
-
             $result[] = 'No puedes añadir productos al carrito porque no has iniciado sesión como cliente.';
         } 
 

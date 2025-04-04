@@ -16,41 +16,44 @@ class manageProductsTable extends baseTable
             $activeClass = $product->getActive() ? 'text-success' : 'text-danger';
 
             // Botón Editar (siempre visible)
-            $editButton = <<<HTML
+            $editButton = <<<EOF
                 <a href="updateProducts.php?productId={$product->getId()}" 
                 class="btn btn-primary btn-sm mr-2">
                 Editar
                 </a>
-             HTML;
+            EOF;
 
             // Botón Eliminar (solo para productos activos)
             $deleteButton = '';
             if ($product->getActive()) {
-                $deleteButton = <<<HTML
+                $deleteButton = <<<EOF
                     <a href="?action=delete&productId={$product->getId()}" 
                        class="btn btn-primary btn-sm mr-2" 
                        onclick="return confirm('¿Estás seguro de que deseas desactivar este producto?');">
                        Eliminar
                     </a>
-                HTML;
+                EOF;
             }
 
             // Botón Activar (solo para productos inactivos)
             $activateButton = '';
             if (!$product->getActive()) {
-                $activateButton = <<<HTML
+                $activateButton = <<<EOF
                     <a href="?action=activate&productId={$product->getId()}" 
                        class="btn btn-primary btn-sm" 
                        onclick="return confirm('¿Estás seguro de que deseas activar este producto?');">
                        Activar
                     </a>
-                HTML;
+                EOF;
             }
+
+            // Construir URL de la imagen
+            $imageUrl = '/AW-project/img/' . $product->getImageGuid() . '.png';
 
             $html .= <<<EOF
                 <tr>
                     <td class="text-center align-middle">
-                        <img src="{$product->getImageUrl()}" alt="{$product->getName()}" class="img-fluid" style="max-width: 80px; max-height: 80px;">
+                        <img src="{$imageUrl}" alt="{$product->getName()}" class="img-fluid" style="max-width: 80px; max-height: 80px;">
                     </td>
                     <td>{$product->getName()}</td>
                     <td>{$product->getDescription()}</td>

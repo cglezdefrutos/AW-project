@@ -57,7 +57,7 @@ class productDAO extends baseDAO implements IProduct
                 $Description, 
                 $Price, 
                 $CategoryId, 
-                $ImageUrl, 
+                $ImageGuid, 
                 $CreatedAt, 
                 $Active,
                 $ProviderEmail,
@@ -68,7 +68,7 @@ class productDAO extends baseDAO implements IProduct
             while ($stmt->fetch())
             {
                 $ProductCategoryDTO = new productCategoryDTO($CategoryId, $CategoryName);
-                $product = new productDTO($Id, $ProviderId, $Name, $Description, $Price, $ProductCategoryDTO, $ImageUrl, $CreatedAt, null, $Active);
+                $product = new productDTO($Id, $ProviderId, $Name, $Description, $Price, $ProductCategoryDTO, $ImageGuid, $CreatedAt, null, $Active);
                 $products[] = $product;
             }
 

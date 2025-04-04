@@ -28,10 +28,13 @@ class productDetailsContent
         // Limpiar la sesión para que el Offcanvas no se muestre en la siguiente recarga
         unset($_SESSION['show_offcanvas']);
 
+        // Construir la URL de la imagen usando el GUID
+        $imageUrl = '/AW-project/img/' . $this->productDTO->getImageGuid() . '.png';
+
         $html .= <<<EOF
             <div class="row">
                 <div class="col-md-6 d-flex justify-content-center align-items-center">
-                    <img src="{$this->productDTO->getImageUrl()}" class="img-fluid rounded" alt="{$this->productDTO->getName()}">
+                    <img src="{$imageUrl}" class="img-fluid rounded" alt="{$this->productDTO->getName()}">
                 </div>
 
                 <div class="col-md-6 mt-5 px-5">

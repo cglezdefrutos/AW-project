@@ -41,14 +41,10 @@ else {
                         $productAppService->activateProduct($productId);
                         $successMessage = 'Producto activado correctamente.';
                         break;
-                        
-
-                        
                     case 'delete':
                         $productAppService->deleteProduct($productId);
                         $successMessage = 'Producto eliminado correctamente.';
                         break;
-                        
                     default:
                         $errorMessage = 'Acción no válida.';
                         break;
