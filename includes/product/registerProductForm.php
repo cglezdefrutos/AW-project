@@ -31,7 +31,7 @@ class registerProductForm extends baseForm
      */
     public function __construct($provider_id, $provider_email)
     {
-        parent::__construct('registerProductForm');
+        parent::__construct('registerProductForm', array('enctype' => 'multipart/form-data'));
         $this->provider_id = $provider_id;
         $this->provider_email = $provider_email;
     }
@@ -100,7 +100,7 @@ class registerProductForm extends baseForm
                 </div>
 
                 <!--Imagen -->
-                < class="mb-3">
+                <div class="mb-3">
                     <label for="image" class="form-label">Imagen del producto:</label>
                     <input type="file" name="image" id="image" class="form-control" accept="image/*" required>
                     <small class="form-text text-muted">Formatos permitidos: JPEG, PNG, GIF.</small>
@@ -183,7 +183,7 @@ class registerProductForm extends baseForm
             $result[] = 'Error al subir la imagen: ' . $this->getUploadError($_FILES['image']['error']);
         } else {
             // Validar tipo de archivo
-            $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webp'];
             $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
             $mimeType = finfo_file($fileInfo, $image['tmp_name']);
             finfo_close($fileInfo);
@@ -226,9 +226,9 @@ class registerProductForm extends baseForm
             $productAppService = productAppService::GetSingleton();
 
             // Intentamos registrar el nuevo producto
-            $registrationResult = $productAppService->registerProduct($productData);
+            $productId = $productAppService->registerProduct($productData);
             
-            if (!$registrationResult) {
+            if (!$productId) {
                 $result[] = 'Error al registrar el producto. Por favor, verifica los datos.';
             } else {
                 $result = 'registerProducts.php?registered=true';

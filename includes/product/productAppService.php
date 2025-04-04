@@ -2,6 +2,8 @@
 
 namespace TheBalance\product;
 
+require_once __DIR__ . '/../../vendor/autoload.php';
+
 use TheBalance\application;
 use TheBalance\product\productHasOrdersException;
 use TheBalance\product\notProductOwnerException;
@@ -275,13 +277,13 @@ class productAppService
     {
         $guid = Uuid::uuid4()->toString();
 
-        //guardar la imagen en el sistema de archivos
-        $uploadDir = __DIR__ . '/../../img/';
-        $extension = pathinfo($image, PATHINFO_EXTENSION);
+        // Guardar la imagen en el sistema de archivos
+        $uploadDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR;
+        $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
         $filename = $guid . '.' . $extension;
         $uploadPath = $uploadDir . $filename;
 
-        if (!move_uploaded_file($image, $uploadPath)) {
+        if (!move_uploaded_file($image['tmp_name'], $uploadPath)) {
             throw new \Exception('Error al subir la imagen del producto.');
         }
 

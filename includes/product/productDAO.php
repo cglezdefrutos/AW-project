@@ -529,69 +529,92 @@ class productDAO extends baseDAO implements IProduct
         return $categoryId;
     }
 
-    private function registerProductSizes($conn, $product_id, productSizesDTO $sizesDTO)
-    {
-        $sizeStmt = null;
-        
+    public function registerProductSizes($product_id, $sizesDTO)
+    {        
         try {
+            // Tomamos la conexión a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Tomamos las tallas registradas del producto
             $sizes = $sizesDTO->getSizes();
             
-            $sizeStmt = $conn->prepare("INSERT INTO product_sizes (product_id, size_id, stock) VALUES (?, ?, ?)");
-            
-            if (!$sizeStmt) {
-                throw new \Exception("Error al preparar la consulta de tallas: " . $conn->error);
-            }
-            
             foreach ($sizes as $size => $stock) {
-                // Escapar el nombre de la talla antes de buscarlo
+                // Escapar el nombre de la talla antes de buscar el ID
                 $escapedSize = $this->realEscapeString($size);
-                $size_id = $this->getSizeIdByName($escapedSize);
+
+                // Buscar el ID de la talla en la base de datos
+                $size_id = $this->getSizeId($escapedSize);
                 
                 if ($size_id === null) {
-                    throw new \Exception("Talla '$size' no encontrada en la base de datos");
+                    throw new \Exception("Talla {$size} no encontrada en la base de datos");
                 }
                 
                 // Escapar y validar el stock
-                $escapedStock = (int)$this->realEscapeString($stock);
-                $escapedProductId = (int)$this->realEscapeString($product_id);
-                $escapedSizeId = (int)$this->realEscapeString($size_id);
+                $escapedStock = $this->realEscapeString($stock);
+                $escapedProductId = $this->realEscapeString($product_id);
+                $escapedSizeId = $this->realEscapeString($size_id);
+
+                // Preparamos la consulta SQL para insertar las tallas
+                $stmt = $conn->prepare("INSERT INTO product_sizes (product_id, size_id, stock) VALUES (?, ?, ?)");
+                if (!$stmt) {
+                    throw new \Exception("Error al preparar la consulta de tallas: " . $conn->error);
+                }
                 
-                $sizeStmt->bind_param("iii", 
+                $stmt->bind_param("iii", 
                     $escapedProductId,  // product_id (integer)
                     $escapedSizeId,     // size_id (integer)
                     $escapedStock       // stock (integer)
                 );
                 
-                if (!$sizeStmt->execute()) {
+                if (!$stmt->execute()) {
                     throw new \Exception("Error al insertar talla $size: " . $sizeStmt->error);
                 }
+
+                // Cerrar statement
+                $stmt->close();
             }
         } catch (\Exception $e) {
             error_log("Error en registerProductSizes: " . $e->getMessage());
             throw $e;
-        } finally {
-            if ($sizeStmt !== null) {
-                $sizeStmt->close();
-            }
         }
+
+        return true;
     }
 
-    private function getSizeIdByName($sizeName)
+    public function getSizeId($sizeName)
     {
-        $conn = application::getInstance()->getConnectionDb();
-        $stmt = $conn->prepare("SELECT id FROM sizes WHERE name = ?");
-        
-        if (!$stmt) {
-            throw new \Exception("Error al preparar consulta de tallas: " . $conn->error);
+        $sizeId = null;
+
+        try {
+            // Tomamos la conexión a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Preparamos la consulta SQL para buscar el ID de la talla
+            $stmt = $conn->prepare("SELECT id FROM sizes WHERE name = ?");
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Escapar y enlazar el parámetro
+            $escapedSizeName = $this->realEscapeString($sizeName);
+            $stmt->bind_param("s", $escapedSizeName);
+
+            // Ejecutamos la consulta
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            // Asignamos el resultado a una variable
+            $stmt->bind_result($sizeId);
+            $stmt->fetch();
+
+            $stmt->close();
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
         }
         
-        $stmt->bind_param("s", $sizeName);
-        $stmt->execute();
-        $stmt->bind_result($size_id);
-        $stmt->fetch();
-        $stmt->close();
-        
-        return $size_id;
+        return $sizeId;
     }
 
      /**
@@ -720,7 +743,7 @@ class productDAO extends baseDAO implements IProduct
             foreach ($sizes as $size => $stock) {
                 // Escapar y validar parámetros
                 $escapedSize = $this->realEscapeString($size);
-                $size_id = $this->getSizeIdByName($escapedSize);
+                $size_id = $this->getSizeId($escapedSize);
                 
                 if ($size_id === null) {
                     throw new \Exception("Talla '$size' no encontrada en la base de datos");
