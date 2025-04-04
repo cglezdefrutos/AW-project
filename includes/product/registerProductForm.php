@@ -100,14 +100,10 @@ class registerProductForm extends baseForm
                 </div>
 
                 <!--Imagen -->
-                <div class="mb-3">
+                < class="mb-3">
                     <label for="image" class="form-label">Imagen del producto:</label>
-                    <input type="file" name="image" id="image" class="form-control" accept="image/*" 
-        EOF;
-
-        $html .= htmlspecialchars($initialData['image'] ?? '') . '" required>';
-        
-        $html .= <<<EOF
+                    <input type="file" name="image" id="image" class="form-control" accept="image/*" required>
+                    <small class="form-text text-muted">Formatos permitidos: JPEG, PNG, GIF.</small>
                 </div>
 
                 <!-- Sección de Stock por tallas -->
@@ -178,16 +174,18 @@ class registerProductForm extends baseForm
             $result[] = 'La categoría es obligatoria y no debe exceder los 50 caracteres.';
         }
 
-            // Validación de la imagen
-        if (!isset($_FILES['image']) || $_FILES['image']['error'] === UPLOAD_ERR_NO_FILE) {
+        // Validación del campo de imagen
+        $image = $_FILES['image'] ?? null;
+
+        if (!isset($image) || $image['error'] === UPLOAD_ERR_NO_FILE) {
             $result[] = 'La imagen del producto es obligatoria.';
-        } elseif ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+        } elseif ($image['error'] !== UPLOAD_ERR_OK) {
             $result[] = 'Error al subir la imagen: ' . $this->getUploadError($_FILES['image']['error']);
         } else {
             // Validar tipo de archivo
             $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
             $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mimeType = finfo_file($fileInfo, $_FILES['image']['tmp_name']);
+            $mimeType = finfo_file($fileInfo, $image['tmp_name']);
             finfo_close($fileInfo);
             
             if (!in_array($mimeType, $allowedTypes)) {
@@ -208,19 +206,21 @@ class registerProductForm extends baseForm
             $sizeData[$size] = $quantity;
         }
 
+        // Si no hay errores, pasar los datos al servicio
         if (count($result) === 0) {
             // Creamos un array con los datos del nuevo producto
-            $productData = array();
-            $productData['provider_id'] = $this->provider_id;
-            $productData['provider_email'] = $this->provider_email;
-            $productData['name'] = $name;
-            $productData['description'] = $description;
-            $productData['price'] = $price;
-            $productData['category'] = $category;
-            $productData['image'] = $_FILES['image']; 
-            $productData['stock'] = $sizeData;
-            $productData['created_at'] = date('Y-m-d H:i:s');
-            $productData['active'] = true;
+            $productData = [
+                'provider_id' => $this->provider_id,
+                'provider_email' => $this->provider_email,
+                'name' => $name,
+                'description' => $description,
+                'price' => $price,
+                'category' => $category,
+                'image' => $image, // Pasar la imagen al servicio
+                'stock' => $sizeData,
+                'created_at' => date('Y-m-d H:i:s'),
+                'active' => true,
+            ];
 
             // Obtenemos la instancia del servicio de productos
             $productAppService = productAppService::GetSingleton();
@@ -228,7 +228,6 @@ class registerProductForm extends baseForm
             // Intentamos registrar el nuevo producto
             $registrationResult = $productAppService->registerProduct($productData);
             
-
             if (!$registrationResult) {
                 $result[] = 'Error al registrar el producto. Por favor, verifica los datos.';
             } else {

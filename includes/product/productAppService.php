@@ -6,6 +6,7 @@ use TheBalance\application;
 use TheBalance\product\productHasOrdersException;
 use TheBalance\product\notProductOwnerException;
 use Ramsey\Uuid\Uuid;
+
 /**
  * Clase que contiene la lógica de la aplicación de productos
  */
@@ -225,25 +226,15 @@ class productAppService
     public function registerProduct($productData)
     {
 
-        $guid = Uuid::uuid4()->toString();
-
-        //guardar la imagen en el sistema de archivos
-        $uploadDir = __DIR__ . '/../../img/';
-        $extension = pathinfo($productData['image'], PATHINFO_EXTENSION);
-        $filename = $guid . '.' . $extension;
-        $uploadPath = $uploadDir . $filename;
-
-        if (!move_uploaded_file($productData['image'], $uploadPath)) {
-            throw new \Exception('Error al subir la imagen del producto.');
-        }
-
+        // Validar y guardar la imagen
+        $filename = $this->saveImage($productData['image']);
 
         $IProductDAO = productFactory::CreateProduct();
 
-         // Comprobamos si la categoria ya existe
-         $categoryId = $IProductDAO->getCategoryId($productData['category']);
+        // Comprobamos si la categoria ya existe
+        $categoryId = $IProductDAO->getCategoryId($productData['category']);
 
-         if ($categoryId === -1)
+        if ($categoryId === -1)
         {
             // Si no existe, lo registramos
             $categoryId = $IProductDAO->registerCategory($productData['category']);
@@ -256,17 +247,46 @@ class productAppService
             $productData['description'],
             $productData['price'],
             new productCategoryDTO($categoryId, $productData['category']),
-            $guid,
+            $filename,
             $productData['created_at'],
             new productSizesDTO(null, $productData['stock']),
             true
         );
 
+        // Registramos el producto
+        $productId = $IProductDAO->registerProduct($productDTO, $productData['provider_id']);
         
-        return $IProductDAO->registerProduct($productDTO, $productData['provider_id']);
-        
+        // Guardamos las tallas del producto
+        $sizesDTO = $productDTO->getSizesDTO();
+        $sizesDTO->setProductId($productId);
+        $IProductDAO->registerProductSizes($productId, $sizesDTO);
+
+        return $productId;
     }
 
+    /**
+     * Guarda una imagen en el sistema de archivos
+     * 
+     * @param string $image Ruta de la imagen
+     * 
+     * @return string Nombre del archivo guardado
+     */
+    public function saveImage($image)
+    {
+        $guid = Uuid::uuid4()->toString();
+
+        //guardar la imagen en el sistema de archivos
+        $uploadDir = __DIR__ . '/../../img/';
+        $extension = pathinfo($image, PATHINFO_EXTENSION);
+        $filename = $guid . '.' . $extension;
+        $uploadPath = $uploadDir . $filename;
+
+        if (!move_uploaded_file($image, $uploadPath)) {
+            throw new \Exception('Error al subir la imagen del producto.');
+        }
+
+        return $filename;
+    }
 
     /**
      * Busca un producto por su ID

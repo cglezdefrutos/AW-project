@@ -336,14 +336,19 @@ class productDAO extends baseDAO implements IProduct
 
     public function registerProduct($productDTO, $provider_id) 
     {
-        $conn = null;
-        $productStmt = null;
+        $product_id = null;
         
         try {
+            // Tomamos la conexión a la base de datos
             $conn = application::getInstance()->getConnectionDb();
-            $conn->begin_transaction();
 
-            // 1. Extraer y escapar valores
+            // Preparamos la consulta SQL para insertar el producto
+            $stmt = $conn->prepare("INSERT INTO products (provider_id, name, description, price, category_id, image_guid, created_at, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Extraer y escapar valores
             $name = $this->realEscapeString($productDTO->getName());
             $description = $this->realEscapeString($productDTO->getDescription());
             $price = $this->realEscapeString($productDTO->getPrice());
@@ -353,51 +358,34 @@ class productDAO extends baseDAO implements IProduct
             $active = $productDTO->getActive() ? 1 : 0;
             $provider_id = $this->realEscapeString($provider_id);
 
-            // 2. Insertar producto
-            $productStmt = $conn->prepare("INSERT INTO products 
-                                        (provider_id, name, description, price, category_id, image_guid, created_at, active) 
-                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            
-            if (!$productStmt) {
-                throw new \Exception("Error al preparar la consulta: " . $conn->error);
-            }
-
-            $productStmt->bind_param("issdsssi", 
+            // Enlazamos los parámetros
+            $stmt->bind_param("issdsssi", 
                 $provider_id,    // i (integer)
                 $name,          // s (string)
                 $description,   // s (string)
                 $price,         // d (double)
                 $category_id,   // s (string)
-                $image_guid,    // s (string) - Ahora es el GUID
+                $image_guid,    // s (string)
                 $createdAt,     // s (string)
                 $active        // i (integer)
             );
 
-            if (!$productStmt->execute()) {
+            // Ejecutamos la consulta
+            if (!$stmt->execute()) {
                 throw new \Exception("Error al registrar producto: " . $productStmt->error);
             }
 
-            // 3. Obtener ID generado
-            $product_id = $conn->insert_id;
-            
-            // 4. Registrar tallas
-            if ($productDTO->getSizesDTO() !== null) {
-                $sizesDTO = $productDTO->getSizesDTO();
-                $sizesDTO->setProductId($product_id);
-                
-                $this->registerProductSizes($conn, $product_id, $sizesDTO);
-            }
+            // Obtener ID del producto insertado
+            $product_id = $stmt->insert_id;
 
-            $conn->commit();
-            return $product_id;
-
+            // Cerrar statement
+            $stmt->close();
         } catch (\Exception $e) {
-            if ($conn !== null) $conn->rollback();
             error_log("Error en registerProduct: " . $e->getMessage());
             throw $e;
-        } finally {
-            if ($productStmt !== null) $productStmt->close();
-        }
+        } 
+
+        return $product_id;
     }
 
     public function updateProduct(productDTO $productDTO) 
