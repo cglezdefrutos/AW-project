@@ -5,9 +5,13 @@ require_once __DIR__ . '/includes/config.php';
 use TheBalance\cart\cartTable;
 use TheBalance\cart\orderSummary;
 use TheBalance\product\productAppService;
+use TheBalance\utils\utilsFactory;
 
 $titlePage = "Carrito";
 $mainContent = "";
+
+// Mensaje de alerta
+$alert = "";
 
 // Procesar acciones del carrito
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -29,28 +33,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Validar si hay suficiente stock disponible para la cantidad solicitada
             if ($quantity > $stock) {
-                $_SESSION['error_message'] = "No hay suficiente stock para la talla seleccionada. Stock disponible: {$stock}.";
+                $alert = "danger|No hay suficiente stock disponible para {$productDTO->getName()} en talla {$size}. Stock disponible: {$stock}.";
+            } elseif ($quantity <= 0) {
+                $alert = "danger|La cantidad debe ser al menos 1.";
             } else {
                 $_SESSION['cart'][$cartKey] = $quantity;
             }
-        } else {
-            $_SESSION['error_message'] = "El producto no existe.";
         }
     }
 
     if (isset($_POST['remove_product'])) {
         $cartKey = $_POST['cart_key'];
         unset($_SESSION['cart'][$cartKey]);
+        $alert = "success|Producto eliminado correctamente del carrito.";
     }
 }
 
-// Generar los mensajes de error
-$errorMessages = '';
-if (!empty($_SESSION['error_message'])) {
-    $errorMessages .= '<div class="alert alert-danger" role="alert">';
-    $errorMessages .= htmlspecialchars($_SESSION['error_message']);
-    $errorMessages .= '</div>';
-    unset($_SESSION['error_message']); // Limpiar el mensaje después de mostrarlo
+// Generar las alertas
+$alertMessage = '';
+if (!empty($alert)) {
+    [$type, $message] = explode('|', $alert);
+    $alertMessage = utilsFactory::createAlert($message, $type);
 }
 
 $cart = $_SESSION['cart'] ?? [];
@@ -65,7 +68,7 @@ $orderSummary = new orderSummary($cart);
 // Generar el contenido principal
 $mainContent = <<<EOF
     <div class="row px-3">
-        {$errorMessages}
+        {$alertMessage}
     </div>
 
     <div class="row">
@@ -75,7 +78,7 @@ $mainContent = <<<EOF
         </div>
 
         <!-- Resumen del pedido -->
-        <div class="col-md-4">
+        <div class="col-md-4 mt-4 mt-md-0">
             {$orderSummary->generateContent()}
         </div>
     </div>

@@ -136,21 +136,7 @@ abstract class baseForm
      */
     private function CreateErrors($errors)
     {
-        $html='';
-        $numErrors = count($errors);
-        if ($numErrors > 0) {
-            $html .= '<div class="alert alert-danger" role="alert">';
-            if ($numErrors == 1) {
-                $html .= $errors[0];
-            } else {
-                $html .= '<ul>';
-                foreach ($errors as $error) {
-                    $html .= '<li>' . $error . '</li>';
-                }
-                $html .= '</ul>';
-            }
-            $html .= '</div>';
-        }
+        $html = count($errors) > 0 ? utilsFactory::createFormErrorsAlert($errors) : '';
         return $html;
     }
 

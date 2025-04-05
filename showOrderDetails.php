@@ -48,8 +48,8 @@ if (!$app->isCurrentUserLogged()) {
         $details = array_map(function($detailData) {
             return new orderDetailDTO(
                 $detailData->getOrderId(),
-                $detailData->getProductName(),
-                $detailData->getImageUrl(),
+                $detailData->getProductId(),
+                $detailData->getImageGuid(),
                 $detailData->getQuantity(),
                 $detailData->getPrice(),
                 $detailData->getSize()

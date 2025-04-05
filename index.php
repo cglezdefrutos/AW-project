@@ -2,9 +2,17 @@
 
 require_once __DIR__.'/includes/config.php';
 
+use TheBalance\utils\utilsFactory;
+
 $titlePage = 'Inicio - The Balance';
 
+$carousel = utilsFactory::createCarousel();
+
 $mainContent=<<<EOS
+
+    <div class="row">
+        $carousel
+    </div>
 
     <div class="row p-4">
         <div class="col-6 text-start mb-4">

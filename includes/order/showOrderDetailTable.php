@@ -15,10 +15,11 @@ class showOrderDetailTable extends baseTable
         foreach ($this->data as $detail) {
             $subtotal = $detail->getSubtotal();
             $total += $subtotal;
+            $imageUrl = '/AW-project/img/' . $detail->getImageGuid() . '.png';
             
             $html .= '<tr>';
-            $html .= '<td>' . htmlspecialchars($detail->getProductName()) . '</td>'; //antes getProductId()
-            $html .= '<td class="align-middle text-center"><img src="'.htmlspecialchars($detail->getImageUrl()).'" class="product-image"></td>';
+            $html .= '<td>' . htmlspecialchars($detail->getProductId()) . '</td>'; //antes getProductId()
+            $html .= '<td class="align-middle text-center"><img src="'.htmlspecialchars($imageUrl).'" class="product-image"></td>';
             $html .= '<td>' . htmlspecialchars($detail->getSize()) . '</td>';
             $html .= '<td>' . htmlspecialchars($detail->getQuantity()) . '</td>';
             $html .= '<td>' . htmlspecialchars(number_format($detail->getPrice(), 2)) . ' €</td>';
