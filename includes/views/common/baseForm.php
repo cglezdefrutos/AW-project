@@ -2,6 +2,8 @@
 
 namespace TheBalance\views\common;
 
+use TheBalance\utils\utilsFactory;
+
 /**
  * Clase base para la creación de formularios
  */

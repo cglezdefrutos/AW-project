@@ -664,6 +664,65 @@ class productDAO extends baseDAO implements IProduct
     }
 
     /**
+     * Actualiza las tallas de un producto
+     * 
+     * @param mysqli $conn Conexión a la base de datos
+     * @param int $product_id ID del producto
+     * @param productSizesDTO $sizesDTO DTO con las tallas y stock
+     */
+    public function updateProductSizes($product_id, $sizesDTO)
+    {
+        try {
+            // Tomamos la conexión a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Tomamos las tallas registradas del producto
+            $sizes = $sizesDTO->getSizes();
+            
+            foreach ($sizes as $size => $stock) {
+                // Escapar el nombre de la talla antes de buscar el ID
+                $escapedSize = $this->realEscapeString($size);
+
+                // Buscar el ID de la talla en la base de datos
+                $size_id = $this->getSizeId($escapedSize);
+                
+                if ($size_id === null) {
+                    throw new \Exception("Talla {$size} no encontrada en la base de datos");
+                }
+                
+                // Escapar y validar el stock
+                $escapedStock = $this->realEscapeString($stock);
+                $escapedProductId = $this->realEscapeString($product_id);
+                $escapedSizeId = $this->realEscapeString($size_id);
+
+                // Preparamos la consulta SQL para actualizar las tallas (UPDATE)
+                $stmt = $conn->prepare("UPDATE product_sizes SET stock = ? WHERE product_id = ? AND size_id = ?");
+                if (!$stmt) {
+                    throw new \Exception("Error al preparar la consulta de tallas: " . $conn->error);
+                }
+                
+                $stmt->bind_param("iii", 
+                    $escapedStock,       // stock (integer)
+                    $escapedProductId,  // product_id (integer)
+                    $escapedSizeId,     // size_id (integer)
+                );
+                
+                if (!$stmt->execute()) {
+                    throw new \Exception("Error al actualizar la talla $size: " . $sizeStmt->error);
+                }
+
+                // Cerrar statement
+                $stmt->close();
+            }
+        } catch (\Exception $e) {
+            error_log("Error en updateProductSizes: " . $e->getMessage());
+            throw $e;
+        }
+        
+        return true;
+    }
+
+    /**
      * Construye la consulta SQL para buscar productos en función de los filtros
      * 
      * @param array $filters Filtros de búsqueda
@@ -759,64 +818,4 @@ class productDAO extends baseDAO implements IProduct
 
         return array('query' => $query, 'params' => $args, 'types' => $types);
     }
-
-    /**
-     * Actualiza las tallas de un producto
-     * 
-     * @param mysqli $conn Conexión a la base de datos
-     * @param int $product_id ID del producto
-     * @param productSizesDTO $sizesDTO DTO con las tallas y stock
-     */
-    public function updateProductSizes($product_id, $sizesDTO)
-    {
-        try {
-            // Tomamos la conexión a la base de datos
-            $conn = application::getInstance()->getConnectionDb();
-
-            // Tomamos las tallas registradas del producto
-            $sizes = $sizesDTO->getSizes();
-            
-            foreach ($sizes as $size => $stock) {
-                // Escapar el nombre de la talla antes de buscar el ID
-                $escapedSize = $this->realEscapeString($size);
-
-                // Buscar el ID de la talla en la base de datos
-                $size_id = $this->getSizeId($escapedSize);
-                
-                if ($size_id === null) {
-                    throw new \Exception("Talla {$size} no encontrada en la base de datos");
-                }
-                
-                // Escapar y validar el stock
-                $escapedStock = $this->realEscapeString($stock);
-                $escapedProductId = $this->realEscapeString($product_id);
-                $escapedSizeId = $this->realEscapeString($size_id);
-
-                // Preparamos la consulta SQL para actualizar las tallas (UPDATE)
-                $stmt = $conn->prepare("UPDATE product_sizes SET stock = ? WHERE product_id = ? AND size_id = ?");
-                if (!$stmt) {
-                    throw new \Exception("Error al preparar la consulta de tallas: " . $conn->error);
-                }
-                
-                $stmt->bind_param("iii", 
-                    $escapedStock,       // stock (integer)
-                    $escapedProductId,  // product_id (integer)
-                    $escapedSizeId,     // size_id (integer)
-                );
-                
-                if (!$stmt->execute()) {
-                    throw new \Exception("Error al actualizar la talla $size: " . $sizeStmt->error);
-                }
-
-                // Cerrar statement
-                $stmt->close();
-            }
-        } catch (\Exception $e) {
-            error_log("Error en updateProductSizes: " . $e->getMessage());
-            throw $e;
-        }
-        
-        return true;
-    }
-
 }

@@ -1,6 +1,7 @@
 <?php
 
 use TheBalance\application;
+use TheBalance\utils\utilsFactory;
 
 /**
  * Parámetros de conexión a la BD
@@ -76,6 +77,13 @@ $app = application::getInstance();
 $app->init(array('host'=>DB_HOST, 'db'=>DB_NAME, 'user'=>DB_USER, 'pass'=>DB_PASS));
 
 /**
+ * Configurar el entorno de desarrollo
+ * APP_ENV = development => Muestra errores
+ * APP_ENV = production => No muestra errores
+ */
+putenv('APP_ENV=development');
+
+/**
  * @see http://php.net/manual/en/function.register-shutdown-function.php
  * @see http://php.net/manual/en/language.types.callable.php
  */
@@ -93,11 +101,7 @@ function exceptionHandler(Throwable $exception)
     $titlePage = 'Error';
     $errorMessage = $exception->getMessage();
 
-    $mainContent = <<<EOS
-        <h1>Oops</h1>
-        <p> Parece que ha habido un fallo.</p>
-        $errorMessage
-    EOS;
+    $mainContent = utilsFactory::generateErrorContent($errorMessage);
 
     require_once("includes/views/template/template.php");
 }

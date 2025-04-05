@@ -181,7 +181,17 @@ class updateEventForm extends baseForm
 
         if (count($result) === 0) {
             // Crear un DTO con los datos actualizados del formulario
-            $updatedEventDTO = new eventDTO($this->eventInitialData->getId(), $eventName, $description, $date, $price, $location, $capacity, null, $categoryName, $this->eventInitialData->getEmailProvider());
+            $updatedEventDTO = new eventDTO(
+                $this->eventInitialData->getId(), 
+                $eventName, 
+                $description, 
+                $date, 
+                $price, 
+                $location, 
+                $capacity, 
+                new eventCategoryDTO(null, $categoryName),
+                $this->eventInitialData->getEmailProvider()
+            );
             
             // Actualizar el evento
             $eventAppService = eventAppService::GetSingleton();

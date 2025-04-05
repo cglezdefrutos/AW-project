@@ -106,7 +106,7 @@ class utilsFactory
         {
             $message .= "<ul><li>".$errors[0]."</li></ul>";
         } 
-        else if ( $numErrores > 1 ) 
+        else if ( $numErrors > 1 ) 
         {
             $message .= "<ul><li>";
             $message .= implode("</li><li>", $errors);
@@ -121,5 +121,45 @@ class utilsFactory
         EOS;
 
         return $alert;
+    }
+
+    /**
+     * Crea un contenido de error para mostrar en la página del Exception Handler
+     * 
+     * @param string $message Mensaje de error a mostrar
+     * 
+     * @return string HTML del contenido de error
+     */
+    public static function generateErrorContent($message) 
+    {
+        // Importar el icono SVG correspondiente al tipo de alerta
+        $importedIcons = iconSVG::importIcons();
+        $icon = iconSVG::getIcon('warning');
+
+        $errorDetails = getenv('APP_ENV') === 'development' ? "<div class='alert alert-danger mt-4' role='alert'><strong>Detalles del error:</strong> $message</div>" : '';
+        
+        $content = <<<EOS
+            $importedIcons
+            <div class="container mt-0">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 text-center">
+                        <!-- Ícono de error -->
+                        $icon
+                        <!-- Encabezado -->
+                        <h1 class="display-4 text-danger">¡Oops! Algo salió mal</h1>
+                        <!-- Mensaje descriptivo -->
+                        <p class="lead">Parece que ha ocurrido un error inesperado. Estamos trabajando para solucionarlo.</p>
+                        <!-- Detalles del error -->
+                        $errorDetails
+                        <!-- Botón para regresar -->
+                        <a href="index.php" class="btn btn-primary btn-lg mt-3">
+                            Volver a la página principal
+                        </a>
+                    </div>
+                </div>
+            </div>
+        EOS;
+
+        return $content;
     }
 }

@@ -6,6 +6,7 @@ use TheBalance\event\eventAppService;
 use TheBalance\event\eventDTO;
 use TheBalance\event\manageEventTable;
 use TheBalance\application;
+use TheBalance\utils\utilsFactory;
 
 $titlePage = "Gestionar eventos";
 $mainContent = "";
@@ -15,18 +16,14 @@ $app = application::getInstance();
 
 if(!$app->isCurrentUserLogged())
 {
-    $mainContent = <<<EOS
-        <h1>No es posible gestionar eventos si no has iniciado sesión.</h1>
-    EOS;
+    $mainContent .= utilsFactory::createAlert("No tienes permisos para gestionar eventos. Por favor, inicia sesión.", "danger");
 }
 else
 {
     // Comprobar si el usuario es proveedor o administrador
     if ( ! $app->isCurrentUserProvider() && ! $app->isCurrentUserAdmin() )
     { 
-        $mainContent = <<<EOS
-            <h1>No es posible gestionar eventos si no se es proveedor o administrador.</h1>
-        EOS;
+        $mainContent .= utilsFactory::createAlert("No tienes permisos para gestionar eventos. Por favor, inicia sesión como proveedor o administrador.", "danger");
     }
     else
     {
@@ -37,11 +34,7 @@ else
         if (isset($_GET['eventId'])) {
             $eventId = $_GET['eventId'];
             $eventAppService->deleteEvent($eventId);
-            $mainContent .= <<<EOS
-                <div class="alert-success">
-                    Evento eliminado correctamente.
-                </div>
-            EOS;
+            $mainContent .= utilsFactory::createAlert("Evento eliminado correctamente.", "success");
         }
 
         // Cogemos los eventos correspondientes al usuario

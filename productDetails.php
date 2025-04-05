@@ -20,7 +20,7 @@ $productAppService = productAppService::GetSingleton();
 $productDTO = $productAppService->getProductById($productId);
 if ($productDTO == null) 
 {
-    throw new \Exception("No se ha encontrado el producto con ese ID.");
+    throw new \Exception("No se ha encontrado el producto.");
 }
 
 // Generamos el contenido del producto

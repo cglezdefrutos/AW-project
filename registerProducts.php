@@ -5,6 +5,7 @@ require_once __DIR__.'/includes/config.php';
 use TheBalance\product\registerProductForm;
 use TheBalance\product\registerAnotherProductForm;
 use TheBalance\application;
+use TheBalance\utils\utilsFactory;
 
 $titlePage = "Registrar productos";
 $mainContent = "";
@@ -13,18 +14,14 @@ $app = application::getInstance();
 
 if(!$app->isCurrentUserLogged())
 {
-    $mainContent = <<<EOS
-        <h1>No es posible registrar un producto si no has iniciado sesión.</h1>
-    EOS;
+    $mainContent .= utilsFactory::createAlert("No has iniciado sesión. Por favor, inicia sesión para registrar productos.", "danger");
 } 
 else 
 {
     // Comprobar si el usuario es proveedor o administrador
     if(!$app->isCurrentUserProvider() && !$app->isCurrentUserAdmin())
     {
-        $mainContent = <<<EOS
-            <h1>No es posible registrar un producto si no se es proveedor o administrador.</h1>
-        EOS;
+        $mainContent .= utilsFactory::createAlert("No tienes permisos para registrar productos. Solo los proveedores y administradores pueden hacerlo.", "danger");
     }
     else
     {
@@ -34,10 +31,11 @@ else
             $form = new registerAnotherProductForm();
             $htmlRegisterAnotherProductForm = $form->Manage();
 
+            // Alerta de éxito
+            $alert = utilsFactory::createAlert("El producto ha sido registrado correctamente.", "success");
+
             $mainContent = <<<EOS
-                <div class="alert alert-success">
-                    <h1>Producto registrado correctamente.</h1>
-                </div>
+                $alert
                 $htmlRegisterAnotherProductForm
             EOS;
         }

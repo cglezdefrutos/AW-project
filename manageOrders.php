@@ -6,27 +6,23 @@ use TheBalance\order\orderAppService;
 use TheBalance\order\OrderWithUserDTO;
 use TheBalance\order\manageOrderTable;
 use TheBalance\application;
+use TheBalance\utils\utilsFactory;
 
 $titlePage = "Gestionar pedidos";
 $mainContent = "";
 
 $app = application::getInstance();
 
-
 if(!$app->isCurrentUserLogged())
 {
-    $mainContent = <<<EOS
-        <h1>No es posible gestionar pedidos si no has iniciado sesión.</h1>
-    EOS;
+    $mainContent .= utilsFactory::createAlert("No has iniciado sesión. Por favor, inicia sesión para gestionar pedidos.", "danger");
 }
 else
 {
     // Comprobar si el usuario es administrador
-    if (! $app->isCurrentUserAdmin() )
+    if (!$app->isCurrentUserAdmin())
     { 
-        $mainContent = <<<EOS
-            <h1>No es posible gestionar pedidos si no se es administrador.</h1>
-        EOS;
+        $mainContent .= utilsFactory::createAlert("No tienes permisos para gestionar pedidos. Solo los administradores pueden hacerlo.", "danger");
     }
     else
     {
@@ -34,14 +30,11 @@ else
         $orderAppService = orderAppService::GetSingleton();
 
         // Manejar la eliminación del pedido si se proporciona un orderId en la URL
-        if (isset($_GET['orderId'])) {
+        if (isset($_GET['orderId'])) 
+        {
             $orderId = $_GET['orderId'];
             $orderAppService->deleteOrderById($orderId);
-            $mainContent .= <<<EOS
-                <div class="alert-success">
-                    Pedido eliminado correctamente.
-                </div>
-            EOS;
+            $mainContent .= utilsFactory::createAlert("Pedido eliminado correctamente.", "success");
         }
 
         $ordersData = $orderAppService->getAllOrdersWithEmail();
@@ -62,9 +55,11 @@ else
         // Definir las columnas de la tabla
         $columns = ['Email del Usuario', 'Dirección de Envío','Precio total', 'Estado', 'Fecha', 'Acciones'];
 
-        if (empty($orders)) {
-            $mainContent = "<h1>No hay pedidos registrados.</h1>";
-        } else {
+        if (empty($orders)) 
+        {
+            $mainContent .= utilsFactory::createAlert("No hay pedidos disponibles.", "warning");
+        } else 
+        {
             $ordersTable = new manageOrderTable($orders, $columns);
             $html = $ordersTable->generateTable();
 

@@ -4,6 +4,7 @@ require_once __DIR__.'/includes/config.php';
 
 use TheBalance\event\joinEventForm;
 use TheBalance\application;
+use TheBalance\utils\utilsFactory;
 
 $titlePage = "Apuntarse a un evento";
 $mainContent = "";
@@ -14,15 +15,11 @@ $app = application::getInstance();
 
 if(!$app->isCurrentUserLogged())
 {
-    $mainContent = <<<EOS
-        <h1>No es posible apuntarse a eventos si no has iniciado sesión.</h1>
-    EOS;
+    $mainContent .= utilsFactory::createAlert("No puedes apuntarte a un evento si no has iniciado sesión.", "danger");
 }
 else if(!$app->isCurrentUserClient())
 {
-    $mainContent = <<<EOS
-        <h1>No es posible apuntarse a eventos si no eres cliente.</h1>
-    EOS;
+    $mainContent .= utilsFactory::createAlert("No puedes apuntarte a un evento si no eres un cliente.", "danger");
 }
 else
 {
@@ -49,9 +46,7 @@ else
     }
     else 
     {
-        $mainContent = <<<EOS
-            <h1>¡Enhorabuena!¡Te has apuntado al evento!</h1>
-        EOS;
+        $mainContent .= utilsFactory::createAlert("Te has apuntado al evento correctamente.", "success");
     }
 
 }

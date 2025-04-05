@@ -171,6 +171,11 @@ class productDTO implements \JsonSerializable
         $this->price = $price;
     }
 
+    public function setCategoryDTO($category_DTO)
+    {
+        $this->category_DTO = $category_DTO;
+    }
+
     public function setCategoryId($category_id)
     {
         $this->category_DTO->setId($category_id);

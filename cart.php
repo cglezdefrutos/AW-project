@@ -10,11 +10,11 @@ use TheBalance\utils\utilsFactory;
 $titlePage = "Carrito";
 $mainContent = "";
 
-// Mensaje de alerta
-$alert = "";
-
 // Procesar acciones del carrito
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // Mensaje de alerta
+    $alert = "";
 
     if (isset($_POST['update_quantity'])) {
         $cartKey = $_POST['cart_key'];
@@ -47,13 +47,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         unset($_SESSION['cart'][$cartKey]);
         $alert = "success|Producto eliminado correctamente del carrito.";
     }
-}
 
-// Generar las alertas
-$alertMessage = '';
-if (!empty($alert)) {
-    [$type, $message] = explode('|', $alert);
-    $alertMessage = utilsFactory::createAlert($message, $type);
+    // Generar las potenciales alertas
+    $alertMessage = '';
+    if (!empty($alert)) {
+        [$type, $message] = explode('|', $alert);
+        $alertMessage = utilsFactory::createAlert($message, $type);
+    }
 }
 
 $cart = $_SESSION['cart'] ?? [];

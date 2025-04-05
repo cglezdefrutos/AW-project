@@ -64,7 +64,7 @@ class eventDAO extends baseDAO implements IEvent
             // Mientras haya resultados, los guardamos en el array
             while ($stmt->fetch())
             {
-                $event = new eventDTO($Id, $Name, $Description, $Date, $Price, $Location, $Capacity, $CategoryId, $CategoryName, $EmailProvider);
+                $event = new eventDTO($Id, $Name, $Description, $Date, $Price, $Location, $Capacity, new eventCategoryDTO($CategoryId, $CategoryName), $EmailProvider);
                 $events[] = $event;
             }
 
@@ -270,7 +270,7 @@ class eventDAO extends baseDAO implements IEvent
             // Si hay resultados, los guardamos en la variable $event
             if ($stmt->fetch())
             {
-                $event = new eventDTO($Id, $Name, $Description, $Date, $Price, $Location, $Capacity, $CategoryId, $CategoryName, $EmailProvider);
+                $event = new eventDTO($Id, $Name, $Description, $Date, $Price, $Location, $Capacity, new eventCategoryDTO($CategoryId, $CategoryName), $EmailProvider);
             }
 
             // Cerramos la consulta

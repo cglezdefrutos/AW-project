@@ -5,6 +5,7 @@ require_once __DIR__.'/includes/config.php';
 use TheBalance\order\orderAppService;
 use TheBalance\order\updateOrderForm;
 use TheBalance\application;
+use TheBalance\utils\utilsFactory;
 
 $titlePage = "Actualizar pedido";
 $mainContent = "";
@@ -13,18 +14,14 @@ $app = application::getInstance();
 
 if (!$app->isCurrentUserLogged())
 {
-    $mainContent = <<<EOS
-        <h1>No es posible actualizar eventos si no has iniciado sesión.</h1>
-    EOS;
+    $mainContent .= utilsFactory::createAlert("No has iniciado sesión. Por favor, inicia sesión para actualizar pedidos.", "danger");
 } 
 else 
 {
     // Comprobar si el usuario es administrador
     if (! $app->isCurrentUserAdmin() )
     {
-        $mainContent = <<<EOS
-            <h1>No es posible actualizar eventos si no se es administrador.</h1>
-        EOS;
+        $mainContent .= utilsFactory::createAlert("No tienes permisos para actualizar pedidos. Solo los administradores pueden hacerlo.", "danger");
     } 
     else 
     {
@@ -49,7 +46,7 @@ else
         } 
         else 
         {
-            $mainContent = "<p>No se ha proporcionado un ID de pedido válido.</p>";
+            $mainContent .= utilsFactory::createAlert("No se ha proporcionado un ID de pedido válido.", "danger");
         }
     }
 }

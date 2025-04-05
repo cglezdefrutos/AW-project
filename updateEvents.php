@@ -5,6 +5,7 @@ require_once __DIR__.'/includes/config.php';
 use TheBalance\event\eventAppService;
 use TheBalance\event\updateEventForm;
 use TheBalance\application;
+use TheBalance\utils\utilsFactory;
 
 $titlePage = "Actualizar evento";
 $mainContent = "";
@@ -13,18 +14,15 @@ $app = application::getInstance();
 
 if (!$app->isCurrentUserLogged())
 {
-    $mainContent = <<<EOS
-        <h1>No es posible actualizar eventos si no has iniciado sesión.</h1>
-    EOS;
+    // Alerta de error si el usuario no ha iniciado sesión
+    $mainContent .= utilsFactory::createAlert("No has iniciado sesión. Por favor, inicia sesión para actualizar eventos.", "danger");
 } 
 else 
 {
     // Comprobar si el usuario es proveedor o administrador
     if ( ! $app->isCurrentUserProvider() && ! $app->isCurrentUserAdmin() )
     {
-        $mainContent = <<<EOS
-            <h1>No es posible actualizar eventos si no se es proveedor.</h1>
-        EOS;
+        $mainContent .= utilsFactory::createAlert("No tienes permisos para actualizar eventos. Solo los proveedores y administradores pueden hacerlo.", "danger");
     } 
     else 
     {
@@ -49,7 +47,7 @@ else
         } 
         else 
         {
-            $mainContent = "<p>No se ha proporcionado un ID de evento válido.</p>";
+            $mainContent .= utilsFactory::createAlert("No se ha proporcionado un ID de evento válido.", "danger");
         }
     }
 }
