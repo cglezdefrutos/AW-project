@@ -27,11 +27,11 @@ date_default_timezone_set('Europe/Madrid');
 /**
  * Parámetros de configuración utilizados para generar las URLs y las rutas a ficheros en la aplicación
  */
-define('RAIZ_APP', dirname(__DIR__));
-define('RUTA_APP', '/AW-project');
-define('RUTA_IMGS', RUTA_APP.'/img');
-define('RUTA_CSS', RUTA_APP.'/css');
-define('RUTA_JS', RUTA_APP.'/js');
+define('BASE_PATH', dirname(__DIR__));
+define('BASE_URL', '/AW-project/');
+define('IMG_PATH', BASE_URL.'img');
+define('CSS_PATH', BASE_URL.'css');
+define('JS_PATH', BASE_URL.'js');
 
 /**
  * Parámetros de configuración de Stripe
@@ -103,7 +103,7 @@ function exceptionHandler(Throwable $exception)
 
     $mainContent = utilsFactory::generateErrorContent($errorMessage);
 
-    require_once("includes/views/template/template.php");
+    require_once BASE_PATH.'/includes/views/template/template.php';
 }
 
 // Establecer el manejador de excepciones

@@ -19,7 +19,7 @@ class showOrderDetailTable extends baseTable
             
             $html .= '<tr>';
             $html .= '<td>' . htmlspecialchars($detail->getProductId()) . '</td>'; //antes getProductId()
-            $html .= '<td class="align-middle text-center"><img src="'.htmlspecialchars($imageUrl).'" class="product-image"></td>';
+            $html .= '<td class="align-middle text-center"><img src="'.htmlspecialchars($imageUrl).'" class="img-fluid table-image"></td>';
             $html .= '<td>' . htmlspecialchars($detail->getSize()) . '</td>';
             $html .= '<td>' . htmlspecialchars($detail->getQuantity()) . '</td>';
             $html .= '<td>' . htmlspecialchars(number_format($detail->getPrice(), 2)) . ' €</td>';

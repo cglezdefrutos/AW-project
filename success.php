@@ -9,6 +9,7 @@ use TheBalance\order\orderDetailAppService;
 use TheBalance\order\orderDTO;
 use TheBalance\order\orderDetailDTO;
 use TheBalance\product\ProductAppService;
+use TheBalance\utils\utilsFactory;
 
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
@@ -94,21 +95,11 @@ if ($sessionId) {
                 </div>
             EOS;
         } else {
-            $mainContent .= <<<EOS
-                <div class="alert alert-danger" role="alert">
-                    No se pudo procesar tu pedido. Por favor, intenta nuevamente.
-                </div>
-                <a href="cart.php" class="btn btn-primary">Volver al carrito</a>
-            EOS;
+            $mainContent .= utilsFactory::createAlert("No se pudo procesar tu pedido. Por favor, intenta nuevamente.", "danger");
         }
     }
 } else {
-    $mainContent .= <<<EOS
-        <div class="alert alert-danger" role="alert">
-            No se pudo procesar tu pedido. Por favor, intenta nuevamente.
-        </div>
-        <a href="cart.php" class="btn btn-primary">Volver al carrito</a>
-    EOS;
+    $mainContent .= utilsFactory::createAlert("No se ha creado la sesión de pago. Por favor, completa la pasarela de pagos para finalizar tu pedido", "danger");
 }
 
-require_once __DIR__ . '/includes/views/template/template.php';
+require_once BASE_PATH.'/includes/views/template/template.php';

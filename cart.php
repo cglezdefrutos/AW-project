@@ -9,6 +9,7 @@ use TheBalance\utils\utilsFactory;
 
 $titlePage = "Carrito";
 $mainContent = "";
+$alertMessage = '';
 
 // Procesar acciones del carrito
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -49,7 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Generar las potenciales alertas
-    $alertMessage = '';
     if (!empty($alert)) {
         [$type, $message] = explode('|', $alert);
         $alertMessage = utilsFactory::createAlert($message, $type);
@@ -84,4 +84,4 @@ $mainContent = <<<EOF
     </div>
 EOF;
 
-require_once __DIR__ . '/includes/views/template/template.php';
+require_once BASE_PATH.'/includes/views/template/template.php';

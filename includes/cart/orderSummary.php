@@ -77,7 +77,7 @@ class orderSummary
     private function calculateShippingCost($subtotal)
     {
         // Envío gratuito a partir de 50 €
-        if ($subtotal >= 50) {
+        if ($subtotal >= 50 || $subtotal == 0) {
             return 0.0;
         }
 

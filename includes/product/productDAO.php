@@ -158,7 +158,8 @@ class productDAO extends baseDAO implements IProduct
             $query = "SELECT s.name, ps.stock 
                       FROM product_sizes ps 
                       INNER JOIN sizes s ON ps.size_id = s.id 
-                      WHERE ps.product_id = ?";
+                      WHERE ps.product_id = ?
+                      ORDER BY s.id ASC";
             $stmt = $conn->prepare($query);
             if(!$stmt)
             {
@@ -737,7 +738,7 @@ class productDAO extends baseDAO implements IProduct
                   FROM products p 
                   INNER JOIN users u ON p.provider_id = u.id 
                   INNER JOIN product_categories c ON p.category_id = c.id 
-                  LEFT JOIN product_sizes ps ON p.id = ps.product_id 
+                  INNER JOIN product_sizes ps ON p.id = ps.product_id 
                   WHERE ";
         $args = array();
         $types = '';

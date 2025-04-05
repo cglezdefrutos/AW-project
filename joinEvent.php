@@ -51,4 +51,4 @@ else
 
 }
 
-require_once __DIR__.'/includes/views/template/template.php';
+require_once BASE_PATH.'/includes/views/template/template.php';

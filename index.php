@@ -8,6 +8,8 @@ $titlePage = 'Inicio - The Balance';
 
 $carousel = utilsFactory::createCarousel();
 
+$imgPath = IMG_PATH;
+
 $mainContent=<<<EOS
 
     <div class="row">
@@ -26,7 +28,7 @@ $mainContent=<<<EOS
             </p>
         </div>
         <div class="col-6 d-flex justify-content-center align-items-center mb-4">
-            <img src="/AW-project/img/logo_thebalance.png" alt="Logo de The Balance">
+            <img src="$imgPath/logo_thebalance.png" alt="Logo de The Balance">
         </div>
     </div>
 
@@ -40,7 +42,7 @@ $mainContent=<<<EOS
         <!-- Tarjeta 1 -->
         <div class="col-md-3 mb-4">
             <div class="card h-100">
-                <img src="/AW-project/img/logo_thebalance.png" class="card-img-top" alt="Tienda">
+                <img src="$imgPath/catalogo.jpg" class="card-img-top" alt="Tienda">
                 <div class="card-body">
                     <h5 class="card-title">Tienda</h5>
                     <p class="card-text">Descubre los mejores suplementos y equipamiento deportivo para mejorar tu rendimiento.</p>
@@ -52,7 +54,7 @@ $mainContent=<<<EOS
         <!-- Tarjeta 2 -->
         <div class="col-md-3 mb-4">
             <div class="card h-100">
-                <img src="/AW-project/img/logo_thebalance.png" class="card-img-top" alt="Eventos">
+                <img src="$imgPath/eventos.png" class="card-img-top" alt="Eventos">
                 <div class="card-body">
                     <h5 class="card-title">Eventos</h5>
                     <p class="card-text">Descubre y participa en los mejores eventos organizados por nuestra comunidad.</p>
@@ -64,7 +66,7 @@ $mainContent=<<<EOS
         <!-- Tarjeta 3 -->
         <div class="col-md-3 mb-4">
             <div class="card h-100">
-                <img src="/AW-project/img/logo_thebalance.png" class="card-img-top" alt="Planes">
+                <img src="$imgPath/trainer.jpg" class="card-img-top" alt="Eventos">
                 <div class="card-body">
                     <h5 class="card-title">Planes de entrenamiento</h5>
                     <p class="card-text">Accede a planes de entrenamiento personalizados para alcanzar tus objetivos.</p>
@@ -76,7 +78,7 @@ $mainContent=<<<EOS
         <!-- Tarjeta 4 -->
         <div class="col-md-3 mb-4">
             <div class="card h-100">
-                <img src="/AW-project/img/logo_thebalance.png" class="card-img-top" alt="Trabaja">
+                <img src="$imgPath/workwithus.jpg" class="card-img-top" alt="Trabaja">
                 <div class="card-body">
                     <h5 class="card-title">Trabaja con nosotros</h5>
                     <p class="card-text">Descubre las oportunidades laborales que tenemos para ti.</p>
@@ -87,4 +89,4 @@ $mainContent=<<<EOS
     </div>
 EOS;
 
-require_once __DIR__.'/includes/views/template/template.php';
+require_once BASE_PATH.'/includes/views/template/template.php';

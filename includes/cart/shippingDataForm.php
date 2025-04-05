@@ -6,7 +6,6 @@ use TheBalance\views\common\baseForm;
 
 class shippingDataForm extends baseForm
 {
-
     /**
      * Constructor de la clase.
      */

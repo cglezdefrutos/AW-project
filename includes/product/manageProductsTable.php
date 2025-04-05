@@ -53,7 +53,7 @@ class manageProductsTable extends baseTable
             $html .= <<<EOF
                 <tr>
                     <td class="text-center align-middle">
-                        <img src="{$imageUrl}" alt="{$product->getName()}" class="img-fluid" style="max-width: 80px; max-height: 80px;">
+                        <img src="{$imageUrl}" alt="{$product->getName()}" class="img-fluid table-image">
                     </td>
                     <td>{$product->getName()}</td>
                     <td>{$product->getDescription()}</td>

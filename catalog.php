@@ -7,6 +7,7 @@ use TheBalance\product\productAppService;
 use TheBalance\product\productDTO;
 use TheBalance\catalog\catalogContent;
 use TheBalance\catalog\catalogFilterForm;
+use TheBalance\utils\utilsFactory;
 
 $app = application::getInstance();
 
@@ -78,6 +79,12 @@ else
 $catalog = new catalogContent($productsDTO);
 $htmlCatalog = $catalog->generateContent();
 
+// Si esta vacio productsDTO, mostramos un mensaje de alerta
+if (empty($productsDTO)) 
+{
+    $htmlCatalog .= utilsFactory::createAlert("Lo sentimos, no hemos encontrado ningún producto que coincida con los filtros seleccionados.", "warning");
+}
+
 // Combinar el formulario y el catálogo
 $mainContent .= <<<EOS
     <div class="container mt-4">
@@ -93,4 +100,4 @@ $mainContent .= <<<EOS
     </div>
 EOS;
 
-require_once __DIR__.'/includes/views/template/template.php';
+require_once BASE_PATH.'/includes/views/template/template.php';

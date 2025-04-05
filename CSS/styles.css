@@ -88,7 +88,13 @@ h2 {
 }
 
 /* Imagen del logo */
-img {
+.table-image {
+    max-height: 100px; /* Ajusta la altura según tus necesidades */
+    border-radius: 8px; /* Bordes redondeados */
+}
+
+/* Imagen de las tablas */
+.img-fluid {
     max-width: 100%;
     height: auto;
     border-radius: 8px; /* Bordes redondeados */

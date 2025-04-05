@@ -46,6 +46,13 @@ class iconSVG
                     </svg>
                 EOS;
                 break;
+            case 'danger':
+                $iconHTML = <<<EOS
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" fill="currentColor" role="img" aria-label="Danger:">
+                        <use xlink:href="#exclamation-triangle-fill"/>
+                    </svg>
+                EOS;
+                break;
             default:
                 return '';
         }

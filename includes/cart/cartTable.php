@@ -1,5 +1,4 @@
 <?php
-// filepath: c:\xampp\htdocs\AW-project\includes\cart\cartTable.php
 
 namespace TheBalance\cart;
 
@@ -43,7 +42,7 @@ class cartTable extends baseTable
             $html .= <<<EOF
                 <tr>
                     <td class="text-center align-middle">
-                        <img src="{$imageUrl}" alt="{$product->getName()}" class="img-fluid" style="max-width: 80px; max-height: 80px;">
+                        <img src="{$imageUrl}" alt="{$product->getName()}" class="img-fluid table-image">
                     </td>
                     
                     <td class="text-center align-middle">{$product->getName()}</td>

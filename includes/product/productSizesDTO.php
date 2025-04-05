@@ -50,7 +50,11 @@ class productSizesDTO implements \JsonSerializable
 
     public function getStockBySize($size)
     {
-        return $this->sizes[$size];
+        $stock = 0;
+        if (array_key_exists($size, $this->sizes)) {
+            $stock = $this->sizes[$size];
+        }
+        return $stock;
     }
 
     /**
