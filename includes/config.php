@@ -6,15 +6,15 @@ use TheBalance\utils\utilsFactory;
 /**
  * Parámetros de conexión a la BD
  */
-/* define('DB_HOST', 'vm012.db.swarm.test');
+define('DB_HOST', 'vm012.db.swarm.test');
 define('DB_NAME', 'the_balance');
 define('DB_USER', 'root');
-define('DB_PASS', 'EvbBYyU2kNwH0XUxjWRw'); */
+define('DB_PASS', 'EvbBYyU2kNwH0XUxjWRw');
 
-define('DB_HOST', 'localhost');
+/* define('DB_HOST', 'localhost');
 define('DB_NAME', 'the_balance');
 define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_PASS', ''); */
 
 
 /**
