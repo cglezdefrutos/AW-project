@@ -29,7 +29,7 @@ class productDetailsContent
         unset($_SESSION['show_offcanvas']);
 
         // Construir la URL de la imagen usando el GUID
-        $imageUrl = '/AW-project/img/' . $this->productDTO->getImageGuid() . '.png';
+        $imageUrl = productAppService::GetSingleton()->getProductImagePath($this->productDTO->getImageGuid());
 
         $html .= <<<EOF
             <div class="row">

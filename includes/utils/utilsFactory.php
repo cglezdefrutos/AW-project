@@ -69,7 +69,7 @@ class utilsFactory
                     <div class="carousel-item">
                         <img src="/AW-project/img/spain_carrusel.jpg" class="img-fluid" alt="Promoción 3">
                         <div class="carousel-caption">
-                            <h5 class="carousel-title"><a href="catalog.php?name=seleccion&search=true">Camiseta de la Selección Española</a></h5>
+                            <h5 class="carousel-title"><a href="catalog.php?name=espa&search=true">Camiseta de la Selección Española</a></h5>
                             <p class="carousel-text">Apoya a la Selección Española con la nueva camiseta de la Eurocopa 2024.</p>
                         </div>
                     </div>

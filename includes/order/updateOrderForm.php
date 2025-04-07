@@ -85,15 +85,17 @@ class updateOrderForm extends baseForm
         $result = [];
 
         // Validar orderId
-        $orderId = $data['orderId'] ?? '';
+        $orderId = trim($data['orderId'] ?? '');
+        $orderId = filter_var($orderId, FILTER_SANITIZE_NUMBER_INT);
         if (!is_numeric($orderId) || $orderId <= 0) {
             $result[] = 'ID de pedido inválido.';
         }
 
         // Validar estado seleccionado
-        $statuses = ['En preparación', 'Enviado', 'Entregado', 'Cancelado'];
+        $states = ['En preparación', 'Enviado', 'Entregado', 'Cancelado'];
         $newStatus = trim($data['status'] ?? '');
-        if (!in_array($newStatus, $statuses)) {
+        $newStatus = filter_var($newStatus, FILTER_SANITIZE_STRING);
+        if (!in_array($newStatus, $states)) {
             $result[] = 'Estado seleccionado no válido.';
         }
 

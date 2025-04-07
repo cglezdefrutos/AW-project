@@ -35,7 +35,8 @@ class updateProductForm extends baseForm
     protected function CreateFields($initialData) 
     {
         // Construir la ruta de la imagen
-        $imageUrl = '/AW-project/img/' . $this->productInitialData->getImageGuid() . '.png';
+        $imageUrl = productAppService::GetSingleton()->getProductImagePath($this->productInitialData->getImageGuid());
+
 
         $sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
         

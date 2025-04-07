@@ -40,6 +40,7 @@ class orderDAO extends baseDAO implements IOrder
             }
     
             // Asignar el parámetro y ejecutar la consulta
+            $orderId = $this->realEscapeString($orderId);
             $stmt->bind_param("i", $orderId);
     
             if (!$stmt->execute()) {
@@ -181,12 +182,12 @@ class orderDAO extends baseDAO implements IOrder
             }
 
             // Obtener valores del DTO
-            $userId = $order->getUserId();
-            $totalPrice = $order->getTotalPrice();
-            $status = $order->getStatus();
-            $shipping_address = $order->getShippingAddress();
-            $createdAt = $order->getCreatedAt();
-            $orderId = $order->getId();
+            $userId = $this->realEscapeString($order->getUserId());
+            $totalPrice = $this->realEscapeString($order->getTotalPrice());
+            $status = $this->realEscapeString($order->getStatus());
+            $shipping_address = $this->realEscapeString($order->getShippingAddress());
+            $createdAt = $this->realEscapeString($order->getCreatedAt());
+            $orderId = $this->realEscapeString($order->getId());
 
             $stmt->bind_param("idsssi", $userId, $totalPrice, $status, $shipping_address, $createdAt, $orderId);
 
@@ -226,6 +227,7 @@ class orderDAO extends baseDAO implements IOrder
             }
 
             // Asignar el parámetro y ejecutar la consulta
+            $orderId = $this->realEscapeString($orderId);
             $stmt->bind_param("i", $orderId);
 
             if (!$stmt->execute()) {
@@ -233,9 +235,6 @@ class orderDAO extends baseDAO implements IOrder
             }
 
             $stmt->close();
-
-           
-
         } catch (\Exception $e) {
             error_log($e->getMessage());
             throw $e;
@@ -266,10 +265,10 @@ class orderDAO extends baseDAO implements IOrder
             }
     
             // Obtener datos del DTO
-            $userId = $order->getUserId();
-            $totalPrice = $order->getTotalPrice();
-            $status = $order->getStatus();
-            $shipping_address = $order->getShippingAddress();
+            $userId = $this->realEscapeString($order->getUserId());
+            $totalPrice = $this->realEscapeString($order->getTotalPrice());
+            $status = $this->realEscapeString($order->getStatus());
+            $shipping_address = $this->realEscapeString($order->getShippingAddress());
     
             // Bind de parámetros
             $stmt->bind_param("idss", $userId, $totalPrice, $status, $shipping_address);

@@ -111,6 +111,7 @@ class productDAO extends baseDAO implements IProduct
             }
 
             // Enlazamos el parámetro
+            $id = $this->realEscapeString($id);
             $stmt->bind_param('i', $id);
 
             // Ejecutamos la consulta
@@ -167,6 +168,7 @@ class productDAO extends baseDAO implements IProduct
             }
 
             // Enlazamos el parámetro
+            $productId = $this->realEscapeString($productId);
             $stmt->bind_param('i', $productId);
 
             // Ejecutamos la consulta
@@ -257,6 +259,7 @@ class productDAO extends baseDAO implements IProduct
             }
 
             // Enlazamos el parámetro
+            $size = $this->realEscapeString($size);
             $stmt->bind_param('s', $size);
 
             // Ejecutamos la consulta
@@ -294,6 +297,7 @@ class productDAO extends baseDAO implements IProduct
             }
     
             // Enlazar parámetro
+            $productId = $this->realEscapeString($productId);
             $stmt->bind_param('i', $productId);
     
             // Ejecutar la actualización
@@ -327,6 +331,8 @@ class productDAO extends baseDAO implements IProduct
                 throw new \Exception("Error al preparar la consulta: " . $conn->error);
             }
 
+            // Escapar el ID del producto
+            $productId = $this->realEscapeString($productId);
             $stmt->bind_param('i', $productId);
             
             if (!$stmt->execute()) {
@@ -354,6 +360,8 @@ class productDAO extends baseDAO implements IProduct
             }
 
             // Enlazamos los parámetros
+            $productId = $this->realEscapeString($productId);
+            $userEmail = $this->realEscapeString($userEmail);
             $stmt->bind_param('is', $productId, $userEmail);
 
             // Ejecutamos la consulta
@@ -429,7 +437,7 @@ class productDAO extends baseDAO implements IProduct
         return $product_id;
     }
 
-    public function updateProduct(productDTO $productDTO): bool 
+    public function updateProduct($productDTO)
     {
         $conn = null;
         $stmt = null;
@@ -646,6 +654,8 @@ class productDAO extends baseDAO implements IProduct
             }
 
             // Enlazamos los parámetros
+            $quantity = $this->realEscapeString($quantity);
+            $productId = $this->realEscapeString($productId);
             $stmt->bind_param('iis', $quantity, $productId, $sizeId);
 
             // Ejecutamos la consulta
@@ -766,29 +776,34 @@ class productDAO extends baseDAO implements IProduct
                     $args[] = $this->realEscapeString($value);
                     $types .= 's';
                     break;
+                case 'provider_id':
+                    $query .= "p.provider_id = ? AND ";
+                    $args[] = $this->realEscapeString($value);
+                    $types .= 'i';
+                    break;
                 case 'minStock':
                     $query .= "SUM(ps.stock) >= ? AND ";
-                    $args[] = $value;
+                    $args[] = $this->realEscapeString($value);
                     $types .= 'i';
                 break;
                 case 'maxStock':
                     $query .= "SUM(ps.stock) <= ? AND ";
-                    $args[] = $value;
+                    $args[] = $this->realEscapeString($value);
                     $types .= 'i';
                 break;
                 case 'minPrice':
                     $query .= "p.price >= ? AND ";
-                    $args[] = $value;
+                    $args[] = $this->realEscapeString($value);
                     $types .= 'd';
                     break;
                 case 'maxPrice':
                     $query .= "p.price <= ? AND ";
-                    $args[] = $value;
+                    $args[] = $this->realEscapeString($value);
                     $types .= 'd';
                     break;
                 case 'active':
                     $query .= "p.active = ? AND ";
-                    $args[] = $value;
+                    $args[] = $this->realEscapeString($value);
                     $types .= 'i';
                     break;
                 default:

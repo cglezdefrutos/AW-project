@@ -9,13 +9,13 @@
     <div class="col-md-4 text-center mb-4 mb-md-0">
         <h5 class="mb-3">Síguenos</h5>
         <div class="d-flex justify-content-center">
-            <a href="https://www.facebook.com" target="_blank" class="btn btn-outline-light btn-circle me-2">
+        <a href="https://www.facebook.com" target="_blank" class="btn btn-outline-light btn-circle me-2">
                 <i class="fab fa-facebook-f"></i>
             </a>
-            <a href="https://www.twitter.com" target="_blank" class="btn btn-outline-light btn-circle me-2">
+            <a href="https://x.com/TheBalance33" target="_blank" class="btn btn-outline-light btn-circle me-2">
                 <i class="fab fa-twitter"></i>
             </a>
-            <a href="https://www.instagram.com" target="_blank" class="btn btn-outline-light btn-circle">
+            <a href="https://www.instagram.com/thebalance_sa/" target="_blank" class="btn btn-outline-light btn-circle">
                 <i class="fab fa-instagram"></i>
             </a>
         </div>

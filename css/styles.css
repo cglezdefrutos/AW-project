@@ -277,3 +277,11 @@ footer p {
     height: 600px; /* Define una altura fija para todas las imágenes */
     object-fit: cover; /* Recorta la imagen para que se ajuste al contenedor sin deformarse */
 }
+
+/* Estilos para las imágenes del catálogo */
+.catalog-img-custom {
+    width: 100%; /* Asegura que la imagen ocupe todo el ancho del contenedor */
+    height: 400px; /* Define una altura fija para todas las imágenes */
+    object-fit: cover; /* Recorta la imagen para que se ajuste al contenedor sin deformarse */
+    border-radius: 5px; /* Opcional: bordes redondeados */
+}

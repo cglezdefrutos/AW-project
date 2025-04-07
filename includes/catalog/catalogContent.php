@@ -35,7 +35,7 @@ class catalogContent
             $html .= <<<EOS
                 <div class="col-sm-6 col-md-4 mb-4">
                     <div class="card h-100">
-                        <img src="{$imageUrl}" class="card-img-top" alt="{$product->getName()}">
+                        <img src="{$imageUrl}" class="card-img-top catalog-img-custom" alt="{$product->getName()}">
                         
                         <div class="card-body text-center">
                             <!-- Nombre del producto -->

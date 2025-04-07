@@ -197,7 +197,8 @@ class registerProductForm extends baseForm
         $sizeData = [];
         
         foreach ($validSizes as $size) {
-            $quantity = isset($stock[$size]) ? (int)$stock[$size] : 0;
+            $quantity = isset($stock[$size]) ? trim($stock[$size]) : 0;
+            $quantity = filter_var($quantity, FILTER_SANITIZE_NUMBER_INT);
             if ($quantity < 0) {
                 $result[] = "El stock para la talla $size debe ser un número positivo.";
             }
