@@ -68,7 +68,7 @@ class catalogFilterForm extends baseForm
 
                 <div class="mb-3">
                     <label for="maxPrice" class="form-label">Precio máximo:</label>
-                    <input type="number" name="maxPrice" id="maxPrice" class="form-control" step="0.50" placeholder="Ej: 100" value="0">
+                    <input type="number" name="maxPrice" id="maxPrice" class="form-control" step="0.50" placeholder="Ej: 100" value="1000">
                 </div>
 
                 <div class="mt-3">
@@ -131,22 +131,14 @@ class catalogFilterForm extends baseForm
             // Buscamos los productos con los filtros seleccionados
             $foundedProductsDTO = $productAppService->searchProducts($filters);
 
-            // Manejamos el control de errores en función de lo que nos devuelva el SA
-            if(count($foundedProductsDTO) === 0)
-            {
-                $result[] = 'No se han encontrado productos con los filtros seleccionados';
-            }
-            else
-            {
-                // Array de productos en formato JSON
-                $foundedProductsJSON = json_encode($foundedProductsDTO);
+            // Array de productos en formato JSON
+            $foundedProductsJSON = json_encode($foundedProductsDTO);
 
-                // Almacenar el JSON en una variable de sesión
-                $_SESSION["foundedProductsJSON"] = $foundedProductsJSON;
+            // Almacenar el JSON en una variable de sesión
+            $_SESSION["foundedProductsJSON"] = $foundedProductsJSON;
 
-                // Volvemos al catálogo con los productos filtrados
-                $result = 'catalog.php?search=true';
-            }
+            // Volvemos al catálogo con los productos filtrados
+            $result = 'catalog.php?search=true';
         }
 
         return $result;

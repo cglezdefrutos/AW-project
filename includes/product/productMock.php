@@ -72,4 +72,9 @@ class productMock implements IProduct
             new productCategoryDTO(4, "Accesorios"),
         );
     }
+
+    public function getProducts($filters){}
+    public function deleteProduct($productId){}
+    public function ownsProduct($productId, $userEmail){}
+    public function getOrdersByProduct($productId){}
 }

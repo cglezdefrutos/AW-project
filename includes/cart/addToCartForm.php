@@ -5,6 +5,7 @@ namespace TheBalance\cart;
 use TheBalance\views\common\baseForm;
 use TheBalance\application;
 use TheBalance\product\productDTO;
+use TheBalance\product\productAppService;
 
 class addToCartForm extends baseForm
 {
@@ -29,8 +30,8 @@ class addToCartForm extends baseForm
 
         // Generar las opciones del select para las tallas
         foreach ($sizes as $size => $stock) {
-            $disabled = ($stock <= 0) ? 'disabled' : ''; // Deshabilitar si no hay stock
-            $stockMessage = ($stock <= 0) ? ' (Sin stock)' : ''; // Mostrar mensaje si no hay stock
+            $disabled = ($stock <= 0) ? 'disabled' : '';
+            $stockMessage = ($stock <= 0) ? ' (Sin stock)' : (($stock <= 5) ? ' (Quedan pocas unidades)' : '');
             $sizeOptions .= "<option value=\"{$size}\" {$disabled}>{$size}{$stockMessage}</option>";
         }
 
@@ -74,18 +75,24 @@ class addToCartForm extends baseForm
         // Si no es cliente, mostrar una alerta de que no se puede añadir al carrito
         if (!application::getInstance()->isCurrentUserClient()) 
         {
-            // Mostrar un mensaje de error si no se pudo crear el pedido y un botón para volver al carrito
-            /* $mainContent .= <<<EOS
-                <div class="alert alert-danger d-flex flex-column flex-md-row align-items-center justify-content-between" role="alert">
-                    <div>
-                        <strong>¡Atención!</strong> No puedes añadir productos al carrito porque no has iniciado sesión como cliente.
-                    </div>
-                    <a href="login.php" class="btn btn-primary mt-3 mt-md-0">Iniciar sesión</a>
-                </div>
-            EOS; */
-
             $result[] = 'No puedes añadir productos al carrito porque no has iniciado sesión como cliente.';
         } 
+
+        // Obtener el producto y su stock
+        $product = productAppService::GetSingleton()->getProductById($productId);
+        $sizesDTO = $product->getSizesDTO();
+        $stock = $sizesDTO->getSizes()[$selectedSize] ?? 0;
+
+        // Generar una clave única para el producto y la talla
+        $cartKey = "{$productId}|{$selectedSize}";
+
+        // Obtener la cantidad actual en el carrito para este producto y talla
+        $currentQuantityInCart = $_SESSION['cart'][$cartKey] ?? 0;
+
+        // Validar si hay suficiente stock disponible
+        if ($currentQuantityInCart + 1 > $stock) {
+            $result[] = "No hay suficiente stock para la talla seleccionada. Stock disponible: {$stock}.";
+        }
 
         if (count($result) === 0) 
         {
@@ -94,9 +101,6 @@ class addToCartForm extends baseForm
             {
                 $_SESSION['cart'] = [];
             }
-
-            // Generar una clave única para el producto y la talla
-            $cartKey = "{$productId}|{$selectedSize}";
 
             // Añade el producto al carrito o incrementa la cantidad si ya existe
             if (!isset($_SESSION['cart'][$cartKey])) 

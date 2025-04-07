@@ -15,12 +15,12 @@ class orderDetailDTO implements \JsonSerializable
     /**
      * @var int ID del producto
      */
-    private $product_name;
+    private $product_id;
 
     /**
      * @var int ID del producto
      */
-    private $image_url;
+    private $image_guid;
 
     /**
      * @var int Cantidad del producto
@@ -40,11 +40,11 @@ class orderDetailDTO implements \JsonSerializable
     /**
      * Constructor
      */
-    public function __construct($order_id, $product_name, $image_url, $quantity, $price, $size)
+    public function __construct($order_id, $product_id, $image_guid, $quantity, $price, $size)
     {
         $this->order_id = $order_id;
-        $this->product_name = $product_name;
-        $this->image_url = $image_url;
+        $this->product_id = $product_id;
+        $this->image_guid = $image_guid;
         $this->quantity = $quantity;
         $this->price = $price;
         $this->size = $size;
@@ -58,14 +58,14 @@ class orderDetailDTO implements \JsonSerializable
         return $this->order_id;
     }
 
-    public function getProductName()
+    public function getProductId()
     {
-        return $this->product_name;
+        return $this->product_id;
     }
 
-    public function getImageUrl()
+    public function getImageGuid()
     {
-        return $this->image_url;
+        return $this->image_guid;
     }
 
     public function getQuantity()
@@ -91,7 +91,7 @@ class orderDetailDTO implements \JsonSerializable
         $this->order_id = $order_id;
     }
 
-    public function setProductName($product_name)
+    public function setProductId($product_name)
     {
         $this->product_name = $product_name;
     }
@@ -99,6 +99,11 @@ class orderDetailDTO implements \JsonSerializable
     public function setQuantity($quantity)
     {
         $this->quantity = $quantity;
+    }
+
+    public function setImageGuid($image_guid)
+    {
+        $this->image_guid = $image_guid;
     }
 
     public function setPrice($price)

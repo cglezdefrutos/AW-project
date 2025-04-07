@@ -39,6 +39,24 @@ class productSizesDTO implements \JsonSerializable
         return $this->sizes;
     }
 
+    public function getTotalStock()
+    {
+        $totalStock = 0;
+        foreach ($this->sizes as $size => $stock) {
+            $totalStock += $stock;
+        }
+        return $totalStock;
+    }
+
+    public function getStockBySize($size)
+    {
+        $stock = 0;
+        if (array_key_exists($size, $this->sizes)) {
+            $stock = $this->sizes[$size];
+        }
+        return $stock;
+    }
+
     /**
      * Setters
      */
@@ -51,7 +69,7 @@ class productSizesDTO implements \JsonSerializable
     {
         $this->sizes = $sizes;
     }
-
+   
     /**
      * Método para serializar el objeto a JSON
      * 

@@ -68,23 +68,13 @@ class searchEventForm extends baseForm
                 <!-- Campo Precio mínimo -->
                 <div class="mb-3">
                     <label for="min_price" class="form-label">Precio mínimo (€):</label>
-                    <input type="number" name="min_price" id="min_price" class="form-control" step="0.01" placeholder="0" value="
-        EOF;
-
-        $html .= htmlspecialchars($initialData['min_price'] ?? '') . '">';
-        
-        $html .= <<<EOF
+                    <input type="number" name="min_price" id="min_price" class="form-control" step="0.01" placeholder="0" value="0">
                 </div>
 
                 <!-- Campo Precio máximo -->
                 <div class="mb-3">
                     <label for="max_price" class="form-label">Precio máximo (€):</label>
-                    <input type="number" name="max_price" id="max_price" class="form-control" step="0.01" placeholder="1000" value="
-        EOF;
-
-        $html .= htmlspecialchars($initialData['max_price'] ?? '') . '">';
-        
-        $html .= <<<EOF
+                    <input type="number" name="max_price" id="max_price" class="form-control" step="0.01" placeholder="1000" value="1000">
                 </div>
 
                 <!-- Campo Ubicación -->
@@ -140,9 +130,9 @@ class searchEventForm extends baseForm
         // Filtrado y sanitización de los datos
         $eventName = trim($data['name'] ?? '');
         $eventName = filter_var($eventName, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if (empty($eventName) || strlen($eventName) > 50)
+        if (strlen($eventName) > 50)
         {
-            $result[] = 'El nombre del evento es obligatorio y no debe exceder los 50 caracteres.';
+            $result[] = 'El nombre del evento no debe exceder los 50 caracteres.';
         }
 
         $startDate = trim($data['start_date'] ?? '');
@@ -151,28 +141,32 @@ class searchEventForm extends baseForm
         $endDate = trim($data['end_date'] ?? '');
         $endDate = filter_var($endDate, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-        $minPrice = trim($data['min_price'] ?? '');
+        $minPrice = trim($data['min_price'] ?? 0);
         $minPrice = filter_var($minPrice, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if (!is_numeric($minPrice) || $minPrice < 0) {
             $result[] = 'El precio debe ser un número positivo.';
         }
 
-        $maxPrice = trim($data['max_price'] ?? '');
+        $maxPrice = trim($data['max_price'] ?? 0);
         $maxPrice = filter_var($maxPrice, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if (!is_numeric($maxPrice) || $maxPrice < 0) {
             $result[] = 'El precio debe ser un número positivo.';
         }
 
+        if($minPrice > $maxPrice) {
+            $result[] = 'El precio mínimo no puede ser mayor que el precio máximo.';
+        }
+
         $location = trim($data['location'] ?? '');
         $location = filter_var($location, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if (empty($location) || strlen($location) > 100) {
-            $result[] = 'La localización es obligatoria y no debe exceder los 100 caracteres.';
+        if (strlen($location) > 100) {
+            $result[] = 'La localización no debe exceder los 100 caracteres.';
         }
 
         $category = trim($data['category'] ?? '');
         $category = filter_var($category, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if (empty($category) || strlen($category) > 50) {
-            $result[] = 'La categoría es obligatoria y no debe exceder los 50 caracteres.';
+        if (strlen($category) > 50) {
+            $result[] = 'La categoría no debe exceder los 50 caracteres.';
         }
 
         if(count($result) === 0)

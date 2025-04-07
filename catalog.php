@@ -7,6 +7,7 @@ use TheBalance\product\productAppService;
 use TheBalance\product\productDTO;
 use TheBalance\catalog\catalogContent;
 use TheBalance\catalog\catalogFilterForm;
+use TheBalance\utils\utilsFactory;
 
 $app = application::getInstance();
 
@@ -29,8 +30,8 @@ if (!isset($_GET["search"]) || $_GET["search"] != "true")
     // Limpiamos resultados anteriores
     unset($_SESSION["foundedProductsJSON"]);
 
-    // Tomar todos los productos de la BBDD
-    $productsDTO = $productAppService->searchProducts(array());
+    // Tomar todos los productos de la BBDD que tengan el campo active a 1
+    $productsDTO = $productAppService->searchProducts(array("active" => 1));
 }
 // Si hay filtros aplicados y se ha utilizado la barra de búsqueda, buscamos ese nombre
 else if(isset($_GET["name"]) && $_GET["name"] != "") 
@@ -66,7 +67,7 @@ else
             $productData['description'],
             $productData['price'],
             $productData['category_DTO'],
-            $productData['image_url'],
+            $productData['image_guid'],
             $productData['created_at'],
             $productData['sizes_DTO'],
             $productData['active'],
@@ -77,6 +78,12 @@ else
 // Generar el contenido del catálogo
 $catalog = new catalogContent($productsDTO);
 $htmlCatalog = $catalog->generateContent();
+
+// Si esta vacio productsDTO, mostramos un mensaje de alerta
+if (empty($productsDTO)) 
+{
+    $htmlCatalog .= utilsFactory::createAlert("Lo sentimos, no hemos encontrado ningún producto que coincida con los filtros seleccionados.", "warning");
+}
 
 // Combinar el formulario y el catálogo
 $mainContent .= <<<EOS
@@ -93,4 +100,4 @@ $mainContent .= <<<EOS
     </div>
 EOS;
 
-require_once __DIR__.'/includes/views/template/template.php';
+require_once BASE_PATH.'/includes/views/template/template.php';

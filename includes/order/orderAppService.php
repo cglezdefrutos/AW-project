@@ -173,12 +173,12 @@ class orderAppService
      * @param orderDTO $order Objeto que contiene los datos del pedido a crear
      * @return int ID del nuevo pedido creado, o -1 si hubo un error
      */
-    public function createOrder($order)
+    public function createOrder($orderDTO)
     {
         $IOrderDAO = orderFactory::CreateOrder();
 
         try {
-            return $IOrderDAO->createOrder($order);
+            return $IOrderDAO->createOrder($orderDTO);
         } catch (\Exception $e) {
             throw new \Exception("Error al crear el pedido: " . $e->getMessage());
         }

@@ -32,7 +32,7 @@ class orderMock implements IOrder
      */
     public function getOrderById($orderId)
     {
-        return new orderDTO($orderId, 1, 100.00, "En preparación", date('Y-m-d H:i:s')); 
+        return new orderDTO($orderId, 1, 100.00, "En preparación", "Calle Holanda 2", date('Y-m-d H:i:s')); 
     }
 
     /**
@@ -41,11 +41,11 @@ class orderMock implements IOrder
      * @param 
      * @return array de orders
      */
-    public function getAllOrders() 
+    public function getAllOrdersWithEmail() 
     {
         $orders = array(
-            new orderDTO(1, 1, 100.00, "En preparación", date('Y-m-d H:i:s')),
-            new orderDTO(2, 2, 200.00, "Enviado", date('Y-m-d H:i:s')),
+            new orderDTO(1, "a@ucm.es", 100.00, "En preparación", "Calle Holanda 2", date('Y-m-d H:i:s')),
+            new orderDTO(2, "b@ucm.es", 200.00, "Enviado", "Calle Belgica 1", date('Y-m-d H:i:s')),
         );
         return $orders;
     }
@@ -59,8 +59,8 @@ class orderMock implements IOrder
     public function getOrdersByUserId($userId)
     {
         $orders = array(
-            new orderDTO(1, $userId, 100.00, "En preparación", date('Y-m-d H:i:s')),
-            new orderDTO(2, $userId, 200.00, "Enviado", date('Y-m-d H:i:s')),
+            new orderDTO(1, $userId, 100.00, "En preparación", "Calle Holanda 2", date('Y-m-d H:i:s')),
+            new orderDTO(3, $userId, 200.00, "Enviado", "Calle Holanda 2", date('Y-m-d H:i:s')),
         );
         return $orders;
     }

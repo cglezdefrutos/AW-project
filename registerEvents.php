@@ -5,6 +5,7 @@ require_once __DIR__.'/includes/config.php';
 use TheBalance\event\registerEventForm;
 use TheBalance\event\registerAnotherEventForm;
 use TheBalance\application;
+use TheBalance\utils\utilsFactory;
 
 $titlePage = "Registrar eventos";
 $mainContent = "";
@@ -13,18 +14,14 @@ $app = application::getInstance();
 
 if(!$app->isCurrentUserLogged())
 {
-    $mainContent = <<<EOS
-        <h1>No es posible registrar un evento si no has iniciado sesión.</h1>
-    EOS;
+    $mainContent = utilsFactory::createAlert("No se puede registrar un evento si no se ha iniciado sesión.", "danger");
 } 
 else 
 {
     // Comprobar si el usuario es proveedor o administrador
     if(!$app->isCurrentUserProvider() && !$app->isCurrentUserAdmin())
     {
-        $mainContent = <<<EOS
-            <h1>No es posible registrar un evento si no se es proveedor o administrador.</h1>
-        EOS;
+        $mainContent .= utilsFactory::createAlert("No se puede registrar un evento si no es proveedor o administrador.", "danger");
     }
     else
     {
@@ -34,8 +31,10 @@ else
             $form = new registerAnotherEventForm();
             $htmlRegisterAnotherEventForm = $form->Manage();
 
-            $mainContent = <<<EOS
-                <h1>Evento registrado correctamente.</h1>
+            // Alerta de éxito
+            $mainContent .= utilsFactory::createAlert("El evento ha sido registrado correctamente.", "success");
+
+            $mainContent .= <<<EOS
                 $htmlRegisterAnotherEventForm
             EOS;
         }
@@ -53,4 +52,4 @@ else
     }
 }
 
-require_once __DIR__.'/includes/views/template/template.php';
+require_once BASE_PATH.'/includes/views/template/template.php';

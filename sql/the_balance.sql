@@ -134,7 +134,7 @@ CREATE TABLE `products` (
   `price` decimal(10,0) NOT NULL,
   `category_id` bigint(11) NOT NULL,
   `image_url` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `active` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
