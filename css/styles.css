@@ -1,0 +1,279 @@
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* General */
+body {
+    font-family: 'Arial', sans-serif; /* Cambia la fuente a algo más moderno */
+    line-height: 1.6; /* Mejora la legibilidad */
+    color: #333; /* Color de texto más suave */
+    background-color: #f8f9fa; /* Fondo claro */
+    margin: 0;
+    padding: 0;
+}
+
+/* Encabezado principal */
+h1.display-4 {
+    font-weight: bold;
+    color: #007bff; /* Azul primario */
+    margin-bottom: 1rem;
+}
+
+p.lead {
+    font-size: 1.2rem;
+    color: #555; /* Gris suave */
+}
+
+/* Títulos secundarios */
+h2 {
+    font-weight: bold;
+    color: #343a40; /* Gris oscuro */
+    margin-bottom: 1.5rem;
+}
+
+/* Página de éxito */
+.success-page {
+    margin-top: 20px; /* Margen superior */
+    margin-bottom: 20px; /* Margen inferior */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Tarjeta de éxito */
+.success-card {
+    max-width: 600px;
+    width: 100%;
+}
+
+/* Logo en la tarjeta */
+.success-logo {
+    max-width: 150px;
+}
+
+/* Tarjetas */
+.card {
+    border: none; /* Elimina el borde predeterminado */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Efecto de elevación al pasar el ratón */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #007bff; /* Azul primario */
+}
+
+.card-text {
+    color: #555; /* Gris suave */
+}
+
+/* Botones */
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Azul más oscuro */
+}
+
+/* Imagen del logo */
+.table-image {
+    max-height: 100px; /* Ajusta la altura según tus necesidades */
+    border-radius: 8px; /* Bordes redondeados */
+}
+
+/* Imagen de las tablas */
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px; /* Bordes redondeados */
+}
+
+/* Márgenes entre filas */
+.row {
+    margin-bottom: 2rem; /* Espaciado entre filas */
+}
+
+/* Footer */
+footer {
+    background-color: #343a40; /* Fondo gris oscuro */
+    color: #fff; /* Texto blanco */
+    padding: 2rem 0;
+}
+
+footer h5 {
+    font-weight: bold;
+    color: #fff;
+}
+
+footer p {
+    color: #ccc; /* Gris claro */
+}
+
+footer a {
+    color: #007bff; /* Azul primario */
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #0056b3; /* Azul más oscuro */
+    text-decoration: underline;
+}
+
+/* Form Styles */
+form {
+    background: #fff;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+form fieldset {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+form legend {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #0056b3; /* Azul estilo Decathlon */
+}
+
+form label {
+    margin-right: 10px; ;
+    margin-bottom: 15px;
+}
+
+form input[type="text"],
+form input[type="password"],
+form input[type="email"],
+form input[type="tel"],
+form input[type="date"],
+form input[type="datetime-local"],
+form input[type="number"],
+form textarea,
+form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border 0.3s ease;
+    font-family: 'Roboto', sans-serif;
+}
+
+form input[type="text"]:focus,
+form input[type="password"]:focus,
+form input[type="email"]:focus,
+form input[type="tel"]:focus,
+form input[type="date"]:focus,
+form input[type="datetime-local"]:focus,
+form input[type="number"]:focus,
+form textarea:focus,
+form select:focus {
+    border: 1px solid #0056b3; /* Azul estilo Decathlon */
+}
+
+form input[type="submit"] {
+    background: #0056b3; /* Azul estilo Decathlon */
+    color: #fff;
+    border: 0;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+form input[type="submit"]:hover {
+    background: #39ff14; /* Verde fosforito */
+}
+
+form textarea {
+    height: 100px; /* Ajusta la altura según tus necesidades */
+    resize: vertical; /* Permite cambiar el tamaño verticalmente */
+}
+
+/* Footer */
+footer {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* Utility Classes */
+.text-center {
+    text-align: center;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+/* Estilos para el texto del carrusel */
+.carousel-caption {
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.carousel-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ffffff; /* Color blanco */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Sombra para el texto */
+}
+
+.carousel-title a {
+    color: #ffcc00; /* Color del enlace */
+    text-decoration: none;
+}
+
+.carousel-title a:hover {
+    color: #ffd633; /* Color del enlace al pasar el ratón */
+    text-decoration: underline;
+}
+
+.carousel-text {
+    font-size: 1.2rem;
+    color: #f0f0f0; /* Color gris claro */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8); /* Sombra para el texto */
+}
+
+/* Estilos para las imágenes de las tarjetas */
+.card-img-custom {
+    width: 100%; /* Asegura que la imagen ocupe todo el ancho del contenedor */
+    height: 200px; /* Altura fija para todas las imágenes */
+    object-fit: cover; /* Recorta la imagen para que se ajuste al contenedor */
+    border-radius: 5px; /* Opcional: bordes redondeados */
+}
+
+/* Estilos para las imágenes del carrusel */
+.carousel-item img {
+    width: 100%; /* Asegura que la imagen ocupe todo el ancho del contenedor */
+    height: 600px; /* Define una altura fija para todas las imágenes */
+    object-fit: cover; /* Recorta la imagen para que se ajuste al contenedor sin deformarse */
+}
