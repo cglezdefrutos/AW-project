@@ -25,7 +25,7 @@ else
 {
     if(!isset($success) || ($success != 'true'))
     {
-        $eventId = $_GET['id'] ?? $_POST['eventId'] ?? null;
+        $eventId = $_GET['id'] ?? $_POST['event_id'] ?? null;
         if($eventId == null)
         {
             $mainContent = <<<EOS

@@ -30,8 +30,8 @@ if (!isset($_GET["search"]) || $_GET["search"] != "true")
     // Limpiamos resultados anteriores
     unset($_SESSION["foundedProductsJSON"]);
 
-    // Tomar todos los productos de la BBDD
-    $productsDTO = $productAppService->searchProducts(array());
+    // Tomar todos los productos de la BBDD que tengan el campo active a 1
+    $productsDTO = $productAppService->searchProducts(array("active" => 1));
 }
 // Si hay filtros aplicados y se ha utilizado la barra de búsqueda, buscamos ese nombre
 else if(isset($_GET["name"]) && $_GET["name"] != "") 

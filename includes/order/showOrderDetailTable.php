@@ -3,6 +3,7 @@
 namespace TheBalance\order;
 
 use TheBalance\views\common\baseTable;
+use TheBalance\product\productAppService;
 
 class showOrderDetailTable extends baseTable
 {
@@ -15,8 +16,9 @@ class showOrderDetailTable extends baseTable
         foreach ($this->data as $detail) {
             $subtotal = $detail->getSubtotal();
             $total += $subtotal;
-            $imageUrl = '/AW-project/img/' . $detail->getImageGuid() . '.png';
-            
+
+            $imageUrl = productAppService::GetSingleton()->getProductImagePath($detail->getImageGuid());
+
             $html .= '<tr>';
             $html .= '<td>' . htmlspecialchars($detail->getProductId()) . '</td>'; //antes getProductId()
             $html .= '<td class="align-middle text-center"><img src="'.htmlspecialchars($imageUrl).'" class="img-fluid table-image"></td>';

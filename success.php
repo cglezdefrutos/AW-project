@@ -58,7 +58,7 @@ if ($sessionId) {
                     $orderDetailDTO = new orderDetailDTO(
                         $orderId, 
                         $productId,
-                        $product->getImageUrl(),
+                        $product->getImageGuid(),
                         $quantity, 
                         $product->getPrice(), 
                         $size

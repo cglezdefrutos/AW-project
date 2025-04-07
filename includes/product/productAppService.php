@@ -297,6 +297,31 @@ class productAppService
     }
 
     /**
+     * Devuelve la ruta de la imagen del producto
+     * 
+     * @param string $imageGuid GUID de la imagen
+     * 
+     * @return string Ruta de la imagen
+     */
+    public function getProductImagePath($imageGuid)
+    {
+        // Definir las extensiones posibles
+        $possibleExtensions = ['png', 'jpg', 'jpeg'];
+
+        // Buscar el archivo con la extensión correcta
+        foreach ($possibleExtensions as $extension) {
+            $path = IMG_PATH . '/' . $imageGuid . '.' . $extension;
+            if (file_exists($_SERVER['DOCUMENT_ROOT'] . $path)) {
+                return $path;
+            }
+        }
+
+        // Si no se encuentra, devolver una imagen por defecto
+        return '/AW-project/img/default.png';
+    }
+
+
+    /**
      * Busca un producto por su ID
      * 
      * @param int $id ID del producto

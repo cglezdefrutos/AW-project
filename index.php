@@ -7,6 +7,10 @@ use TheBalance\utils\utilsFactory;
 $titlePage = 'Inicio - The Balance';
 
 $carousel = utilsFactory::createCarousel();
+$card1 = utilsFactory::createCard(IMG_PATH . "/catalogo.jpg", 'Tienda', 'Tienda', 'Descubre los mejores suplementos y equipamiento deportivo para mejorar tu rendimiento.', 'catalog.php');
+$card2 = utilsFactory::createCard(IMG_PATH . "/eventos.png", 'Eventos', 'Eventos', 'Descubre y participa en los mejores eventos organizados por nuestra comunidad.', 'searchEvents.php');
+$card3 = utilsFactory::createCard(IMG_PATH . "/trainer.jpg", 'Planes de entrenamiento', 'Planes de entrenamiento', 'Accede a planes de entrenamiento personalizados para alcanzar tus objetivos.', 'index.php');    
+$card4 = utilsFactory::createCard(IMG_PATH . "/workwithus.jpg", 'Trabaja con nosotros', 'Trabaja con nosotros', 'Descubre las oportunidades laborales que tenemos para ti. Únete a nuestro equipo.', 'index.php');
 
 $imgPath = IMG_PATH;
 
@@ -41,50 +45,22 @@ $mainContent=<<<EOS
     <div class="row p-3">
         <!-- Tarjeta 1 -->
         <div class="col-md-3 mb-4">
-            <div class="card h-100">
-                <img src="$imgPath/catalogo.jpg" class="card-img-top" alt="Tienda">
-                <div class="card-body">
-                    <h5 class="card-title">Tienda</h5>
-                    <p class="card-text">Descubre los mejores suplementos y equipamiento deportivo para mejorar tu rendimiento.</p>
-                    <a href="catalog.php" class="btn btn-primary">Ver más</a>
-                </div>
-            </div>
+            $card1
         </div>
 
         <!-- Tarjeta 2 -->
         <div class="col-md-3 mb-4">
-            <div class="card h-100">
-                <img src="$imgPath/eventos.png" class="card-img-top" alt="Eventos">
-                <div class="card-body">
-                    <h5 class="card-title">Eventos</h5>
-                    <p class="card-text">Descubre y participa en los mejores eventos organizados por nuestra comunidad.</p>
-                    <a href="searchEvents.php" class="btn btn-primary">Ver más</a>
-                </div>
-            </div>
+            $card2
         </div>
 
         <!-- Tarjeta 3 -->
         <div class="col-md-3 mb-4">
-            <div class="card h-100">
-                <img src="$imgPath/trainer.jpg" class="card-img-top" alt="Eventos">
-                <div class="card-body">
-                    <h5 class="card-title">Planes de entrenamiento</h5>
-                    <p class="card-text">Accede a planes de entrenamiento personalizados para alcanzar tus objetivos.</p>
-                    <a href="index.php" class="btn btn-primary">Ver más</a>
-                </div>
-            </div>
+            $card3
         </div>
 
         <!-- Tarjeta 4 -->
         <div class="col-md-3 mb-4">
-            <div class="card h-100">
-                <img src="$imgPath/workwithus.jpg" class="card-img-top" alt="Trabaja">
-                <div class="card-body">
-                    <h5 class="card-title">Trabaja con nosotros</h5>
-                    <p class="card-text">Descubre las oportunidades laborales que tenemos para ti.</p>
-                    <a href="index.php" class="btn btn-primary">Ver más</a>
-                </div>
-            </div>
+            $card4
         </div>
     </div>
 EOS;

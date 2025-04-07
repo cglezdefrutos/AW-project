@@ -41,40 +41,40 @@ class utilsFactory
     {
         $carousel = <<<EOS
             <div id="carousel" class="carousel slide" data-ride="carousel">
-                <!-- Indicadores (aparecen como rayitas) -->
+                <!-- Indicadores -->
                 <ul class="carousel-indicators">
                     <button type="button" data-bs-target="#carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                     <button type="button" data-bs-target="#carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
                     <button type="button" data-bs-target="#carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
                 </ul>
-                <!-- Diapositivas (elementos del carrusel) -->
+                <!-- Diapositivas -->
                 <div class="carousel-inner">
                     <!-- Primera diapositiva -->
                     <div class="carousel-item active">
                         <img src="/AW-project/img/bellingham_carrusel.jpeg" class="img-fluid" alt="Promoción 1">
                         <div class="carousel-caption">
-                            <h5><a href="index.php">Equipamiento Fitness</a></h5>
-                            <p>Descubre nuestra selección de productos para mantenerte en forma.</p>
+                            <h5 class="carousel-title"><a href="catalog.php?name=bellingham&search=true">Adidas X Jude Bellingham</a></h5>
+                            <p class="carousel-text">Descubre la nueva colección de Adidas en colaboracion con Jude Bellingham.</p>
                         </div>
                     </div>
                     <!-- Segunda diapositiva -->
                     <div class="carousel-item">
-                        <img src="/AW-project/img/bellingham_carrusel.jpeg" class="img-fluid" alt="Promoción 2">
+                        <img src="/AW-project/img/nike_carrusel.jpg" class="img-fluid" alt="Promoción 2">
                         <div class="carousel-caption">
-                            <h5><a href="index.php">Bienestar y Relax</a></h5>
-                            <p>Encuentra productos para tu equilibrio físico y mental.</p>
+                            <h5 class="carousel-title"><a href="catalog.php?name=cleveland&search=true">LeBron James en Cleveland</a></h5>
+                            <p class="carousel-text">Recuerda los mejores momentos de LeBron James en Cleveland con su camiseta retro.</p>
                         </div>
                     </div>
                     <!-- Tercera diapositiva -->
                     <div class="carousel-item">
-                        <img src="/AW-project/img/bellingham_carrusel.jpeg" class="img-fluid" alt="Promoción 3">
+                        <img src="/AW-project/img/spain_carrusel.jpg" class="img-fluid" alt="Promoción 3">
                         <div class="carousel-caption">
-                            <h5><a href="index.php">Nutrición Saludable</a></h5>
-                            <p>Explora nuestra línea de suplementos y alimentos saludables.</p>
+                            <h5 class="carousel-title"><a href="catalog.php?name=seleccion&search=true">Camiseta de la Selección Española</a></h5>
+                            <p class="carousel-text">Apoya a la Selección Española con la nueva camiseta de la Eurocopa 2024.</p>
                         </div>
                     </div>
                 </div>
-                <!-- Controles para pasar a la anterior o a la siguiente -->
+                <!-- Controles -->
                 <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
@@ -87,6 +87,21 @@ class utilsFactory
         EOS;
 
         return $carousel;
+    }
+
+    public static function createCard($imagePath, $altText, $title, $description, $link, $buttonText = 'Ver más')
+    {
+        $html = <<<EOS
+            <div class="card h-100">
+                <img src="$imagePath" class="card-img-top card-img-custom" alt="$altText">
+                <div class="card-body">
+                    <h5 class="card-title">$title</h5>
+                    <p class="card-text">$description</p>
+                    <a href="$link" class="btn btn-primary">$buttonText</a>
+                </div>
+            </div>
+        EOS;
+        return $html;
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace TheBalance\catalog;
 
+use TheBalance\product\productAppService;
+
 /**
  * Clase para generar el contenido del catálogo.
  */
@@ -28,10 +30,7 @@ class catalogContent
         foreach ($this->products as $product) 
         {
             // Construir la URL de la imagen usando el GUID
-            $imageUrl = '/AW-project/img/' . $product->getImageGuid() . '.png';
-            /* if (!file_exists($imagePath)) {
-                $imagePath = 'img/default.png'; // Imagen predeterminada
-            } */
+            $imageUrl = productAppService::GetSingleton()->getProductImagePath($product->getImageGuid());
 
             $html .= <<<EOS
                 <div class="col-sm-6 col-md-4 mb-4">

@@ -37,7 +37,7 @@ class cartTable extends baseTable
             $subtotal = $product->getPrice() * $quantity;
 
             // Construir la URL de la imagen
-            $imageUrl = '/AW-project/img/' . $product->getImageGuid() . '.png';
+            $imageUrl = $this->productAppService->getProductImagePath($product->getImageGuid());
 
             $html .= <<<EOF
                 <tr>

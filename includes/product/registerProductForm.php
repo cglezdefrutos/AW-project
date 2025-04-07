@@ -45,8 +45,6 @@ class registerProductForm extends baseForm
      */
     protected function CreateFields($initialData)
     {
-        $html = '<form method="post" enctype="multipart/form-data">';
-
         // Definimos las tallas disponibles
         $sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
         
@@ -103,7 +101,7 @@ class registerProductForm extends baseForm
                 <div class="mb-3">
                     <label for="image" class="form-label">Imagen del producto:</label>
                     <input type="file" name="image" id="image" class="form-control" accept="image/*" required>
-                    <small class="form-text text-muted">Formatos permitidos: JPEG, PNG, GIF.</small>
+                    <small class="form-text text-muted">Formatos permitidos: JPEG, JPG o PNG.</small>
                 </div>
 
                 <!-- Sección de Stock por tallas -->
@@ -183,13 +181,13 @@ class registerProductForm extends baseForm
             $result[] = 'Error al subir la imagen: ' . $this->getUploadError($_FILES['image']['error']);
         } else {
             // Validar tipo de archivo
-            $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webp'];
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
             $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
             $mimeType = finfo_file($fileInfo, $image['tmp_name']);
             finfo_close($fileInfo);
             
             if (!in_array($mimeType, $allowedTypes)) {
-                $result[] = 'El archivo debe ser una imagen (JPEG, PNG o GIF).';
+                $result[] = 'El archivo debe ser una imagen (JPEG, JPG o PNG).';
             }
         }
 

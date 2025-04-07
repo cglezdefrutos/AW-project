@@ -48,7 +48,7 @@ class manageProductsTable extends baseTable
             }
 
             // Construir URL de la imagen
-            $imageUrl = '/AW-project/img/' . $product->getImageGuid() . '.png';
+            $imageUrl = productAppService::GetSingleton()->getProductImagePath($product->getImageGuid());
 
             $html .= <<<EOF
                 <tr>
