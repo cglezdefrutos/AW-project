@@ -2,7 +2,7 @@
 
 namespace TheBalance\order;
 
-class OrderWithUserDTO implements \JsonSerializable {
+class orderWithUserDTO implements \JsonSerializable {
     /**
      * @var int Identificador del usuario
      */

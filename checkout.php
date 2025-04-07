@@ -89,8 +89,8 @@ $checkoutSession = Session::create([
     'payment_method_types' => ['card'],
     'line_items' => $lineItems,
     'mode' => 'payment',
-    'success_url' => 'http://localhost/AW-project/success.php?session_id={CHECKOUT_SESSION_ID}',
-    'cancel_url' => 'http://localhost/AW-project/success.php',
+    'success_url' => 'https://vm012.containers.fdi.ucm.es/AW-project/success.php?session_id={CHECKOUT_SESSION_ID}',
+    'cancel_url' => 'https://vm012.containers.fdi.ucm.es/AW-project/cancel.php',
     'metadata' => [
         'shipping_address' => implode(', ', [
             $shippingAddress['street'],

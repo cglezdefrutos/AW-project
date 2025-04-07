@@ -8,7 +8,7 @@ use TheBalance\order\orderAppService;
 use TheBalance\order\orderDetailAppService;
 use TheBalance\order\orderDTO;
 use TheBalance\order\orderDetailDTO;
-use TheBalance\product\ProductAppService;
+use TheBalance\product\productAppService;
 use TheBalance\utils\utilsFactory;
 
 use Stripe\Stripe;
@@ -50,7 +50,7 @@ if ($sessionId) {
                 [$productId, $size] = explode('|', $cartKey);
 
                 // Obtener información del producto desde la base de datos
-                $productAppService = ProductAppService::GetSingleton();
+                $productAppService = productAppService::GetSingleton();
                 $product = $productAppService->getProductById($productId);
 
                 if ($product) {
@@ -86,7 +86,7 @@ if ($sessionId) {
                             <p class="lead">Tu pedido ha sido procesado con éxito.</p>
                             <hr>
                             <p>Pronto recibirás un correo electrónico con los detalles de tu pedido.</p>
-                            <p class="text-muted">Si tienes alguna pregunta, no dudes en <a href="contact.php" class="text-decoration-none">contactarnos</a>.</p>
+                            <p class="text-muted">Si tienes alguna pregunta, no dudes en <a href="index.php" class="text-decoration-none">contactarnos</a>.</p>
                         </div>
                         <div class="card-footer text-center">
                             <a href="catalog.php" class="btn btn-primary btn-lg">Volver al catálogo</a>

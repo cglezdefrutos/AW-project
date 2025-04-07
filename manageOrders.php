@@ -3,7 +3,7 @@
 require_once __DIR__.'/includes/config.php';
 
 use TheBalance\order\orderAppService;
-use TheBalance\order\OrderWithUserDTO;
+use TheBalance\order\orderWithUserDTO;
 use TheBalance\order\manageOrderTable;
 use TheBalance\application;
 use TheBalance\utils\utilsFactory;
@@ -41,7 +41,7 @@ else
 
         // Convertir los datos en objetos DTO
         $orders = array_map(function($orderData) {
-            return new OrderWithUserDTO(
+            return new orderWithUserDTO(
                 $orderData->getId(),
                 $orderData->getUserId(),
                 $orderData->getEmail(),

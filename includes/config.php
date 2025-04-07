@@ -6,15 +6,15 @@ use TheBalance\utils\utilsFactory;
 /**
  * Parámetros de conexión a la BD
  */
-define('DB_HOST', 'vm012.db.swarm.test');
+/* define('DB_HOST', 'vm012.db.swarm.test');
 define('DB_NAME', 'the_balance');
 define('DB_USER', 'root');
-define('DB_PASS', 'EvbBYyU2kNwH0XUxjWRw');
+define('DB_PASS', 'EvbBYyU2kNwH0XUxjWRw'); */
 
-/* define('DB_HOST', 'localhost');
+define('DB_HOST', 'localhost');
 define('DB_NAME', 'the_balance');
 define('DB_USER', 'root');
-define('DB_PASS', ''); */
+define('DB_PASS', '');
 
 
 /**
@@ -52,7 +52,7 @@ spl_autoload_register(function ($class) {
     $prefix = 'TheBalance\\';
 
     // Directorio base para el namespace raíz
-    $base_dir = __DIR__ . DIRECTORY_SEPARATOR;
+    $base_dir = __DIR__ . "/";
 
     // Verificar si la clase usa nuestro namespace
     $len = strlen($prefix);
@@ -64,7 +64,7 @@ spl_autoload_register(function ($class) {
     $relative_class = substr($class, $len);
 
     // Convertir namespace en ruta de archivos
-    $file = str_replace(DIRECTORY_SEPARATOR, '/', $base_dir) . str_replace(DIRECTORY_SEPARATOR, '/', $relative_class) . '.php';
+    $file = str_replace('\\', '/', $base_dir) . str_replace("\\", '/', $relative_class) . '.php';
 
     // Cargar el archivo si existe
     if (file_exists($file)) {

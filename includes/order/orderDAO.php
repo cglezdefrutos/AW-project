@@ -97,7 +97,7 @@ class orderDAO extends baseDAO implements IOrder
     
             // Guardamos los resultados en el array
             while ($stmt->fetch()) {
-                $order = new OrderWithUserDTO($id, $user_id, $email, $total_price, $status, $shipping_address, $created_at);
+                $order = new orderWithUserDTO($id, $user_id, $email, $total_price, $status, $shipping_address, $created_at);
                 $orders[] = $order;
             }
     
