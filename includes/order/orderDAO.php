@@ -111,8 +111,6 @@ class orderDAO extends baseDAO implements IOrder
         return $orders;
     }
     
-    
-
     /**
      * Optiene los Orders de un usuario
      * 
@@ -294,6 +292,4 @@ class orderDAO extends baseDAO implements IOrder
     
         return $orderId;
     }
-    
-
 }

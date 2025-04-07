@@ -2,9 +2,13 @@
 
 namespace TheBalance\product;
 
+require_once __DIR__ . '/../../vendor/autoload.php';
+
 use TheBalance\application;
 use TheBalance\product\productHasOrdersException;
 use TheBalance\product\notProductOwnerException;
+use Ramsey\Uuid\Uuid;
+
 /**
  * Clase que contiene la lógica de la aplicación de productos
  */
@@ -195,25 +199,31 @@ class productAppService
      * 
      * @return bool Resultado de la operación
      */
-    public function updateProduct($productData)
+    public function updateProduct($productDTO)
     {
         $IProductDAO = productFactory::CreateProduct();
-
-        
+    
         // Obtener el ID de la categoría a partir del nombre de la categoría
-        $categoryId = $IProductDAO->getCategoryId(($productData->getCategoryName()));
-
-        if ($categoryId === -1)
-       {
-           // Si no existe, lo registramos
-           $categoryId = $IProductDAO->registerCategory($productData->getCategoryName());
-       }
-
+        $categoryId = $IProductDAO->getCategoryId($productDTO->getCategoryName());
+    
+        if ($categoryId === -1) {
+            // Si no existe, lo registramos
+            $categoryId = $IProductDAO->registerCategory($productDTO->getCategoryName());
+        }
+    
         // Actualizamos el ID de la categoría en el DTO
-        $productData->setCategoryId($categoryId);
-
-        return $IProductDAO->updateProduct($productData);
-    }  
+        $productDTO->setCategoryId($categoryId);
+    
+        // Actualizar el producto
+        $updateResult = $IProductDAO->updateProduct($productDTO);
+    
+        // Actualizar las tallas del producto
+        if ($updateResult) {
+            $IProductDAO->updateProductSizes($productDTO->getId(), $productDTO->getSizesDTO());
+        }
+    
+        return $updateResult;
+    }
     /**
      * Registra un producto
      * 
@@ -223,12 +233,16 @@ class productAppService
      */
     public function registerProduct($productData)
     {
+
+        // Validar y guardar la imagen
+        $filename = $this->saveImage($productData['image']);
+
         $IProductDAO = productFactory::CreateProduct();
 
-         // Comprobamos si la categoria ya existe
-         $categoryId = $IProductDAO->getCategoryId($productData['category']);
+        // Comprobamos si la categoria ya existe
+        $categoryId = $IProductDAO->getCategoryId($productData['category']);
 
-         if ($categoryId === -1)
+        if ($categoryId === -1)
         {
             // Si no existe, lo registramos
             $categoryId = $IProductDAO->registerCategory($productData['category']);
@@ -241,15 +255,69 @@ class productAppService
             $productData['description'],
             $productData['price'],
             new productCategoryDTO($categoryId, $productData['category']),
-            $productData['image_url'],
+            $filename,
             $productData['created_at'],
             new productSizesDTO(null, $productData['stock']),
             true
         );
 
+        // Registramos el producto
+        $productId = $IProductDAO->registerProduct($productDTO, $productData['provider_id']);
         
-        return $IProductDAO->registerProduct($productDTO, $productData['provider_id']);
-        
+        // Guardamos las tallas del producto
+        $sizesDTO = $productDTO->getSizesDTO();
+        $sizesDTO->setProductId($productId);
+        $IProductDAO->registerProductSizes($productId, $sizesDTO);
+
+        return $productId;
+    }
+
+    /**
+     * Guarda una imagen en el sistema de archivos
+     * 
+     * @param string $image Ruta de la imagen
+     * 
+     * @return string Nombre del archivo guardado
+     */
+    public function saveImage($image)
+    {
+        $guid = Uuid::uuid4()->toString();
+
+        // Guardar la imagen en el sistema de archivos
+        $uploadDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR;
+        $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
+        $filename = $guid . '.' . $extension;
+        $uploadPath = $uploadDir . $filename;
+
+        if (!move_uploaded_file($image['tmp_name'], $uploadPath)) {
+            throw new \Exception('Error al subir la imagen del producto.');
+        }
+
+        return $filename;
+    }
+
+    /**
+     * Devuelve la ruta de la imagen del producto
+     * 
+     * @param string $imageGuid GUID de la imagen
+     * 
+     * @return string Ruta de la imagen
+     */
+    public function getProductImagePath($imageGuid)
+    {
+        // Definir las extensiones posibles
+        $possibleExtensions = ['png', 'jpg', 'jpeg'];
+
+        // Buscar el archivo con la extensión correcta
+        foreach ($possibleExtensions as $extension) {
+            $path = IMG_PATH . '/' . $imageGuid . '.' . $extension;
+            if (file_exists($_SERVER['DOCUMENT_ROOT'] . $path)) {
+                return $path;
+            }
+        }
+
+        // Si no se encuentra, devolver una imagen por defecto
+        return '/AW-project/img/default.png';
     }
 
 
@@ -285,6 +353,28 @@ class productAppService
         $IProduct = productFactory::CreateProduct();
 
         return $IProduct->getCategories();
+    }
+
+    /**
+     * Actualiza el stock de un producto
+     * 
+     * @param int $id ID del producto 
+     * @param int $quantity Cantidad a actualizar
+     * @param string $size Talla del producto
+     * 
+     * @return bool Resultado de la operación
+     */
+    public function updateProductStock($productId, $quantity, $size)
+    {
+        $IProduct = productFactory::CreateProduct();
+
+        // Tomamos el id de la talla
+        $sizeId = $IProduct->getSizeId($size);
+
+        // Actualizamos el stock del producto
+        $result = $IProduct->updateProductStock($productId, $quantity, $sizeId);
+
+        return $result;
     }
 }
     

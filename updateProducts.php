@@ -5,6 +5,7 @@ require_once __DIR__.'/includes/config.php';
 use TheBalance\product\productAppService;
 use TheBalance\product\updateProductForm;
 use TheBalance\application;
+use TheBalance\utils\utilsFactory;
 
 $titlePage = "Actualizar producto";
 $mainContent = "";
@@ -13,18 +14,15 @@ $app = application::getInstance();
 
 if (!$app->isCurrentUserLogged())
 {
-    $mainContent = <<<EOS
-        <h1>No es posible actualizar productos si no has iniciado sesión.</h1>
-    EOS;
+    // Alerta de que no se puede actualizar el producto si no se ha iniciado sesión
+    $mainContent .= utilsFactory::createAlert("No se puede actualizar el producto si no has iniciado sesión.", "danger");
 } 
 else 
 {
     // Comprobar si el usuario es proveedor o administrador
     if ( ! $app->isCurrentUserProvider() && ! $app->isCurrentUserAdmin() )
     {
-        $mainContent = <<<EOS
-            <h1>No es posible actualizar productos si no se es proveedor o administrador.</h1>
-        EOS;
+        $mainContent .= utilsFactory::createAlert("No tienes permisos para actualizar productos. Solo los proveedores y administradores pueden hacerlo.", "danger");
     } 
     else 
     {
@@ -38,11 +36,12 @@ else
             $product = $productAppService->getProductById($productId);
 
             // Verificar que el producto pertenece al proveedor (a menos que sea admin)
-            if (!$app->isCurrentUserAdmin() && $product->getProviderEmail() !== $app->getCurrentUserEmail()) {
-                $mainContent = <<<EOS
-                    <h1>No tienes permisos para actualizar este producto.</h1>
-                EOS;
-            } else {
+            if (!$app->isCurrentUserAdmin() && $product->getProviderEmail() !== $app->getCurrentUserEmail()) 
+            {
+                $mainContent .= utilsFactory::createAlert("No tienes permisos para actualizar este producto. Solo el proveedor que lo creó puede hacerlo.", "danger");
+            } 
+            else 
+            {
                 // Creamos el formulario
                 $form = new updateProductForm($product);
                 $htmlUpdateProductForm = $form->Manage();
@@ -56,9 +55,9 @@ else
         } 
         else 
         {
-            $mainContent = "<p>No se ha proporcionado un ID de producto válido.</p>";
+            $mainContent .= utilsFactory::createAlert("No se ha proporcionado un ID de producto válido.", "danger");
         }
     }
 }
 
-require_once __DIR__.'/includes/views/template/template.php';
+require_once BASE_PATH.'/includes/views/template/template.php';

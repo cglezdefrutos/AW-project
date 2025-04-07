@@ -91,7 +91,7 @@ class orderDetailAppService
         $IOrderDetailDAO = orderDetailFactory::createOrderDetail();
         try
         {
-            return $IOrderDetailDAO->createOrderDetail($orderDetailDTO);
+            $IOrderDetailDAO->createOrderDetail($orderDetailDTO);
         }
         catch (\Exception $e)
         {

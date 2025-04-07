@@ -39,14 +39,10 @@ class eventDTO implements \JsonSerializable
     private $location;
 
     /**
-     * @var string ID de la categoría del evento
+     * @var eventCategoryDTO Objeto que contiene la categoría del evento
+     * @see eventCategoryDTO
      */
-    private $categoryId;
-
-    /**
-     * @var string Nombre de la categoría del evento
-     */
-    private $categoryName;
+    private $categoryDTO;
 
     /**
      * @var int Capacidad del evento
@@ -61,7 +57,7 @@ class eventDTO implements \JsonSerializable
     /**
      * Constructor
      */
-    public function __construct($id, $name, $desc, $date, $price, $location, $capacity, $categoryId, $categoryName, $email_provider)
+    public function __construct($id, $name, $desc, $date, $price, $location, $capacity, $categoryDTO, $email_provider)
     {
         $this->id = $id;
         $this->name = $name;
@@ -70,8 +66,7 @@ class eventDTO implements \JsonSerializable
         $this->price = $price;
         $this->location = $location;
         $this->capacity = $capacity;
-        $this->categoryId = $categoryId;
-        $this->categoryName = $categoryName;
+        $this->categoryDTO = $categoryDTO;
         $this->email_provider = $email_provider;
     }
 
@@ -110,12 +105,12 @@ class eventDTO implements \JsonSerializable
 
     public function getCategoryId()
     {
-        return $this->categoryId;
+        return $this->categoryDTO->getId();
     }
 
     public function getCategoryName()
     {
-        return $this->categoryName;
+        return $this->categoryDTO->getName();
     }
 
     public function getCapacity()
@@ -161,14 +156,19 @@ class eventDTO implements \JsonSerializable
         $this->location = $location;
     }
 
+    public function setCategoryDTO($categoryDTO)
+    {
+        $this->categoryDTO = $categoryDTO;
+    }
+
     public function setCategoryId($categoryId)
     {
-        $this->categoryId = $categoryId;
+        $this->categoryDTO->setId($categoryId);
     }
     
     public function setCategoryName($categoryName)
     {
-        $this->categoryName = $categoryName;
+        $this->categoryDTO->setName($categoryName);
     }   
 
     public function setCapacity($capacity)

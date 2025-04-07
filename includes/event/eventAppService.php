@@ -59,7 +59,17 @@ class eventAppService
             $categoryId = $IEventDAO->registerCategory($eventData['category']);
         }
 
-        $eventsDTO = new eventDTO(0, $eventData['name'], $eventData['description'], $eventData['date'], $eventData['price'], $eventData['location'], $eventData['capacity'], $categoryId, $eventData['category'], $eventData['provider']);
+        $eventsDTO = new eventDTO(
+            null, 
+            $eventData['name'], 
+            $eventData['description'], 
+            $eventData['date'], 
+            $eventData['price'], 
+            $eventData['location'], 
+            $eventData['capacity'], 
+            new eventCategoryDTO($categoryId, $eventData['category']),
+            $eventData['provider']
+        );
 
         return $IEventDAO->registerEvent($eventsDTO);
     }

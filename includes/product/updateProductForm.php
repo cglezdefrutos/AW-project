@@ -23,7 +23,7 @@ class updateProductForm extends baseForm
      */
     public function __construct($productInitialData)
     {
-        parent::__construct('updateProductForm');
+        parent::__construct('updateProductForm', array('enctype' => 'multipart/form-data'));
         $this->productInitialData = $productInitialData;
     }
 
@@ -34,82 +34,83 @@ class updateProductForm extends baseForm
      */
     protected function CreateFields($initialData) 
     {
+        // Construir la ruta de la imagen
+        $imageUrl = '/AW-project/img/' . $this->productInitialData->getImageGuid() . '.png';
+
         $sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
         
         $html = <<<HTML
-        <div class="card border-primary">
-            <div class="card-header bg-primary text-white">
-                <h3 class="mb-0">Actualizar Producto</h3>
-            </div>
-            <div class="card-body">
-                <form method="post">
-                    <input type="hidden" name="productId" value="{$this->productInitialData->getId()}">
-                    
-                    <!-- Nombre -->
-                    <div class="mb-3">
-                        <label class="form-label">Nombre del producto:</label>
-                        <input type="text" name="name" class="form-control" 
-                            value="{$this->productInitialData->getName()}" required>
-                    </div>
-                    
-                    <!-- Descripción -->
-                    <div class="mb-3">
-                        <label class="form-label">Descripción:</label>
-                        <textarea name="description" class="form-control" rows="3" required>{$this->productInitialData->getDescription()}</textarea>
-                    </div>
-                    
-                    <!-- Precio -->
-                    <div class="mb-3">
-                        <label class="form-label">Precio (€):</label>
-                        <input type="number" name="price" class="form-control" step="0.01"
-                            value="{$this->productInitialData->getPrice()}" required>
-                    </div>
-                    
-                    <!-- Stock por tallas -->
-                    <div class="mb-3">
-                        <label class="form-label">Stock por tallas:</label>
-                        <div class="d-flex flex-wrap gap-3">
+            <fieldset class="border p-4 rounded">
+            <legend class="w-auto">Registro de Producto</legend> <br>
+                <!-- ID del producto -->
+                <input type="hidden" name="productId" value="{$this->productInitialData->getId()}">
+                
+                <!-- Nombre -->
+                <div class="mb-3">
+                    <label class="form-label">Nombre del producto:</label>
+                    <input type="text" name="name" class="form-control" 
+                        value="{$this->productInitialData->getName()}" required>
+                </div>
+                
+                <!-- Descripción -->
+                <div class="mb-3">
+                    <label class="form-label">Descripción:</label>
+                    <textarea name="description" class="form-control" rows="3" required>{$this->productInitialData->getDescription()}</textarea>
+                </div>
+                
+                <!-- Precio -->
+                <div class="mb-3">
+                    <label class="form-label">Precio (€):</label>
+                    <input type="number" name="price" class="form-control" step="0.01"
+                        value="{$this->productInitialData->getPrice()}" required>
+                </div>
+                
+                <!-- Stock por tallas -->
+                <div class="mb-3">
+                    <label class="form-label">Stock por tallas:</label>
+                    <div class="d-flex flex-wrap gap-3">
         HTML;
 
         foreach ($sizes as $size) {
             $stock = $this->productInitialData->getStockBySize($size);
             $html .= <<<HTML
-                            <div style="min-width: 120px;">
-                                <label>Talla {$size}:</label>
-                                <input type="number" name="stock[{$size}]" class="form-control" 
-                                    value="{$stock}" min="0">
-                            </div>
+                        <div style="min-width: 120px;">
+                            <label>Talla {$size}:</label>
+                            <input type="number" name="stock[{$size}]" class="form-control" 
+                                value="{$stock}" min="0">
+                        </div>
             HTML;
         }
 
         $html .= <<<HTML
-                        </div>
                     </div>
+                </div>
                     
-                    <!-- URL Imagen -->
-                    <div class="mb-3">
-                        <label class="form-label">URL de la imagen:</label>
-                        <input type="url" name="imageUrl" class="form-control" 
-                            value="{$this->productInitialData->getImageUrl()}" required>
+                <!-- Imagen -->
+                <div class="mb-3">
+                    <label class="form-label">Imagen del producto:</label>
+                    <input type="file" name="image" class="form-control" accept="image/*">
+                    <small class="form-text text-muted">Formatos permitidos: JPEG, JPG o PNG. Dejar vacío para mantener la imagen actual.</small>
+                    <div class="mt-2">
+                        <img src="{$imageUrl}" alt="Imagen actual" style="max-height: 200px;">
                     </div>
-                    
-                    <!-- Categoría -->
-                    <div class="mb-3">
-                        <label class="form-label">Categoría:</label>
-                        <input type="text" name="category" class="form-control" 
-                            value="{$this->productInitialData->getCategoryName()}" required>
-                    </div>
-                    
-                    <!-- Botón -->
-                    <div class="mt-4">
-                        <button type="submit" name="update_product" 
-                                class="btn btn-primary w-100 py-2">
-                            Actualizar Producto
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                </div>
+                
+                <!-- Categoría -->
+                <div class="mb-3">
+                    <label class="form-label">Categoría:</label>
+                    <input type="text" name="category" class="form-control" 
+                        value="{$this->productInitialData->getCategoryName()}" required>
+                </div>
+                
+                <!-- Botón -->
+                <div class="mt-4">
+                    <button type="submit" name="update_product" 
+                            class="btn btn-primary w-100 py-2">
+                        Actualizar Producto
+                    </button>
+                </div>
+            </fieldset>
         HTML;
         
         return $html;
@@ -126,6 +127,9 @@ class updateProductForm extends baseForm
     {
         // Array para almacenar mensajes de error
         $result = array();
+
+        // Tomamos la instancia del servicio de aplicación de productos
+        $productAppService = productAppService::GetSingleton();
 
         // Filtrado y sanitización de los datos recibidos
         $productName = trim($data['name'] ?? '');
@@ -151,10 +155,26 @@ class updateProductForm extends baseForm
             $result[] = 'La categoría es obligatoria y no debe exceder los 50 caracteres.';
         }
 
-        $imageUrl = trim($data['imageUrl'] ?? '');
-        $imageUrl = filter_var($imageUrl, FILTER_SANITIZE_URL);
-        if (empty($imageUrl) || !filter_var($imageUrl, FILTER_VALIDATE_URL)) {
-            $result[] = 'La URL de la imagen no es válida.';
+        // Comprobar si se ha subido una nueva imagen
+        $imageGUID = null;
+        
+        // Si se ha subido una nueva imagen, procesarla
+        if(isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $image = $_FILES['image'];
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webp'];
+            $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mimeType = finfo_file($fileInfo, $image['tmp_name']);
+            finfo_close($fileInfo);
+            
+            if (in_array($mimeType, $allowedTypes)) {
+                // Generar un nuevo GUID para la imagen
+                $imageGUID = $productAppService->saveImage($image);
+            } else {
+                $result[] = 'El archivo debe ser una imagen (JPEG, PNG o GIF).';
+            }
+        } else {
+            // Si no se ha subido una nueva imagen, mantener la imagen actual
+            $imageGUID = $this->productInitialData->getImageGuid();
         }
 
         // Procesamiento del stock por tallas
@@ -190,15 +210,13 @@ class updateProductForm extends baseForm
                 $productName,
                 $description,
                 $price,
-                $categoryDTO,   // Pasamos el DTO de categoría completo
-                $imageUrl,
+                $categoryDTO,
+                $imageGUID,
                 $this->productInitialData->getCreatedAt(),
-                $sizesDTO,      // Pasamos el DTO de tallas
+                $sizesDTO,
                 $this->productInitialData->getActive()
             );
             
-            // Resto del código permanece igual...
-            $productAppService = productAppService::GetSingleton();
             $updateResult = $productAppService->updateProduct($updatedProductDTO);
     
             if(!$updateResult) {

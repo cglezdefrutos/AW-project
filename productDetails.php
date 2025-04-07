@@ -20,11 +20,11 @@ $productAppService = productAppService::GetSingleton();
 $productDTO = $productAppService->getProductById($productId);
 if ($productDTO == null) 
 {
-    throw new \Exception("No se ha encontrado el producto con ese ID.");
+    throw new \Exception("No se ha encontrado el producto.");
 }
 
 // Generamos el contenido del producto
 $productDetailsContent = new productDetailsContent($productDTO);
 $mainContent .= $productDetailsContent->generateContent();
 
-require_once __DIR__.'/includes/views/template/template.php';
+require_once BASE_PATH.'/includes/views/template/template.php';

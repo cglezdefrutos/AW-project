@@ -6,6 +6,7 @@ use TheBalance\product\productAppService;
 use TheBalance\product\productDTO;
 use TheBalance\product\manageProductsTable;
 use TheBalance\application;
+use TheBalance\utils\utilsFactory;
 
 $titlePage = "Gestionar productos";
 $mainContent = "";
@@ -13,16 +14,12 @@ $mainContent = "";
 $app = application::getInstance();
 
 if(!$app->isCurrentUserLogged()) {
-    $mainContent = <<<EOS
-        <h1>No es posible gestionar productos si no has iniciado sesión.</h1>
-    EOS;
+    $mainContent .= utilsFactory::createAlert("No has iniciado sesión. Por favor, inicia sesión para gestionar productos.", "danger");
 }
 else {
     // Comprobar si el usuario es proveedor o administrador
     if (!$app->isCurrentUserProvider() && !$app->isCurrentUserAdmin()) { 
-        $mainContent = <<<EOS
-            <h1>No es posible gestionar productos si no se es proveedor o administrador.</h1>
-        EOS;
+        $mainContent .= utilsFactory::createAlert("No tienes permisos para gestionar productos. Solo los proveedores y administradores pueden hacerlo.", "danger");
     }
     else {
         // Obtenemos la instancia del servicio de productos
@@ -32,46 +29,19 @@ else {
         if (isset($_GET['action']) && isset($_GET['productId'])) {
             $productId = (int)$_GET['productId'];
             $action = $_GET['action'];
-            $successMessage = '';
-            $errorMessage = '';
-
-            try {
-                switch ($action) {
-                    case 'activate':
-                        $productAppService->activateProduct($productId);
-                        $successMessage = 'Producto activado correctamente.';
-                        break;
-                        
-
-                        
-                    case 'delete':
-                        $productAppService->deleteProduct($productId);
-                        $successMessage = 'Producto eliminado correctamente.';
-                        break;
-                        
-                    default:
-                        $errorMessage = 'Acción no válida.';
-                        break;
-                }
-            } catch (Exception $e) {
-                $errorMessage = 'Error al procesar la acción: ' . $e->getMessage();
-            }
-
-            // Mostrar mensajes de feedback
-            if (!empty($successMessage)) {
-                $mainContent .= <<<EOS
-                    <div class="alert alert-success">
-                        $successMessage
-                    </div>
-                EOS;
-            }
             
-            if (!empty($errorMessage)) {
-                $mainContent .= <<<EOS
-                    <div class="alert alert-danger">
-                        $errorMessage
-                    </div>
-                EOS;
+            switch ($action) {
+                case 'activate':
+                    $productAppService->activateProduct($productId);
+                    $mainContent .= utilsFactory::createAlert("Producto activado correctamente.", "success");
+                    break;
+                case 'delete':
+                    $productAppService->deleteProduct($productId);
+                    $mainContent .= utilsFactory::createAlert("Producto eliminado correctamente.", "success");
+                    break;
+                default:
+                    $mainContent .= utilsFactory::createAlert("Acción no válida.", "danger");
+                    break;
             }
         }
 
@@ -92,4 +62,4 @@ else {
     }
 }
 
-require_once __DIR__.'/includes/views/template/template.php';
+require_once BASE_PATH.'/includes/views/template/template.php';
