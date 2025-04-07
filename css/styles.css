@@ -232,3 +232,48 @@ footer p {
 .mb-20 {
     margin-bottom: 20px;
 }
+
+/* Estilos para el texto del carrusel */
+.carousel-caption {
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.carousel-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ffffff; /* Color blanco */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Sombra para el texto */
+}
+
+.carousel-title a {
+    color: #ffcc00; /* Color del enlace */
+    text-decoration: none;
+}
+
+.carousel-title a:hover {
+    color: #ffd633; /* Color del enlace al pasar el ratón */
+    text-decoration: underline;
+}
+
+.carousel-text {
+    font-size: 1.2rem;
+    color: #f0f0f0; /* Color gris claro */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8); /* Sombra para el texto */
+}
+
+/* Estilos para las imágenes de las tarjetas */
+.card-img-custom {
+    width: 100%; /* Asegura que la imagen ocupe todo el ancho del contenedor */
+    height: 200px; /* Altura fija para todas las imágenes */
+    object-fit: cover; /* Recorta la imagen para que se ajuste al contenedor */
+    border-radius: 5px; /* Opcional: bordes redondeados */
+}
+
+/* Estilos para las imágenes del carrusel */
+.carousel-item img {
+    width: 100%; /* Asegura que la imagen ocupe todo el ancho del contenedor */
+    height: 600px; /* Define una altura fija para todas las imágenes */
+    object-fit: cover; /* Recorta la imagen para que se ajuste al contenedor sin deformarse */
+}

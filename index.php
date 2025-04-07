@@ -21,7 +21,7 @@ $mainContent=<<<EOS
     </div>
 
     <div class="row p-4">
-        <div class="col-6 text-start mb-4">
+        <div class="col-md-6 text-start mb-4">
             <h1 class="display-4">Bienvenido a The Balance</h1>
             <p class="lead">
                 The Balance es una plataforma web que revoluciona el mundo del fitness al combinar e-commerce de productos deportivos con servicios 
@@ -31,7 +31,7 @@ $mainContent=<<<EOS
                 ecosistema donde las marcas y los clientes interactúan y comparten experiencias.
             </p>
         </div>
-        <div class="col-6 d-flex justify-content-center align-items-center mb-4">
+        <div class="col-md-6 d-flex justify-content-center align-items-center mt-4 mt-md-0 mb-4">
             <img src="$imgPath/logo_thebalance.png" alt="Logo de The Balance">
         </div>
     </div>
