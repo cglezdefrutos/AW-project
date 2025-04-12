@@ -12,38 +12,34 @@ class manageProductsTable extends baseTable
 
         foreach ($this->data as $product) {
             // Estado activo (Sí/No con colores)
-            $activeText = $product->getActive() ? 'Sí' : 'No';
-            $activeClass = $product->getActive() ? 'text-success' : 'text-danger';
+            $active = $product->getActive();
+            $activeText = $active ? 'Sí' : 'No';
+            $activeClass = $active ? 'text-success' : 'text-danger';
 
             // Botón Editar (siempre visible)
             $editButton = <<<EOF
-                <a href="updateProducts.php?productId={$product->getId()}" 
-                class="btn btn-primary btn-sm mr-2">
-                Editar
-                </a>
+                <button class="btn btn-primary btn-sm edit-product" data-id="{$product->getId()}">
+                    Editar
+                </button>
             EOF;
 
             // Botón Eliminar (solo para productos activos)
             $deleteButton = '';
-            if ($product->getActive()) {
+            if ($active) {
                 $deleteButton = <<<EOF
-                    <a href="?action=delete&productId={$product->getId()}" 
-                       class="btn btn-primary btn-sm mr-2" 
-                       onclick="return confirm('¿Estás seguro de que deseas desactivar este producto?');">
-                       Eliminar
-                    </a>
+                    <button class="btn btn-danger btn-sm delete-product" data-id="{$product->getId()}">
+                        Eliminar
+                    </button>
                 EOF;
             }
 
             // Botón Activar (solo para productos inactivos)
             $activateButton = '';
-            if (!$product->getActive()) {
+            if (!$active) {
                 $activateButton = <<<EOF
-                    <a href="?action=activate&productId={$product->getId()}" 
-                       class="btn btn-primary btn-sm" 
-                       onclick="return confirm('¿Estás seguro de que deseas activar este producto?');">
-                       Activar
-                    </a>
+                    <button class="btn btn-success btn-sm activate-product" data-id="{$product->getId()}">
+                        Activar
+                    </button>
                 EOF;
             }
 
