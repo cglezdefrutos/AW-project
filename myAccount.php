@@ -37,6 +37,7 @@ else
             </div>
             <script src="/AW-project/js/myAccount.js"></script>
             <script src="/AW-project/js/manageProducts.js"></script>
+            <script src="/AW-project/js/manageEvents.js"></script>
         </div>
         
     EOS;

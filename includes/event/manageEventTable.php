@@ -12,20 +12,33 @@ class manageEventTable extends baseTable
 
         // Generar filas de la tabla
         foreach ($this->data as $event) {
-            $html .= '<tr>';
-            $html .= '<td>' . htmlspecialchars($event->getName()) . '</td>';
-            $html .= '<td>' . htmlspecialchars($event->getDesc()) . '</td>';
-            $html .= '<td>' . htmlspecialchars($event->getDate()) . '</td>';
-            $html .= '<td>' . htmlspecialchars($event->getLocation()) . '</td>';
-            $html .= '<td>' . htmlspecialchars($event->getPrice()) . '</td>';
-            $html .= '<td>' . htmlspecialchars($event->getCapacity()) . '</td>';
-            $html .= '<td>' . htmlspecialchars($event->getCategoryName()) . '</td>';
-            $html .= '<td>';
-            $html .= '<a href="updateEvents.php?eventId=' . htmlspecialchars($event->getId()) . '">Editar</a>';
-            $html .= ' o ';
-            $html .= '<a href="manageEvents.php?eventId=' . htmlspecialchars($event->getId()) . '" onclick="return confirm(\'¿Estás seguro de que deseas eliminar este evento?\');">Eliminar</a>';
-            $html .= '</td>';
-            $html .= '</tr>';
+
+            // Limpiamos los datos para evitar inyecciones de código
+            $id = htmlspecialchars($event->getId());
+            $name = htmlspecialchars($event->getName());
+            $desc = htmlspecialchars($event->getDesc());
+            $date = htmlspecialchars($event->getDate());
+            $location = htmlspecialchars($event->getLocation());
+            $price = htmlspecialchars($event->getPrice());
+            $capacity = htmlspecialchars($event->getCapacity());
+            $categoryName = htmlspecialchars($event->getCategoryName());
+
+            // Generar la fila de la tabla
+            $html .= <<<EOS
+                <tr>
+                    <td>$name</td>
+                    <td>$desc</td>
+                    <td>$date</td>
+                    <td>$location</td>
+                    <td>$price</td>
+                    <td>$capacity</td>
+                    <td>$categoryName</td>
+                    <td>
+                        <button class="btn btn-primary edit-event" data-id="$id">Editar</button>
+                        <button class="btn btn-danger delete-event mt-2" data-id="$id">Eliminar</button>
+                    </td>
+                </tr>
+            EOS;
         }
 
         return $html;
