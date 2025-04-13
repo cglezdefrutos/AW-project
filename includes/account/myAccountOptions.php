@@ -34,10 +34,10 @@ class myAccountOptions
         if ($app->isCurrentUserAdmin()) 
         {
             $options .= <<<EOS
-                <li class="list-group-item menu-item" data-section="adminProducts">Administrar Productos</li>
-                <li class="list-group-item menu-item" data-section="adminEvents">Administrar Eventos</li>
-                <li class="list-group-item menu-item" data-section="adminPlans">Administrar Planes</li>
-                <li class="list-group-item menu-item" data-section="adminUsers">Administrar Usuarios</li>
+                <li class="list-group-item menu-item" data-section="manageProducts">Administrar Productos</li>
+                <li class="list-group-item menu-item" data-section="manageEvents">Administrar Eventos</li>
+                <li class="list-group-item menu-item" data-section="managePlans">Administrar Planes</li>
+                <li class="list-group-item menu-item" data-section="manageUsers">Administrar Usuarios</li>
             EOS;
         } 
         elseif ($app->isCurrentUserClient())
@@ -49,14 +49,14 @@ class myAccountOptions
         elseif ($app->isCurrentUserProvider())
         {
             $options .= <<<EOS
-                <li class="list-group-item menu-item" data-section="myProducts">Mis Productos</li>
-                <li class="list-group-item menu-item" data-section="myEvents">Mis Eventos</li>
+                <li class="list-group-item menu-item" data-section="manageProducts">Mis Productos</li>
+                <li class="list-group-item menu-item" data-section="manageEvents">Mis Eventos</li>
             EOS;
         }
         else
         {
             $options .= <<<EOS
-                <li class="list-group-item menu-item" data-section="myPlans">Mis Planes</li>
+                <li class="list-group-item menu-item" data-section="managePlans">Mis Planes</li>
             EOS;
         }
 
