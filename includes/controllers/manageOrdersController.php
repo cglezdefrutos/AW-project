@@ -39,7 +39,7 @@ if ($action) {
             
         case 'getOrderDetails':
             $orderId = $_POST['orderId'];
-            $orderDetails = $orderDetailAppService->getDetailsByOrderId($orderId);
+            $orderDetails = $orderAppService->getDetailsByOrderId($orderId);
 
             if ($orderDetails) {
                 $columns = ['Nombre Producto', 'Imagen Producto', 'Talla', 'Cantidad', 'Precio Unitario', 'Subtotal'];

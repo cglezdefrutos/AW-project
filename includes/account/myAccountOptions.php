@@ -44,7 +44,7 @@ class myAccountOptions
         elseif ($app->isCurrentUserClient())
         {  
             $options .= <<<EOS
-                <li class="list-group-item menu-item" data-section="orders">Mis Pedidos</li>
+                <li class="list-group-item menu-item" data-section="myOrders">Mis Pedidos</li>
             EOS;
         }
         elseif ($app->isCurrentUserProvider())
