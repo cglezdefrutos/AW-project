@@ -21,7 +21,7 @@ class manageOrderTable extends baseTable
             $html .= '<td>';
             $html .= '<button class="btn btn-info view-order" data-id="' . htmlspecialchars($order->getId()) . '">Ver Detalles</button> ';
             $html .= '<button class="btn btn-primary edit-order mt-2" data-id="' . htmlspecialchars($order->getId()) . '">Cambiar Estado</button> ';
-            $html .= '<button class="btn btn-danger delete-order mt-2" data-id="' . htmlspecialchars($order->getId()) . '" onclick="return confirm(\'¿Estás seguro de que deseas eliminar este pedido?\');">Eliminar</button>';
+            $html .= '<button class="btn btn-danger delete-order mt-2" data-id="' . htmlspecialchars($order->getId()) . '">Eliminar</button>';
             $html .= '</td>';
             $html .= '</tr>';
         }

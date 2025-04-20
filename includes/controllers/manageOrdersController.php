@@ -124,6 +124,13 @@ if ($action) {
 
         case 'deleteOrder':
             $orderId = $_POST['orderId'];
+            $orderId = filter_var($orderId, FILTER_SANITIZE_NUMBER_INT);
+            if (!is_numeric($orderId) || $orderId <= 0) {
+                $alert = utilsFactory::createAlert('ID de pedido inválido.', 'danger');
+                echo json_encode(['success' => false, 'alert' => $alert]);
+                exit;
+            }
+
             $deleted = $orderAppService->deleteOrderById($orderId);
 
             if ($deleted) {
