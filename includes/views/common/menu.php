@@ -75,6 +75,11 @@ function mostrarLogin()
                 <li class="nav-item">
                     <a class="nav-link" href="cart.php">Carrito</a>
                 </li>
+
+                <!-- Opción Mi Cuenta -->
+                <li class="nav-item">
+                    <a class="nav-link" href="myAccount.php">Mi Cuenta</a>
+                </li>
             </ul>
         </div>
 
