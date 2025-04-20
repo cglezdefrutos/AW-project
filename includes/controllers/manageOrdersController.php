@@ -2,6 +2,8 @@
 
 require_once '../config.php';
 use TheBalance\order\orderAppService;
+use TheBalance\order\orderDetailAppService;
+
 use TheBalance\utils\utilsFactory;
 use TheBalance\order\showOrderDetailTable;
 use TheBalance\order\orderDTO;
@@ -10,6 +12,7 @@ $action = $_POST['action'] ?? null;
 
 if ($action) {
     $orderAppService = orderAppService::GetSingleton();
+    $orderDetailAppService = orderDetailAppService::GetSingleton();
 
     switch ($action) {
         case 'getOrder':
@@ -36,7 +39,7 @@ if ($action) {
             
         case 'getOrderDetails':
             $orderId = $_POST['orderId'];
-            $orderDetails = $orderAppService->getOrderDetailsById($orderId);
+            $orderDetails = $orderDetailAppService->getDetailsByOrderId($orderId);
 
             if ($orderDetails) {
                 $columns = ['Nombre Producto', 'Imagen Producto', 'Talla', 'Cantidad', 'Precio Unitario', 'Subtotal'];

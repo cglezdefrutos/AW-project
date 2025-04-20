@@ -57,6 +57,6 @@ else
 
         // Agregar el modal al contenido
         echo orderModal::generateEditModal();
-        //echo orderModal::generateDetailsModal();
+        echo orderModal::generateDetailsModal();
     }
 }
