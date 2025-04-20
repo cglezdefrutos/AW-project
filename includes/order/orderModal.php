@@ -26,7 +26,11 @@ class orderModal
                         <div class="modal-body">
                             <form id="editOrderForm" method="POST">
                                 <input type="hidden" name="orderId" id="orderId">
-                                
+                                <input type="hidden" name="userId" id="userId">
+                                <input type="hidden" name="totalPrice" id="totalPrice">
+                                <input type="hidden" name="shippingAddress" id="shippingAddress">
+                                <input type="hidden" name="createdAt" id="createdAt">
+
                                 <div class="mb-3">
                                     <label class="form-label">Estado del Pedido</label>
                                     <div>

@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/includes/config.php';
+require_once '../config.php';
 
 use TheBalance\order\orderAppService;
 use TheBalance\order\orderWithUserDTO;
@@ -57,6 +57,6 @@ else
 
         // Agregar el modal al contenido
         echo orderModal::generateEditModal();
-        echo orderModal::generateDetailsModal();
+        //echo orderModal::generateDetailsModal();
     }
 }

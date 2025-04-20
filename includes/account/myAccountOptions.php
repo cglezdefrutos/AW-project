@@ -38,6 +38,7 @@ class myAccountOptions
                 <li class="list-group-item menu-item" data-section="manageEvents">Administrar Eventos</li>
                 <li class="list-group-item menu-item" data-section="managePlans">Administrar Planes</li>
                 <li class="list-group-item menu-item" data-section="manageUsers">Administrar Usuarios</li>
+                <li class="list-group-item menu-item" data-section="manageOrders">Administrar Pedidos</li>
             EOS;
         } 
         elseif ($app->isCurrentUserClient())

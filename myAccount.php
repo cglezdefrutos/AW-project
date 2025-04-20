@@ -38,6 +38,7 @@ else
             <script src="/AW-project/js/myAccount.js"></script>
             <script src="/AW-project/js/manageProducts.js"></script>
             <script src="/AW-project/js/manageEvents.js"></script>
+            <script src="/AW-project/js/manageOrders.js"></script>
         </div>
         
     EOS;
