@@ -3,6 +3,7 @@
 namespace TheBalance\event;
 
 use TheBalance\views\common\baseForm;
+use TheBalance\user\userAlreadyJoinEventException;
 
 /**
  * Formulario de apuntarse a un evento
