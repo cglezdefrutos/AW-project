@@ -3,7 +3,7 @@
 namespace TheBalance\catalog;
 
 use TheBalance\views\common\baseForm;
-use TheBalance\product\productAppService;
+use TheBalance\product\planAppService;
 
 /**
  * Formulario para filtrar productos en el catálogo.

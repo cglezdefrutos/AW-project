@@ -2,8 +2,8 @@
 
 require_once __DIR__.'/includes/config.php';
 
-use TheBalance\product\registerProductForm;
-use TheBalance\product\registerAnotherProductForm;
+use TheBalance\plan\registerPlanForm;
+use TheBalance\plan\registerAnotherPlanForm;
 use TheBalance\application;
 use TheBalance\utils\utilsFactory;
 
@@ -28,7 +28,7 @@ else
         // Comprobar si el producto ya ha sido registrado
         if (isset($_GET["registered"]) && $_GET["registered"] === "true") 
         {
-            $form = new registerAnotherProductForm();
+            $form = new registerAnotherPlanForm();
             $htmlRegisterAnotherProductForm = $form->Manage();
 
             // Alerta de éxito
@@ -43,11 +43,11 @@ else
         {
             $provider_id = $app->getCurrentUserId();
             $provider_email = $app->getCurrentUserEmail();
-            $form = new registerProductForm($provider_id, $provider_email);
+            $form = new registerPlanForm($provider_id, $provider_email);
             $htmlRegisterProductForm = $form->Manage();
 
             $mainContent = <<<EOS
-                <h1 class="mb-4">Registrar nuevo producto</h1>
+                <h1 class="mb-4">Registrar nuevo plan de entrenamiento</h1>
                 $htmlRegisterProductForm
             EOS;
         }

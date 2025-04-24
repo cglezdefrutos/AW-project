@@ -3,26 +3,26 @@
 require_once __DIR__.'/includes/config.php';
 
 use TheBalance\application;
-use TheBalance\product\productAppService;
-use TheBalance\product\productDTO;
-use TheBalance\catalog\catalogContent;
-use TheBalance\catalog\catalogFilterForm;
+use TheBalance\plan\planAppService;
+use TheBalance\plan\planDTO;
+use TheBalance\catalog\planCatalogContent;
+use TheBalance\catalog\planCatalogFilterForm;
 use TheBalance\utils\utilsFactory;
 
 $app = application::getInstance();
 
-$titlePage = "Catálogo";
+$titlePage = "Catálogo Planes de Entrenamiento";
 $mainContent = "";
 
 // Crear el formulario de filtros
-$form = new catalogFilterForm();
+$form = new planCatalogFilterForm();
 $htmlFilterForm = $form->Manage();
 
 // Creamos el array de productDTOs
-$productsDTO = array();
+$planDTO = array();
 
 // Tomamos la instancia del servicio de productos
-$productAppService = productAppService::GetSingleton();
+$planAppService = planAppService::GetSingleton();
 
 // Si no hay filtros aplicados, mostrarlos (es decir, que en la url no haya un search=true)
 if (!isset($_GET["search"]) || $_GET["search"] != "true") 
@@ -31,7 +31,7 @@ if (!isset($_GET["search"]) || $_GET["search"] != "true")
     unset($_SESSION["foundedProductsJSON"]);
 
     // Tomar todos los productos de la BBDD que tengan el campo active a 1
-    $productsDTO = $productAppService->searchProducts(array("active" => 1));
+    $planDTO = $planAppService->searchProducts(array("active" => 1));
 }
 // Si hay filtros aplicados y se ha utilizado la barra de búsqueda, buscamos ese nombre
 else if(isset($_GET["name"]) && $_GET["name"] != "") 
@@ -44,8 +44,8 @@ else if(isset($_GET["name"]) && $_GET["name"] != "")
     $filters['name'] = $name;
 
     // Llamamos a la instancia de SA de productos
-    $productAppService = productAppService::GetSingleton();
-    $productsDTO = $productAppService->searchProducts($filters);
+    $planAppService = planAppService::GetSingleton();
+    $planDTO = $planAppService->searchProducts($filters);
 }
 // Si hay filtros aplicados y no se ha utilizado la barra de búsqueda, buscamos por los filtros
 else 
@@ -60,7 +60,7 @@ else
 
     // Convertir los datos decodificados en objetos eventDTO
     $productsDTO = array_map(function($productData) {
-        return new productDTO(
+        return new planDTO(
             $productData['id'],
             $productData['trainer_id'],
             $productData['name'],
