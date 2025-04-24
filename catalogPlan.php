@@ -11,77 +11,70 @@ use TheBalance\utils\utilsFactory;
 
 $app = application::getInstance();
 
-$titlePage = "Catálogo Planes de Entrenamiento";
+$titlePage = "Catálogo de Planes";
 $mainContent = "";
 
 // Crear el formulario de filtros
 $form = new planCatalogFilterForm();
 $htmlFilterForm = $form->Manage();
 
-// Creamos el array de productDTOs
-$planDTO = array();
+// Creamos el array de planDTOs
+$plansDTO = array();
 
-// Tomamos la instancia del servicio de productos
+// Tomamos la instancia del servicio de planes
 $planAppService = planAppService::GetSingleton();
 
-// Si no hay filtros aplicados, mostrarlos (es decir, que en la url no haya un search=true)
-if (!isset($_GET["search"]) || $_GET["search"] != "true") 
-{
+// Si no hay filtros aplicados, mostrarlos todos
+if (!isset($_GET["search"]) || $_GET["search"] != "true") {
     // Limpiamos resultados anteriores
-    unset($_SESSION["foundedProductsJSON"]);
+    unset($_SESSION["foundedPlansJSON"]);
 
-    // Tomar todos los productos de la BBDD que tengan el campo active a 1
-    $planDTO = $planAppService->searchProducts(array("active" => 1));
+    // Tomar todos los planes activos de la BBDD
+    $plansDTO = $planAppService->searchTrainingPlans(array("active" => 1));
 }
-// Si hay filtros aplicados y se ha utilizado la barra de búsqueda, buscamos ese nombre
-else if(isset($_GET["name"]) && $_GET["name"] != "") 
-{
+// Si hay filtros aplicados y se ha utilizado la barra de búsqueda
+else if(isset($_GET["name"]) && $_GET["name"] != "") {
     // Tomamos el contenido de la barra de busqueda
     $name = $_GET["name"];
 
-    // Crear un array de filtros con el nombre del producto
+    // Crear un array de filtros con el nombre del plan
     $filters = array();
     $filters['name'] = $name;
 
-    // Llamamos a la instancia de SA de productos
-    $planAppService = planAppService::GetSingleton();
-    $planDTO = $planAppService->searchProducts($filters);
+    $plansDTO = $planAppService->searchTrainingPlans($filters);
 }
-// Si hay filtros aplicados y no se ha utilizado la barra de búsqueda, buscamos por los filtros
-else 
-{
-    $foundedProductsJSON = array();
+// Si hay filtros aplicados desde el formulario
+else {
+    $foundedPlansJSON = array();
 
-    // Si $_SESSION["foundedProductsJSON"] esta definida, decodificamos el JSON almacenado en la sesión
-    if (isset($_SESSION["foundedProductsJSON"])) 
-    {
-        $foundedProductsJSON = json_decode($_SESSION["foundedProductsJSON"], true);
+    if (isset($_SESSION["foundedPlansJSON"])) {
+        $foundedPlansJSON = json_decode($_SESSION["foundedPlansJSON"], true);
     } 
 
-    // Convertir los datos decodificados en objetos eventDTO
-    $productsDTO = array_map(function($productData) {
+    // Convertir los datos decodificados en objetos planDTO
+    $plansDTO = array_map(function($planData) {
         return new planDTO(
-            $productData['id'],
-            $productData['trainer_id'],
-            $productData['name'],
-            $productData['description'],
-            $productData['difficulty'],
-            $productData['duration'],
-            $productData['price'],
-            $productData['pdf_path'],
-            $productData['created_at']
+            $planData['id'],
+            $planData['trainer_id'],
+            $planData['name'],
+            $planData['description'],
+            $planData['difficulty'],
+            $planData['duration'],
+            $planData['price'],
+            $planData['image_guid'],
+            $planData['pdf_path'],
+            $planData['created_at']
         );
-    }, $foundedProductsJSON);
+    }, $foundedPlansJSON);
 }
 
 // Generar el contenido del catálogo
-$catalog = new catalogContent($productsDTO);
+$catalog = new planCatalogContent($plansDTO);
 $htmlCatalog = $catalog->generateContent();
 
-// Si esta vacio productsDTO, mostramos un mensaje de alerta
-if (empty($productsDTO)) 
-{
-    $htmlCatalog .= utilsFactory::createAlert("Lo sentimos, no hemos encontrado ningún producto que coincida con los filtros seleccionados.", "warning");
+// Si no hay planes, mostramos mensaje
+if (empty($plansDTO)) {
+    $htmlCatalog .= utilsFactory::createAlert("No se encontraron planes con los filtros seleccionados.", "warning");
 }
 
 // Combinar el formulario y el catálogo
@@ -93,6 +86,7 @@ $mainContent .= <<<EOS
                 $htmlFilterForm
             </div>
             <div class="col-md-9">
+                <h1 class="mb-4">Planes de Entrenamiento</h1>
                 $htmlCatalog
             </div>
         </div>

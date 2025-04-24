@@ -1,11 +1,11 @@
 <?php
 
-namespace TheBalance\training;
+namespace TheBalance\plan;
 
 /**
  * Data Transfer Object para planes de entrenamiento
  */
-class TrainingPlanDTO implements \JsonSerializable
+class planDTO implements \JsonSerializable
 {
     /**
      * @var int Identificador del plan

@@ -3,16 +3,16 @@
 namespace TheBalance\catalog;
 
 use TheBalance\views\common\baseForm;
-use TheBalance\product\planAppService;
+use TheBalance\plan\planAppService;
 
 /**
- * Formulario para filtrar productos en el catálogo.
+ * Formulario para filtrar planes de entrenamiento en el catálogo.
  */
-class catalogFilterForm extends baseForm
+class planCatalogFilterForm extends baseForm
 {
     public function __construct()
     {
-        parent::__construct('catalogFilterForm');
+        parent::__construct('planCatalogFilterForm');
     }
 
     /**
@@ -24,13 +24,14 @@ class catalogFilterForm extends baseForm
      */
     protected function CreateFields($initialData)
     {
-        // Obtener las categorías desde el servicio de productos
-        $productAppService = productAppService::GetSingleton();
-        $categories = $productAppService->getCategories();
+        // Obtener los entrenadores y dificultades desde el servicio de planes
+        $planAppService = planAppService::GetSingleton();
+        $trainers = $planAppService->getTrainers();
+        $difficulties = $planAppService->getDifficulties();
 
         $html = <<<EOF
             <fieldset class="border p-4 rounded">
-                <legend class="w-auto">Filtrar Productos</legend>
+                <legend class="w-auto">Filtrar Planes</legend>
 
                 <div class="mb-3">
                     <label for="name" class="form-label">Nombre:</label>
@@ -43,18 +44,34 @@ class catalogFilterForm extends baseForm
                 </div>
 
                 <div class="mb-3">
-                    <label for="category" class="form-label">Categoría:</label>
-                    <select name="category" id="category" class="form-control">
-                        <option value="">Seleccionar categoría</option>
+                    <label for="trainer" class="form-label">Entrenador:</label>
+                    <select name="trainer" id="trainer" class="form-control">
+                        <option value="">Seleccionar entrenador</option>
         EOF;
 
-        // Añadir las categorías como opciones
-        foreach ($categories as $category) {
-            // Acceder a las propiedades del objeto productCategoryDTO
-            $categoryId = htmlspecialchars($category->getId());
-            $categoryName = htmlspecialchars($category->getName());
-            $selected = (isset($initialData['category']) && $initialData['category'] == $categoryName) ? 'selected' : '';
-            $html .= '<option value="' . $categoryName . '" ' . $selected . '>' . $categoryName . '</option>';
+        // Añadir los entrenadores como opciones
+        foreach ($trainers as $trainer) {
+            $trainerId = htmlspecialchars($trainer->getId());
+            $trainerName = htmlspecialchars($trainer->getName());
+            $selected = (isset($initialData['trainer']) && $initialData['trainer'] == $trainerId) ? 'selected' : '';
+            $html .= '<option value="' . $trainerId . '" ' . $selected . '>' . $trainerName . '</option>';
+        }
+
+        $html .= <<<EOF
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="difficulty" class="form-label">Dificultad:</label>
+                    <select name="difficulty" id="difficulty" class="form-control">
+                        <option value="">Seleccionar dificultad</option>
+        EOF;
+
+        // Añadir las dificultades como opciones
+        foreach ($difficulties as $difficulty) {
+            $difficultyValue = htmlspecialchars($difficulty);
+            $selected = (isset($initialData['difficulty']) && $initialData['difficulty'] == $difficultyValue) ? 'selected' : '';
+            $html .= '<option value="' . $difficultyValue . '" ' . $selected . '>' . $difficultyValue . '</option>';
         }
 
         $html .= <<<EOF
@@ -63,12 +80,22 @@ class catalogFilterForm extends baseForm
 
                 <div class="mb-3">
                     <label for="minPrice" class="form-label">Precio mínimo:</label>
-                    <input type="number" name="minPrice" id="minPrice" class="form-control" step="0.50" min="0" placeholder="Ej: 0" value="0">
+                    <input type="number" name="minPrice" id="minPrice" class="form-control" step="0.50" min="0" placeholder="Ej: 0" value="
+        EOF;
+
+        $html .= htmlspecialchars($initialData['minPrice'] ?? '0') . '">';
+
+        $html .= <<<EOF
                 </div>
 
                 <div class="mb-3">
                     <label for="maxPrice" class="form-label">Precio máximo:</label>
-                    <input type="number" name="maxPrice" id="maxPrice" class="form-control" step="0.50" placeholder="Ej: 100" value="1000">
+                    <input type="number" name="maxPrice" id="maxPrice" class="form-control" step="0.50" placeholder="Ej: 100" value="
+        EOF;
+
+        $html .= htmlspecialchars($initialData['maxPrice'] ?? '1000') . '">';
+
+        $html .= <<<EOF
                 </div>
 
                 <div class="mt-3">
@@ -95,50 +122,59 @@ class catalogFilterForm extends baseForm
         // Filtrado y sanitización de los datos recibidos
         $name = trim($data['name'] ?? '');
         $name = filter_var($name, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if (strlen($name) > 50) {
-            $result[] = 'El nombre del producto no puede estar vacío ni superar los 50 caracteres.';
+        if (strlen($name) > 100) {
+            $result[] = 'El nombre del plan no puede superar los 100 caracteres.';
         }
 
-        $category = trim($data['category'] ?? '');
-        $category = filter_var($category, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if (strlen($category) > 50) {
-            $result[] = 'La categoría del producto no puede estar vacía ni superar los 50 caracteres.';
+        $trainer = trim($data['trainer'] ?? '');
+        $trainer = filter_var($trainer, FILTER_SANITIZE_NUMBER_INT);
+        if ($trainer !== '' && !filter_var($trainer, FILTER_VALIDATE_INT)) {
+            $result[] = 'El ID del entrenador debe ser un número entero válido.';
+        }
+
+        $difficulty = trim($data['difficulty'] ?? '');
+        $difficulty = filter_var($difficulty, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (strlen($difficulty) > 50) {
+            $result[] = 'La dificultad no puede superar los 50 caracteres.';
         }
 
         $minPrice = filter_var($data['minPrice'] ?? 0.0, FILTER_VALIDATE_FLOAT);
-        if (!is_numeric($minPrice ) || $minPrice  < 0) {
-            $result[] = 'El precio debe ser un número positivo.';
+        if (!is_numeric($minPrice) || $minPrice < 0) {
+            $result[] = 'El precio mínimo debe ser un número positivo.';
         }
 
         $maxPrice = filter_var($data['maxPrice'] ?? 1000.0, FILTER_VALIDATE_FLOAT);
-        if (!is_numeric($maxPrice ) || $maxPrice  < 0) {
-            $result[] = 'El precio debe ser un número positivo.';
+        if (!is_numeric($maxPrice) || $maxPrice < 0) {
+            $result[] = 'El precio máximo debe ser un número positivo.';
         }
 
-        if(count($result) === 0)
-        {
+        if ($minPrice > $maxPrice) {
+            $result[] = 'El precio mínimo no puede ser mayor que el precio máximo.';
+        }
+
+        if(count($result) === 0) {
             // Crear un diccionario con los filtros seleccionados
             $filters = array();
             $filters['name'] = $name;
-            $filters['category'] = $category;
+            $filters['trainer_id'] = $trainer !== '' ? (int)$trainer : null;
+            $filters['difficulty'] = $difficulty;
             $filters['minPrice'] = $minPrice;
             $filters['maxPrice'] = $maxPrice;
-            $filters['active'] = 1;
 
-            // Llamamos a la instancia de SA de productos
-            $productAppService = productAppService::GetSingleton();
+            // Llamamos a la instancia de SA de planes de entrenamiento
+            $planAppService = planAppService::GetSingleton();
 
-            // Buscamos los productos con los filtros seleccionados
-            $foundedProductsDTO = $productAppService->searchProducts($filters);
+            // Buscamos los planes con los filtros seleccionados
+            $foundedPlansDTO = $planAppService->searchPlans($filters);
 
-            // Array de productos en formato JSON
-            $foundedProductsJSON = json_encode($foundedProductsDTO);
+            // Array de planes en formato JSON
+            $foundedPlansJSON = json_encode($foundedPlansDTO);
 
             // Almacenar el JSON en una variable de sesión
-            $_SESSION["foundedProductsJSON"] = $foundedProductsJSON;
+            $_SESSION["foundedPlansJSON"] = $foundedPlansJSON;
 
-            // Volvemos al catálogo con los productos filtrados
-            $result = 'catalog.php?search=true';
+            // Volvemos al catálogo con los planes filtrados
+            $result = 'catalogPlan.php?search=true';
         }
 
         return $result;
