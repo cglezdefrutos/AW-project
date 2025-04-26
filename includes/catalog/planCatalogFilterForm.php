@@ -94,7 +94,7 @@ class planCatalogFilterForm extends baseForm
                         <input type="number" name="maxDuration" id="maxDuration" class="form-control" min="1" placeholder="Ej: 30" value="
         EOF;
 
-        $html .= htmlspecialchars($initialData['maxDuration'] ?? '30') . '">';
+        $html .= htmlspecialchars($initialData['maxDuration'] ?? '365') . '">';
 
         $html .= <<<EOF
                 </div>
