@@ -10,9 +10,9 @@ class planFactory
     /**
      * Crea un DAO de planes de entrenamiento
      * 
-     * @return IPlanDAO DAO de planes creado
+     * @return IPlan DAO de planes creado
      */
-    public static function CreateTrainingPlan() : IPlanDAO
+    public static function CreateTrainingPlan() : IPlan
     {
         $planDAO = false;
         $config = "DAO"; // Puedes cambiar esto por configuración si lo necesitas

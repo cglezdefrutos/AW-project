@@ -14,14 +14,14 @@ $app = application::getInstance();
 
 if(!$app->isCurrentUserLogged())
 {
-    $mainContent .= utilsFactory::createAlert("No has iniciado sesión. Por favor, inicia sesión para registrar productos.", "danger");
+    $mainContent .= utilsFactory::createAlert("No has iniciado sesión. Por favor, inicia sesión para registrar planes.", "danger");
 } 
 else 
 {
     // Comprobar si el usuario es proveedor o administrador
-    if(!$app->isCurrentUserProvider() && !$app->isCurrentUserAdmin())
+    if(!$app->isCurrentUserTrainer() && !$app->isCurrentUserAdmin())
     {
-        $mainContent .= utilsFactory::createAlert("No tienes permisos para registrar productos. Solo los proveedores y administradores pueden hacerlo.", "danger");
+        $mainContent .= utilsFactory::createAlert("No tienes permisos para registrar productos. Solo los entrenadores y administradores pueden hacerlo.", "danger");
     }
     else
     {
@@ -29,26 +29,26 @@ else
         if (isset($_GET["registered"]) && $_GET["registered"] === "true") 
         {
             $form = new registerAnotherPlanForm();
-            $htmlRegisterAnotherProductForm = $form->Manage();
+            $htmlRegisterAnotherPlanForm = $form->Manage();
 
             // Alerta de éxito
-            $alert = utilsFactory::createAlert("El producto ha sido registrado correctamente.", "success");
+            $alert = utilsFactory::createAlert("El plan de entrenamiento ha sido registrado correctamente.", "success");
 
             $mainContent = <<<EOS
                 $alert
-                $htmlRegisterAnotherProductForm
+                $htmlRegisterAnotherPlanForm
             EOS;
         }
         else
         {
-            $provider_id = $app->getCurrentUserId();
-            $provider_email = $app->getCurrentUserEmail();
-            $form = new registerPlanForm($provider_id, $provider_email);
-            $htmlRegisterProductForm = $form->Manage();
+            $trainer_id = $app->getCurrentUserId();
+            $trainer_email = $app->getCurrentUserEmail();
+            $form = new registerPlanForm($trainer_id, $trainer_email);
+            $htmlRegisterPlanForm = $form->Manage();
 
             $mainContent = <<<EOS
                 <h1 class="mb-4">Registrar nuevo plan de entrenamiento</h1>
-                $htmlRegisterProductForm
+                $htmlRegisterPlanForm
             EOS;
         }
     }

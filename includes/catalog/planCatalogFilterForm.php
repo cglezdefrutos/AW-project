@@ -40,6 +40,7 @@ class planCatalogFilterForm extends baseForm
 
         $html .= htmlspecialchars($initialData['name'] ?? '') . '">';
 
+        /*
         $html .= <<<EOF
                 </div>
 
@@ -55,6 +56,21 @@ class planCatalogFilterForm extends baseForm
             $trainerName = htmlspecialchars($trainer->getName());
             $selected = (isset($initialData['trainer']) && $initialData['trainer'] == $trainerId) ? 'selected' : '';
             $html .= '<option value="' . $trainerId . '" ' . $selected . '>' . $trainerName . '</option>';
+        }
+        */
+
+        $html .= <<<EOF
+        </div>
+        <div class="mb-3">
+            <label for="trainer" class="form-label">Entrenador:</label>
+            <select name="trainer" id="trainer" class="form-control">
+                <option value="">Seleccionar entrenador</option>
+        EOF;
+
+        foreach ($trainers as $trainer) {
+            $trainerId = htmlspecialchars($trainer['id']);  // Accede como array
+            $selected = (isset($initialData['trainer']) && $initialData['trainer'] == $trainerId) ? 'selected' : '';
+            $html .= '<option value="' . $trainerId . '" ' . $selected . '>' . $trainerId . '</option>';
         }
 
         $html .= <<<EOF
@@ -94,6 +110,24 @@ class planCatalogFilterForm extends baseForm
         EOF;
 
         $html .= htmlspecialchars($initialData['maxPrice'] ?? '1000') . '">';
+
+        $html .= <<<EOF
+                </div>
+                <div class="mb-3">
+                        <label for="minDuration" class="form-label">Duración mínima (días):</label>
+                        <input type="number" name="minDuration" id="minDuration" class="form-control" min="1" placeholder="Ej: 1" value="
+        EOF;
+
+        $html .= htmlspecialchars($initialData['minDuration'] ?? '1') . '">';
+
+        $html .= <<<EOF
+                    </div>
+                    <div class="mb-3">
+                        <label for="maxDuration" class="form-label">Duración máxima (días):</label>
+                        <input type="number" name="maxDuration" id="maxDuration" class="form-control" min="1" placeholder="Ej: 30" value="
+        EOF;
+
+        $html .= htmlspecialchars($initialData['maxDuration'] ?? '30') . '">';
 
         $html .= <<<EOF
                 </div>
@@ -152,6 +186,21 @@ class planCatalogFilterForm extends baseForm
             $result[] = 'El precio mínimo no puede ser mayor que el precio máximo.';
         }
 
+        // Validación de la duración
+        $minDuration = filter_var($data['minDuration'] ?? 1, FILTER_VALIDATE_INT);
+        if (!is_numeric($minDuration) || $minDuration < 1) {
+            $result[] = 'La duración mínima debe ser un número entero positivo.';
+        }
+
+        $maxDuration = filter_var($data['maxDuration'] ?? 30, FILTER_VALIDATE_INT);
+        if (!is_numeric($maxDuration) || $maxDuration < 1) {
+            $result[] = 'La duración máxima debe ser un número entero positivo.';
+        }
+
+        if ($minDuration > $maxDuration) {
+            $result[] = 'La duración mínima no puede ser mayor que la duración máxima.';
+        }
+
         if(count($result) === 0) {
             // Crear un diccionario con los filtros seleccionados
             $filters = array();
@@ -160,12 +209,14 @@ class planCatalogFilterForm extends baseForm
             $filters['difficulty'] = $difficulty;
             $filters['minPrice'] = $minPrice;
             $filters['maxPrice'] = $maxPrice;
+            $filters['minDuration'] = $minDuration;
+            $filters['maxDuration'] = $maxDuration;
 
             // Llamamos a la instancia de SA de planes de entrenamiento
             $planAppService = planAppService::GetSingleton();
 
             // Buscamos los planes con los filtros seleccionados
-            $foundedPlansDTO = $planAppService->searchPlans($filters);
+            $foundedPlansDTO = $planAppService->searchTrainingPlans($filters);
 
             // Array de planes en formato JSON
             $foundedPlansJSON = json_encode($foundedPlansDTO);

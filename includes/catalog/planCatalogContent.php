@@ -74,11 +74,14 @@ class planCatalogContent
      */
     private function getDifficultyStars($difficulty)
     {
+        // Normalizar la dificultad (eliminar espacios y convertir a minúsculas)
+        $normalizedDifficulty = strtolower(trim($difficulty));
+        
         $levels = [
-            'Principiante' => 1,
-            'Intermedio' => 2,
-            'Avanzado' => 3,
-            'Experto' => 4
+            'principiante' => 1,
+            'intermedio' => 2,
+            'avanzado' => 3,
+            'experto' => 4
         ];
         
         $level = $levels[$difficulty] ?? 1;

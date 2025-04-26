@@ -19,7 +19,7 @@ $form = new planCatalogFilterForm();
 $htmlFilterForm = $form->Manage();
 
 // Creamos el array de planDTOs
-$plansDTO = array();
+$planDTO = array();
 
 // Tomamos la instancia del servicio de planes
 $planAppService = planAppService::GetSingleton();
@@ -30,7 +30,7 @@ if (!isset($_GET["search"]) || $_GET["search"] != "true") {
     unset($_SESSION["foundedPlansJSON"]);
 
     // Tomar todos los planes activos de la BBDD
-    $plansDTO = $planAppService->searchTrainingPlans(array("active" => 1));
+    $planDTO = $planAppService->searchTrainingPlans(array("active" => 1));
 }
 // Si hay filtros aplicados y se ha utilizado la barra de búsqueda
 else if(isset($_GET["name"]) && $_GET["name"] != "") {
@@ -41,7 +41,7 @@ else if(isset($_GET["name"]) && $_GET["name"] != "") {
     $filters = array();
     $filters['name'] = $name;
 
-    $plansDTO = $planAppService->searchTrainingPlans($filters);
+    $planDTO = $planAppService->searchTrainingPlans($filters);
 }
 // Si hay filtros aplicados desde el formulario
 else {
@@ -52,7 +52,7 @@ else {
     } 
 
     // Convertir los datos decodificados en objetos planDTO
-    $plansDTO = array_map(function($planData) {
+    $planDTO = array_map(function($planData) {
         return new planDTO(
             $planData['id'],
             $planData['trainer_id'],
@@ -69,11 +69,11 @@ else {
 }
 
 // Generar el contenido del catálogo
-$catalog = new planCatalogContent($plansDTO);
+$catalog = new planCatalogContent($planDTO);
 $htmlCatalog = $catalog->generateContent();
 
 // Si no hay planes, mostramos mensaje
-if (empty($plansDTO)) {
+if (empty($planDTO)) {
     $htmlCatalog .= utilsFactory::createAlert("No se encontraron planes con los filtros seleccionados.", "warning");
 }
 

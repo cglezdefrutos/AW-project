@@ -149,7 +149,7 @@ class planDAO extends baseDAO implements IPlan
 
         try {
             $conn = application::getInstance()->getConnectionDb();
-            $query = "SELECT id, name FROM users WHERE role = 'trainer' ORDER BY name ASC";
+            $query = "SELECT id FROM users WHERE usertype = 3 ORDER BY id ASC";
 
             $stmt = $conn->query($query);
             if (!$stmt) {
@@ -158,8 +158,7 @@ class planDAO extends baseDAO implements IPlan
 
             while ($row = $stmt->fetch_assoc()) {
                 $trainers[] = [
-                    'id' => $row['id'],
-                    'name' => $row['name']
+                    'id' => $row['id']
                 ];
             }
 
@@ -214,6 +213,20 @@ class planDAO extends baseDAO implements IPlan
             $query .= "price <= ? AND ";
             $args[] = $this->realEscapeString($filters['maxPrice']);
             $types .= 'd';
+        }
+
+        // Filtro por duración mínima
+        if (isset($filters['minDuration']) && $filters['minDuration'] !== '') {
+            $query .= "duration >= ? AND ";
+            $args[] = $this->realEscapeString($filters['minDuration']);
+            $types .= 'i';
+        }
+
+        // Filtro por duración máxima
+        if (isset($filters['maxDuration']) && $filters['maxDuration'] !== '') {
+            $query .= "duration <= ? AND ";
+            $args[] = $this->realEscapeString($filters['maxDuration']);
+            $types .= 'i';
         }
 
         // Eliminar el último AND si hay filtros

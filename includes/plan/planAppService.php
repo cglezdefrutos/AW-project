@@ -92,4 +92,89 @@ class planAppService
         $ITrainingPlan = planFactory::CreateTrainingPlan();
         return $ITrainingPlan->getPlanById($id);
     }
+
+    /**
+     * Registra un nuevo plan de entrenamiento
+     * 
+     * @param array $planData Datos del plan
+     * @return int|false ID del plan registrado o false en caso de error
+     */
+    public function registerPlan($planData)
+    {
+        try {
+            // Guardar archivos
+            $imageGuid = $this->savePlanImage($planData['image_file']);
+            $pdfPath = $this->savePlanPdf($planData['pdf_file']);
+            
+            // Crear DTO del plan
+            $planDTO = new planDTO(
+                null,
+                $planData['trainer_id'],
+                $planData['name'],
+                $planData['description'],
+                $planData['difficulty'],
+                $planData['duration'],
+                $planData['price'],
+                $imageGuid,
+                $pdfPath,
+                $planData['created_at'],
+                $planData['is_active']
+            );
+            
+            // Registrar en base de datos
+            $ITrainingPlan = planFactory::CreateTrainingPlan();
+            return $ITrainingPlan->registerPlan($planDTO);
+            
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+   /**
+     * Guarda una imagen en el sistema de archivos
+     * 
+     * @param string $image Ruta de la imagen
+     * 
+     * @return string Nombre del archivo guardado
+     */
+    public function savePlanImage($image)
+    {
+        $guid = Uuid::uuid4()->toString();
+
+        // Guardar la imagen en el sistema de archivos
+        $uploadDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR;
+        $extension = pathinfo($imageFile['name'], PATHINFO_EXTENSION);
+        $filename = $guid . '.' . $extension;
+        $uploadPath = $uploadDir . $filename;
+
+        if (!move_uploaded_file($imageFile['tmp_name'], $uploadPath)) {
+            throw new \Exception('Error al subir la imagen del plan.');
+        }
+
+        return $filename;
+    }
+
+    /**
+     * Guarda el PDF del plan en el sistema de archivos
+     * 
+     * @param array $pdfFile Datos del archivo PDF
+     * @return string Ruta relativa del PDF guardado
+     */
+    public function savePlanPdf($pdfFile)
+    {
+        $guid = Uuid::uuid4()->toString();
+
+        // Guardar el pdf en el sistema de archivos
+        $uploadDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR;
+        $extension = pathinfo($imageFile['name'], PATHINFO_EXTENSION);
+        $filename = $guid . '.' . $extension;
+        $uploadPath = $uploadDir . $filename;
+
+        if (!move_uploaded_file($imageFile['tmp_name'], $uploadPath)) {
+            throw new \Exception('Error al subir el pdf del plan.');
+        }
+
+        return $filename;
+    }
 }
