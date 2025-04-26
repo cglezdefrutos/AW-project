@@ -40,39 +40,6 @@ class planCatalogFilterForm extends baseForm
 
         $html .= htmlspecialchars($initialData['name'] ?? '') . '">';
 
-        /*
-        $html .= <<<EOF
-                </div>
-
-                <div class="mb-3">
-                    <label for="trainer" class="form-label">Entrenador:</label>
-                    <select name="trainer" id="trainer" class="form-control">
-                        <option value="">Seleccionar entrenador</option>
-        EOF;
-
-        // Añadir los entrenadores como opciones
-        foreach ($trainers as $trainer) {
-            $trainerId = htmlspecialchars($trainer->getId());
-            $trainerName = htmlspecialchars($trainer->getName());
-            $selected = (isset($initialData['trainer']) && $initialData['trainer'] == $trainerId) ? 'selected' : '';
-            $html .= '<option value="' . $trainerId . '" ' . $selected . '>' . $trainerName . '</option>';
-        }
-        */
-
-        $html .= <<<EOF
-        </div>
-        <div class="mb-3">
-            <label for="trainer" class="form-label">Entrenador:</label>
-            <select name="trainer" id="trainer" class="form-control">
-                <option value="">Seleccionar entrenador</option>
-        EOF;
-
-        foreach ($trainers as $trainer) {
-            $trainerId = htmlspecialchars($trainer['id']);  // Accede como array
-            $selected = (isset($initialData['trainer']) && $initialData['trainer'] == $trainerId) ? 'selected' : '';
-            $html .= '<option value="' . $trainerId . '" ' . $selected . '>' . $trainerId . '</option>';
-        }
-
         $html .= <<<EOF
                     </select>
                 </div>

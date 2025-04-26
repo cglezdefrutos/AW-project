@@ -62,7 +62,8 @@ class planDAO extends baseDAO implements IPlan
                     $price,
                     $image_guid,
                     $pdf_path,
-                    $created_at
+                    $created_at,
+                    $is_active
                 );
             }
 
@@ -239,4 +240,68 @@ class planDAO extends baseDAO implements IPlan
 
         return ['query' => $query, 'params' => $args, 'types' => $types];
     }
+
+    public function registerPlan($planDTO) 
+    {
+        $plan_id = null;
+        
+        try {
+            // Tomamos la conexión a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Preparamos la consulta SQL para insertar el plan
+            $stmt = $conn->prepare("
+            INSERT INTO training_plans 
+            (trainer_id, name, description, difficulty, duration, price, image_guid, pdf_path, created_at, is_active) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ");         
+
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Extraer y escapar valores del DTO
+            $trainer_id = $this->realEscapeString($planDTO->getTrainerId());
+            $name = $this->realEscapeString($planDTO->getName());
+            $description = $this->realEscapeString($planDTO->getDescription());
+            $difficulty = $this->realEscapeString($planDTO->getDifficulty());
+            $duration = $this->realEscapeString($planDTO->getDuration());
+            $price = $this->realEscapeString($planDTO->getPrice());
+            $image_guid = $this->realEscapeString($planDTO->getImageGuid());
+            $pdf_path = $this->realEscapeString($planDTO->getPdfPath());
+            $created_at = $this->realEscapeString($planDTO->getCreatedAt());
+            $is_active = $planDTO->getIsActive() ? 1 : 0;
+
+            // Enlazamos los parámetros
+            $stmt->bind_param("isssdssssi", 
+                $trainer_id,    // i (integer)
+                $name,          // s (string)
+                $description,   // s (string)
+                $difficulty,    // s (string)
+                $duration,      // d (double)
+                $price,         // d (double)
+                $image_guid,    // s (string)
+                $pdf_path,      // s (string)
+                $created_at,    // s (string)
+                $is_active      // i (integer)
+            );
+
+            // Ejecutamos la consulta
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al registrar el plan: " . $stmt->error);
+            }
+
+            // Obtener ID del plan insertado
+            $plan_id = $stmt->insert_id;
+
+            // Cerrar statement
+            $stmt->close();
+        } catch (\Exception $e) {
+            error_log("Error en registerPlan: " . $e->getMessage());
+            throw $e;
+        }
+
+        return $plan_id;
+    }
+
 }

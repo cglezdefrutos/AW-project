@@ -131,10 +131,10 @@ class planAppService
         }
     }
 
-   /**
+    /**
      * Guarda una imagen en el sistema de archivos
      * 
-     * @param string $image Ruta de la imagen
+     * @param array $image Datos del archivo de imagen
      * 
      * @return string Nombre del archivo guardado
      */
@@ -144,11 +144,11 @@ class planAppService
 
         // Guardar la imagen en el sistema de archivos
         $uploadDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR;
-        $extension = pathinfo($imageFile['name'], PATHINFO_EXTENSION);
+        $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
         $filename = $guid . '.' . $extension;
         $uploadPath = $uploadDir . $filename;
 
-        if (!move_uploaded_file($imageFile['tmp_name'], $uploadPath)) {
+        if (!move_uploaded_file($image['tmp_name'], $uploadPath)) {
             throw new \Exception('Error al subir la imagen del plan.');
         }
 
@@ -167,14 +167,15 @@ class planAppService
 
         // Guardar el pdf en el sistema de archivos
         $uploadDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR;
-        $extension = pathinfo($imageFile['name'], PATHINFO_EXTENSION);
+        $extension = pathinfo($pdfFile['name'], PATHINFO_EXTENSION);
         $filename = $guid . '.' . $extension;
         $uploadPath = $uploadDir . $filename;
 
-        if (!move_uploaded_file($imageFile['tmp_name'], $uploadPath)) {
+        if (!move_uploaded_file($pdfFile['tmp_name'], $uploadPath)) {
             throw new \Exception('Error al subir el pdf del plan.');
         }
 
         return $filename;
     }
+
 }

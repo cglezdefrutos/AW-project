@@ -42,8 +42,7 @@ else
         else
         {
             $trainer_id = $app->getCurrentUserId();
-            $trainer_email = $app->getCurrentUserEmail();
-            $form = new registerPlanForm($trainer_id, $trainer_email);
+            $form = new registerPlanForm($trainer_id);
             $htmlRegisterPlanForm = $form->Manage();
 
             $mainContent = <<<EOS

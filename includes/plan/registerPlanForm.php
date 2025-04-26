@@ -10,30 +10,21 @@ use TheBalance\views\common\baseForm;
 class registerPlanForm extends baseForm
 {
     /**
-     * ID del proveedor
+     * ID del trainer
      * 
      * @var int
      */
     private $trainer_id;
     
     /**
-     * Email del proveedor
-     * 
-     * @var string
-     */
-    private $trainer_email;
-
-    /**
      * Constructor
      * 
-     * @param int $trainer_id ID del proveedor
-     * @param string $trainer_email Email del proveedor
+     * @param int $trainer_id ID del trainer
      */
-    public function __construct($trainer_id, $trainer_email)
+    public function __construct($trainer_id)
     {
         parent::__construct('registerPlanForm', array('enctype' => 'multipart/form-data'));
         $this->trainer_id = $trainer_id;
-        $this->trainer_email = $trainer_email;
     }
 
     /**
@@ -81,7 +72,7 @@ class registerPlanForm extends baseForm
                     <input type="number" name="duration" id="duration" class="form-control" min="1" placeholder="Ej: 30" value="
         EOF;
 
-        $html .= htmlspecialchars($initialData['duration'] ?? '') . '</textarea>';
+        $html .= htmlspecialchars($initialData['duration'] ?? '') . '" required>';
         
         $html .= <<<EOF
                 </div>
