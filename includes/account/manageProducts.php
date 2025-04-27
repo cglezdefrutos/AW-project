@@ -26,7 +26,7 @@ if (!$app->isCurrentUserLogged()) {
         $html = $productTable->generateTable();
 
         echo <<<EOS
-            <h1>Gestión de productos</h1>
+            <h2>Gestión de productos</h2>
             $html
         EOS;
 

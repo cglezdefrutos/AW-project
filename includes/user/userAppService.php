@@ -66,4 +66,39 @@ class userAppService
 
         return $createdUserDTO;
     }
+
+    /**
+     * Cambia la contraseña de un usuario
+     * 
+     * @param int $userId ID del usuario
+     * @param string $newPassword Nueva contraseña
+     * @param string $repeatNewPassword Repetir nueva contraseña
+     * 
+     * @return bool Resultado de la operación
+     */
+    public function changePassword($userId, $newPassword, $repeatNewPassword)
+    {
+        $IUserDAO = userFactory::CreateUser();
+        
+        $result = $IUserDAO->changePassword($userId, $newPassword, $repeatNewPassword);
+
+        return $result;
+    }
+
+    /**
+     * Cambia el email de un usuario
+     * 
+     * @param int $userId ID del usuario
+     * @param string $newEmail Nuevo email
+     * 
+     * @return array Resultado de la operación
+     */
+    public function changeEmail($userId, $newEmail)
+    {
+        $IUserDAO = userFactory::CreateUser();
+
+        $result = $IUserDAO->changeEmail($userId, $newEmail);
+
+        return $result;
+    }
 }

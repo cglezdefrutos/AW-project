@@ -12,6 +12,8 @@ $(document).ready(function () {
                 const result = JSON.parse(response);
                 if (result.success) {
                     const event = result.data;
+                    const categories = result.data.categories;
+                    const isAdmin = result.data.isAdmin;
 
                     // Llenar el formulario del modal con los datos del evento
                     $('#eventId').val(event.id);
@@ -21,7 +23,24 @@ $(document).ready(function () {
                     $('#eventLocation').val(event.location);
                     $('#eventPrice').val(event.price);
                     $('#eventCapacity').val(event.capacity);
-                    $('#eventCategory').val(event.category);
+
+                    // Generar dinámicamente el campo de categoría
+                    let categoryFieldHtml = '';
+                    if (isAdmin) {
+                        // Administrador: campo de texto
+                        categoryFieldHtml = `
+                            <input type="text" name="category" id="eventCategory" class="form-control" value="${event.category}" required>
+                        `;
+                    } else {
+                        // Proveedor: campo select con las categorías disponibles
+                        categoryFieldHtml = '<select name="category" id="eventCategory" class="form-control" required>';
+                        categories.forEach(category => {
+                            const selected = category.name === event.category ? 'selected' : '';
+                            categoryFieldHtml += `<option value="${category.name}" ${selected}>${category.name}</option>`;
+                        });
+                        categoryFieldHtml += '</select>';
+                    }
+                    $('#categoryField').html(categoryFieldHtml);
 
                     // Abrir el modal
                     $('#editEventModal').modal('show');

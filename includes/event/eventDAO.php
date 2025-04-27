@@ -673,6 +673,66 @@ class eventDAO extends baseDAO implements IEvent
 
         return true;
     }
+
+    /**
+     * Devuelve el número de asistentes actuales a un evento
+     *  
+     * @param int $eventId Id del evento
+     *  
+     * @return int Número de asistentes
+     */
+    public function getCurrentAssistants($eventId)
+    {
+        $currentAssistants = 0;
+
+        try {
+            // Tomamos la conexion a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Implementar la logica de acceso a la base de datos para obtener el número de asistentes actuales a un evento
+            $stmt = $conn->prepare("SELECT COUNT(*) FROM event_participants WHERE event_id = ?");
+            if(!$stmt)
+            {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Asignamos los parametros
+            $escEventId = $this->realEscapeString($eventId);
+            $stmt->bind_param("i", $escEventId);
+
+            // Ejecutamos la consulta
+            if(!$stmt->execute())
+            {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            // Asignamos los resultados a variables
+            $stmt->bind_result($currentAssistants);
+
+            // Almacenar el resultado para verificar el número de filas
+            $stmt->store_result();
+
+            // Si no se encontraron filas, el evento no tiene asistentes
+            if ($stmt->num_rows === 0)
+            {
+                $currentAssistants = 0;
+            }
+            // Si se encontró, obtenemos el número de asistentes
+            else
+            {
+                $stmt->fetch();
+            }
+
+            // Cerramos la consulta
+            $stmt->close();
+
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+
+        return $currentAssistants;
+    }
     
     /**
      * Construye la consulta SQL para buscar eventos en función de los filtros

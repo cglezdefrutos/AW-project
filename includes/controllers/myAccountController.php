@@ -6,10 +6,6 @@ $section = $_POST['section'] ?? null;
 
 if ($section) {
     switch ($section) {
-        case 'welcome':
-            echo '<h3>Bienvenido a tu cuenta</h3><p>Selecciona una opción del menú para comenzar.</p>';
-            break;
-
         case 'manageProducts':
             include '../account/manageProducts.php'; // Cargar la vista de gestión de productos
             break;

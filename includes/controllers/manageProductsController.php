@@ -7,6 +7,7 @@ use TheBalance\product\productDTO;
 use TheBalance\product\productCategoryDTO;
 use TheBalance\product\productSizesDTO;
 use TheBalance\utils\utilsFactory;
+use TheBalance\application;
 
 $action = $_POST['action'] ?? null;
 
@@ -17,6 +18,13 @@ if ($action) {
         case 'getProduct':
             $productId = $_POST['productId'];
             $product = $productAppService->getProductById($productId);
+
+            // Si no es admin, tomamos las categorias disponibles
+            $isAdmin = application::getInstance()->isCurrentUserAdmin();
+            $categories = [];
+            if (!$isAdmin) {
+                $categories = $productAppService->getCategories();
+            }
 
             // Tomar la URL de la imagen del producto
             $imageUrl = $productAppService->getProductImagePath($product->getImageGuid());
@@ -38,7 +46,9 @@ if ($action) {
                         'imageGUID' => $product->getImageGuid(),
                         'createdAt' => $product->getCreatedAt(),
                         'active' => $product->getActive(),
-                        'providerEmail' => $product->getProviderEmail()
+                        'providerEmail' => $product->getProviderEmail(),
+                        'categories' => $categories,
+                        'isAdmin' => $isAdmin
                     ]
                 ]);
             } else {

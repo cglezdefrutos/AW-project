@@ -59,7 +59,7 @@ class eventModal
                                 
                                 <div class="mb-3">
                                     <label for="eventCategory" class="form-label">Categoría</label>
-                                    <input type="text" class="form-control" id="eventCategory" name="category" required>
+                                    <div id="categoryField"></div> <!-- Este div será dinámico -->
                                 </div>
                                 
                                 <button type="submit" class="btn btn-primary">Guardar Cambios</button>

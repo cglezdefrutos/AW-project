@@ -27,10 +27,6 @@ class myAccountOptions
         $app = application::getInstance();
         $options = '';
 
-        $options .= <<<EOS
-            <li class="list-group-item menu-item" data-section="welcome">Bienvenido</li>
-        EOS;
-
         if ($app->isCurrentUserAdmin()) 
         {
             $options .= <<<EOS
@@ -44,7 +40,9 @@ class myAccountOptions
         elseif ($app->isCurrentUserClient())
         {  
             $options .= <<<EOS
-                <li class="list-group-item menu-item" data-section="orders">Mis Pedidos</li>
+                <li class="list-group-item menu-item" data-section="myOrders">Mis Pedidos</li>
+                <li class="list-group-item menu-item" data-section="myEvents">Mis Eventos</li>
+                <li class="list-group-item menu-item" data-section="myPlans">Mis Planes</li>
             EOS;
         }
         elseif ($app->isCurrentUserProvider())

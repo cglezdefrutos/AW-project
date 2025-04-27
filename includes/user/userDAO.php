@@ -132,6 +132,91 @@ class userDAO extends baseDAO implements IUser
     }
 
     /**
+     * Cambia la contraseña de un usuario
+     * 
+     * @param int $userId ID del usuario
+     * @param string $newPassword Nueva contraseña
+     * @param string $repeatNewPassword Repetir nueva contraseña
+     * 
+     * @return bool Resultado de la operación
+     */
+    public function changePassword($userId, $newPassword, $repeatNewPassword)
+    {
+        $result = false;
+
+        // Verifica si las contraseñas coinciden
+        if ($newPassword === $repeatNewPassword) 
+        {
+            $hashedPassword = self::hashPassword($newPassword);
+
+            $conn = application::getInstance()->getConnectionDb();
+            if (!$conn) {
+                throw new Exception("No se pudo establecer la conexión a la base de datos.");
+            }
+
+            $query = "UPDATE users SET password = ? WHERE id = ?";
+
+            $stmt = $conn->prepare($query);
+            if (!$stmt) {
+                throw new Exception("Error en la preparación de la consulta: " . $conn->error);
+            }
+
+            $stmt->bind_param("si", $hashedPassword, $userId);
+
+            if ($stmt->execute())
+            {
+                $result = true;
+            }
+            else
+            {
+                throw new Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Cambia el email de un usuario
+     * 
+     * @param int $userId ID del usuario
+     * @param string $newEmail Nuevo email
+     * 
+     * @return array Resultado de la operación
+     */
+    public function changeEmail($userId, $newEmail)
+    {
+        $result = false;
+
+        $conn = application::getInstance()->getConnectionDb();
+
+        if (!$conn) {
+            throw new Exception("No se pudo establecer la conexión a la base de datos.");
+        }
+
+        $query = "UPDATE users SET email = ? WHERE id = ?";
+
+        $stmt = $conn->prepare($query);
+        if (!$stmt) {
+            throw new Exception("Error en la preparación de la consulta: " . $conn->error);
+        }
+
+        $escNewEmail = $this->realEscapeString($newEmail);
+        $stmt->bind_param("si", $escNewEmail, $userId);
+
+        if ($stmt->execute())
+        {
+            $result = true;
+        }
+        else
+        {
+            throw new Exception("Error al ejecutar la consulta: " . $stmt->error);
+        }
+
+        return $result;
+    }
+
+    /**
      * Nos da el hash de la contraseña
      * 
      * @param string $password Contraseña

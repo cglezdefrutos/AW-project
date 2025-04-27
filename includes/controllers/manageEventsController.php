@@ -5,6 +5,7 @@ use TheBalance\event\eventAppService;
 use TheBalance\utils\utilsFactory;
 use TheBalance\event\eventDTO;
 use TheBalance\event\eventCategoryDTO;
+use TheBalance\application;
 
 $action = $_POST['action'] ?? null;
 
@@ -16,6 +17,13 @@ if ($action) {
             $eventId = $_POST['eventId'];
             $event = $eventAppService->getEventById($eventId);
             $formattedDateTime = date('Y-m-d\TH:i', strtotime($event->getDate()));
+
+            // Si no es admin, tomamos las categorias disponibles
+            $isAdmin = application::getInstance()->isCurrentUserAdmin();
+            $categories = [];
+            if (!$isAdmin) {
+                $categories = $eventAppService->getEventCategories();
+            }
 
             if ($event) {
                 echo json_encode([
@@ -29,6 +37,8 @@ if ($action) {
                         'price' => $event->getPrice(),
                         'capacity' => $event->getCapacity(),
                         'category' => $event->getCategoryName(),
+                        'categories' => $categories,
+                        'isAdmin' => $isAdmin
                     ]
                 ]);
             } else {
