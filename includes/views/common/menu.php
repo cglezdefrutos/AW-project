@@ -37,11 +37,6 @@ function mostrarLogin()
                     <a class="nav-link" href="catalog.php">Catálogo</a>
                 </li>
 
-                <!-- Opción Catálogo -->
-                <li class="nav-item">
-                    <a class="nav-link" href="catalogPlan.php">Catálogo Planes de Entrenamiento</a>
-                </li>
-
                 <!-- Dropdown Eventos -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="eventosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -82,7 +77,7 @@ function mostrarLogin()
                         Planes
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="planesDropdown">
-                        <li><a class="dropdown-item" href="managePlans.php">Gestionar</a></li>
+                        <li><a class="dropdown-item" href="catalogPlan.php">Catalogo</a></li>
                         <li><a class="dropdown-item" href="registerPlans.php">Registrar</a></li>
                     </ul>
                 </li>
