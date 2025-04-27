@@ -284,7 +284,7 @@ class productAppService
         $guid = Uuid::uuid4()->toString();
 
         // Guardar la imagen en el sistema de archivos
-        $uploadDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR;
+        $uploadDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'products' . DIRECTORY_SEPARATOR;
         $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
         $filename = $guid . '.' . $extension;
         $uploadPath = $uploadDir . $filename;
@@ -292,6 +292,9 @@ class productAppService
         if (!move_uploaded_file($image['tmp_name'], $uploadPath)) {
             throw new \Exception('Error al subir la imagen del producto.');
         }
+
+        // Quitar la extensión del nombre del archivo
+        $filename = pathinfo($filename, PATHINFO_FILENAME);
 
         return $filename;
     }
@@ -310,7 +313,7 @@ class productAppService
 
         // Buscar el archivo con la extensión correcta
         foreach ($possibleExtensions as $extension) {
-            $path = IMG_PATH . '/' . $imageGuid . '.' . $extension;
+            $path = IMG_PATH . '/' . 'products' . '/' . $imageGuid . '.' . $extension;
             if (file_exists($_SERVER['DOCUMENT_ROOT'] . $path)) {
                 return $path;
             }

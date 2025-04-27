@@ -69,16 +69,19 @@ class planAppService
      */
     public function getPlanImagePath($imageGuid)
     {
-        $possibleExtensions = ['png', 'jpg', 'jpeg', 'gif'];
+        // Definir las extensiones posibles
+        $possibleExtensions = ['png', 'jpg', 'jpeg'];
 
+        // Buscar el archivo con la extensión correcta
         foreach ($possibleExtensions as $extension) {
-            $path = '/img/plans/' . $imageGuid . '.' . $extension;
+            $path = IMG_PATH . '/' . 'plans' . '/' . $imageGuid . '.' . $extension;
             if (file_exists($_SERVER['DOCUMENT_ROOT'] . $path)) {
                 return $path;
             }
         }
 
-        return '/img/default-plan.png';
+        // Si no se encuentra, devolver una imagen por defecto
+        return '/AW-project/img/default.png';
     }
 
     /**
@@ -143,7 +146,7 @@ class planAppService
         $guid = Uuid::uuid4()->toString();
 
         // Guardar la imagen en el sistema de archivos
-        $uploadDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR;
+        $uploadDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'plans' . DIRECTORY_SEPARATOR;
         $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
         $filename = $guid . '.' . $extension;
         $uploadPath = $uploadDir . $filename;
@@ -151,6 +154,10 @@ class planAppService
         if (!move_uploaded_file($image['tmp_name'], $uploadPath)) {
             throw new \Exception('Error al subir la imagen del plan.');
         }
+
+        // Quitar la extensión del nombre del archivo para el GUID
+        // Esto es necesario para evitar problemas al guardar en la base de datos
+        $filename = pathinfo($filename, PATHINFO_FILENAME);
 
         return $filename;
     }
@@ -166,7 +173,7 @@ class planAppService
         $guid = Uuid::uuid4()->toString();
 
         // Guardar el pdf en el sistema de archivos
-        $uploadDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR;
+        $uploadDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'pdf' . DIRECTORY_SEPARATOR;
         $extension = pathinfo($pdfFile['name'], PATHINFO_EXTENSION);
         $filename = $guid . '.' . $extension;
         $uploadPath = $uploadDir . $filename;
