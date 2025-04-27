@@ -51,7 +51,7 @@ else
         $html = $ordersTable->generateTable();
 
         echo <<<EOS
-            <h1>Gestión de pedidos</h1>
+            <h2>Gestión de pedidos</h2>
             $html
         EOS;
 

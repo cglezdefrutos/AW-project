@@ -38,7 +38,7 @@ else
         $html = $eventTable->generateTable();
 
         echo <<<EOS
-            <h1>Gestión de eventos</h1>
+            <h2>Gestión de eventos</h2>
             $html
         EOS;
 
