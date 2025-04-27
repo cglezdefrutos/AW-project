@@ -12,13 +12,15 @@ $(document).ready(function () {
                 const result = JSON.parse(response);
                 if (result.success) {
                     const product = result.data;
+                    const categories = result.data.categories;
+                    const isAdmin = result.data.isAdmin;
 
                     // Llenar el formulario del modal con los datos del producto
                     $('#productId').val(product.id);
                     $('#productName').val(product.name);
                     $('#productDescription').val(product.description);
                     $('#productPrice').val(product.price);
-                    $('#productCategory').val(product.category);
+                    //$('#productCategory').val(product.category);
                     $('#productEmailProvider').val(product.emailProvider);
                     $('#productCreatedAt').val(product.createdAt);
                     $('#productActive').val(product.active);
@@ -28,6 +30,24 @@ $(document).ready(function () {
                     for (const size in sizes) {
                         $(`#stock_${size}`).val(sizes[size]);
                     }
+
+                    // Generar dinámicamente el campo de categoría
+                    let categoryFieldHtml = '';
+                    if (isAdmin) {
+                        // Administrador: campo de texto
+                        categoryFieldHtml = `
+                            <input type="text" name="category" id="productCategory" class="form-control" value="${product.category}" required>
+                        `;
+                    } else {
+                        // Proveedor: campo select con las categorías disponibles
+                        categoryFieldHtml = '<select name="category" id="productCategory" class="form-control" required>';
+                        categories.forEach(category => {
+                            const selected = category.name === product.category ? 'selected' : '';
+                            categoryFieldHtml += `<option value="${category.name}" ${selected}>${category.name}</option>`;
+                        });
+                        categoryFieldHtml += '</select>';
+                    }
+                    $('#categoryField').html(categoryFieldHtml);
 
                     // Mostrar la imagen actual
                     $('#currentProductImage').attr('src', product.image);

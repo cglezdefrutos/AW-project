@@ -92,7 +92,8 @@ class productModal
                             <!-- Categoría -->
                             <div class="mb-3">
                                 <label for="productCategory" class="form-label">Categoría:</label>
-                                <input type="text" name="category" id="productCategory" class="form-control" required>
+                                <!-- <input type="text" name="category" id="productCategory" class="form-control" required> -->
+                                <div id="categoryField"></div> <!-- Este div será dinámico -->
                             </div>
 
                             <!-- Campo oculto para el proveedor de email -->

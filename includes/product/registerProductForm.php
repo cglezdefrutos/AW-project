@@ -3,6 +3,7 @@
 namespace TheBalance\product;
 
 use TheBalance\views\common\baseForm;
+use TheBalance\application;
 
 /**
  * Formulario de registro de productos
@@ -47,6 +48,30 @@ class registerProductForm extends baseForm
     {
         // Definimos las tallas disponibles
         $sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+
+        // Creamos el campo categoría en funcion del tipo de usuario
+        $app = application::getInstance();
+        $categoriesHtml = '';
+        if ($app->isCurrentUserProvider()) 
+        {
+            $categories = productAppService::GetSingleton()->getCategories();
+            $categoriesHtml = '<select name="category_id" id="category_id" class="form-control" required>';
+            foreach ($categories as $category) {
+                // Acceder al nombre de la categoría usando el método getName()
+                $categoryName = $category->getName();
+                $selected = ($initialData['category_id'] ?? '') === $categoryName ? 'selected' : '';
+                $categoriesHtml .= '<option value="' . htmlspecialchars($categoryName) . '" ' . $selected . '>' . htmlspecialchars($categoryName) . '</option>';
+            }
+            $categoriesHtml .= '</select>';
+        }
+        else
+        {
+            // Si es administrador, permitimos un input de texto
+            $categoriesHtml = <<<EOF
+                <input type="text" name="category_id" id="category_id" class="form-control" min="1" placeholder="Ej: Fútbol, Baloncesto" value="
+            EOF;
+            $categoriesHtml .= htmlspecialchars($initialData['category_id'] ?? '') . '" required>';
+        }
         
         // Creamos el formulario de registro de productos
         $html = <<<EOF
@@ -89,12 +114,7 @@ class registerProductForm extends baseForm
                 <!-- Campo Categoría -->
                 <div class="mb-3">
                     <label for="category_id" class="form-label">Categoría:</label>
-                    <input type="text" name="category_id" id="category_id" class="form-control" min="1" placeholder="Ej: Fútbol, Baloncesto" value="
-        EOF;
-
-        $html .= htmlspecialchars($initialData['category_id'] ?? '') . '" required>';
-        
-        $html .= <<<EOF
+                    $categoriesHtml
                 </div>
 
                 <!--Imagen -->
