@@ -20,7 +20,6 @@ $(document).ready(function () {
                     $('#productName').val(product.name);
                     $('#productDescription').val(product.description);
                     $('#productPrice').val(product.price);
-                    //$('#productCategory').val(product.category);
                     $('#productEmailProvider').val(product.emailProvider);
                     $('#productCreatedAt').val(product.createdAt);
                     $('#productActive').val(product.active);
