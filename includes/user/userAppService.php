@@ -68,6 +68,36 @@ class userAppService
     }
 
     /**
+     * Elimina un usuario
+     * 
+     * @param int $userId ID del usuario
+     * 
+     * @return bool Resultado de la operación
+     */
+    public function deleteUser($userId)
+    {
+        $IUserDAO = userFactory::CreateUser();
+
+        $result = $IUserDAO->deleteUser($userId);
+
+        return $result;
+    }
+
+    /**
+     * Devuelve todos los usuarios
+     * 
+     * @return array $usersDTO Lista de usuarios
+     */
+    public function getUsers()
+    {
+        $IUserDAO = userFactory::CreateUser();
+
+        $usersDTO = $IUserDAO->getUsers();
+
+        return $usersDTO;
+    }
+
+    /**
      * Cambia la contraseña de un usuario
      * 
      * @param int $userId ID del usuario
@@ -86,6 +116,22 @@ class userAppService
     }
 
     /**
+     * Devuelve el email de un usuario
+     * 
+     * @param int $userId ID del usuario
+     * 
+     * @return string $email Email del usuario
+     */
+    public function getEmail($userId)
+    {
+        $IUserDAO = userFactory::CreateUser();
+
+        $email = $IUserDAO->getEmail($userId);
+
+        return $email;
+    }
+
+    /**
      * Cambia el email de un usuario
      * 
      * @param int $userId ID del usuario
@@ -98,6 +144,39 @@ class userAppService
         $IUserDAO = userFactory::CreateUser();
 
         $result = $IUserDAO->changeEmail($userId, $newEmail);
+
+        return $result;
+    }
+
+    /**
+     * Devuelve el tipo de usuario de un usuario
+     * 
+     * @param int $userId ID del usuario
+     * 
+     * @return string $userType Tipo de usuario
+     */
+    public function getUserType($userId)
+    {
+        $IUserDAO = userFactory::CreateUser();
+
+        $userType = $IUserDAO->getUserType($userId);
+
+        return $userType;
+    }
+
+    /**
+     * Actualiza el tipo de usuario
+     * 
+     * @param int $userId ID del usuario
+     * @param int $userType Nuevo tipo de usuario
+     * 
+     * @return bool Resultado de la operación
+     */
+    public function changeUserType($userId, $userType)
+    {
+        $IUserDAO = userFactory::CreateUser();
+
+        $result = $IUserDAO->changeUserType($userId, $userType);
 
         return $result;
     }

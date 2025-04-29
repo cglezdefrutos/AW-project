@@ -26,8 +26,10 @@ if (!$app->isCurrentUserLogged()) {
         $html = $productTable->generateTable();
 
         echo <<<EOS
-            <h2>Gestión de productos</h2>
-            $html
+            <div class="container mt-4">
+                <h2>Gestión de productos</h2>
+                $html
+            </div>
         EOS;
 
         // Agregar el modal al contenido

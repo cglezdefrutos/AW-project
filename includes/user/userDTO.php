@@ -85,6 +85,26 @@ class userDTO implements \JsonSerializable
     }
 
     /**
+     * Devuelve el tipo de usuario como texto
+     * @return string
+     */
+    public function usertypeText()
+    {
+        switch ($this->usertype) {
+            case 0:
+                return 'Admin';
+            case 1:
+                return 'Cliente';
+            case 2:
+                return 'Proveedor';
+            case 3:
+                return 'Entrenador';
+            default:
+                return 'Desconocido';
+        }
+    }
+
+    /**
      * Implementación de JsonSerializable
      * @return array Array con los datos del objeto
      */    
