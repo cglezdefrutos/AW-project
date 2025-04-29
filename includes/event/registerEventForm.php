@@ -3,6 +3,7 @@
 namespace TheBalance\event;
 
 use TheBalance\views\common\baseForm;
+use TheBalance\application;
 
 /**
  * Formulario de registro de eventos
@@ -36,6 +37,28 @@ class registerEventForm extends baseForm
      */
     protected function CreateFields($initialData)
     {
+        // Creamos el campo categoría en función del tipo de usuario
+        $app = application::getInstance();
+        $categoriesHtml = '';
+        if ($app->isCurrentUserProvider()) {
+            // Obtener las categorías activas desde el servicio
+            $categories = eventAppService::GetSingleton()->getEventCategories();
+            $categoriesHtml = '<select name="category_id" id="category_id" class="form-control" required>';
+            foreach ($categories as $category) {
+                // Acceder al nombre de la categoría usando el método getName()
+                $categoryName = $category->getName();
+                $selected = ($initialData['category_id'] ?? '') === $categoryName ? 'selected' : '';
+                $categoriesHtml .= '<option value="' . htmlspecialchars($categoryName) . '" ' . $selected . '>' . htmlspecialchars($categoryName) . '</option>';
+            }
+            $categoriesHtml .= '</select>';
+        } else {
+            // Si es administrador, permitimos un input de texto
+            $categoriesHtml = <<<EOF
+                <input type="text" name="category_id" id="category_id" class="form-control" placeholder="Ej: Deportes, Música" value="
+            EOF;
+            $categoriesHtml .= htmlspecialchars($initialData['category_id'] ?? '') . '" required>';
+        }
+
         // Creamos el formulario de registro de eventos
         $html = <<<EOF
             <fieldset class="border p-4 rounded">
@@ -109,13 +132,8 @@ class registerEventForm extends baseForm
 
                 <!-- Campo Categoría -->
                 <div class="mb-3">
-                    <label for="category" class="form-label">Categoría:</label>
-                    <input type="text" name="category" id="category" class="form-control" placeholder="Ej: Deportes" value="
-        EOF;
-
-        $html .= htmlspecialchars($initialData['category'] ?? '') . '" required>';
-        
-        $html .= <<<EOF
+                    <label for="category_id" class="form-label">Categoría:</label>
+                    $categoriesHtml
                 </div>
 
                 <!-- Botón de registro -->
@@ -171,7 +189,7 @@ class registerEventForm extends baseForm
             $result[] = 'La capacidad debe ser un número positivo.';
         }
 
-        $category = trim($data['category'] ?? '');
+        $category = trim($data['category_id'] ?? '');
         $category = filter_var($category, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if (empty($category) || strlen($category) > 50) {
             $result[] = 'La categoría es obligatoria y no debe exceder los 50 caracteres.';

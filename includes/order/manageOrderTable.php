@@ -19,11 +19,9 @@ class manageOrderTable extends baseTable
             $html .= '<td>' . htmlspecialchars($order->getStatus()) . '</td>';
             $html .= '<td>' . htmlspecialchars($order->getCreatedAt()) . '</td>';
             $html .= '<td>';
-            $html .= '<a href="showOrderDetails.php?id=' . htmlspecialchars($order->getId()) . '">Ver Detalles</a>';
-            $html .= ' o ';
-            $html .= '<a href="updateOrders.php?orderId=' . htmlspecialchars($order->getId()) . '">Cambiar Estado</a>';
-            $html .= ' o ';
-            $html .= '<a href="manageOrders.php?orderId=' . htmlspecialchars($order->getId()) . '" onclick="return confirm(\'¿Estás seguro de que deseas eliminar este pedido?\');">Eliminar</a>';
+            $html .= '<button class="btn btn-info view-order" data-id="' . htmlspecialchars($order->getId()) . '">Ver Detalles</button> ';
+            $html .= '<button class="btn btn-primary edit-order mt-2" data-id="' . htmlspecialchars($order->getId()) . '">Cambiar Estado</button> ';
+            $html .= '<button class="btn btn-danger delete-order mt-2" data-id="' . htmlspecialchars($order->getId()) . '">Eliminar</button>';
             $html .= '</td>';
             $html .= '</tr>';
         }

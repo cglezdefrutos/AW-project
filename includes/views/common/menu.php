@@ -71,9 +71,25 @@ function mostrarLogin()
                     </ul>
                 </li>
 
+                <!-- Dropdown Planes -->
+                 <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="planesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Planes
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="planesDropdown">
+                        <li><a class="dropdown-item" href="catalogPlan.php">Catalogo</a></li>
+                        <li><a class="dropdown-item" href="registerPlans.php">Registrar</a></li>
+                    </ul>
+                </li>
+
                 <!-- Opción Carrito -->
                 <li class="nav-item">
                     <a class="nav-link" href="cart.php">Carrito</a>
+                </li>
+
+                <!-- Opción Mi Cuenta -->
+                <li class="nav-item">
+                    <a class="nav-link" href="myAccount.php">Mi Cuenta</a>
                 </li>
             </ul>
         </div>

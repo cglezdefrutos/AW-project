@@ -266,4 +266,38 @@ class eventAppService
 
         return $IEventDAO->deleteEventCategory($categoryId);
     }
+
+    /**
+     * Devuelve el número de asistentes actuales a un evento
+     * 
+     * @param string $eventId ID del evento
+     * 
+     * @return int Número de asistentes
+     */
+    public function getCurrentAssistants($eventId)
+    {
+        $IEventDAO = eventFactory::CreateEvent();
+
+        // Obtenemos el número de asistentes al evento
+        $currentAssistants = $IEventDAO->getCurrentAssistants($eventId);
+
+        return $currentAssistants;
+    }
+
+    /**
+     * Devuelve los eventos a los que se ha unido un usuario
+     * 
+     * @param string $userId ID del usuario
+     * 
+     * @return eventDTO[] Lista de eventos
+     */
+    public function getJoinedEvents($userId)
+    {
+        $IEventDAO = eventFactory::CreateEvent();
+
+        // Obtenemos los eventos a los que se ha unido el usuario
+        $joinedEventsDTO = $IEventDAO->getJoinedEvents($userId);
+
+        return $joinedEventsDTO;
+    }
 }

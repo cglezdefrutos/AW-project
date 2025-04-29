@@ -300,5 +300,24 @@ class application
     public function getCurrentUserEmail()
     {
         return json_decode($_SESSION['user'], true)['email'] ?? null;
-    }    
+    }
+    
+    /**
+     * Cambia el email del usuario actual.
+     * 
+     * @param string $email Nuevo email del usuario.
+     * 
+     * @return bool Verdadero si se ha cambiado el email, falso en caso contrario.
+     */
+    public function changeCurrentUserEmail($email)
+    {
+        if ($this->isCurrentUserLogged()) 
+        {
+            $user = json_decode($_SESSION['user'], true);
+            $user['email'] = $email;
+            $_SESSION['user'] = json_encode($user);
+            return true;
+        }
+        return false;
+    }
 }
