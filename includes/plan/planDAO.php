@@ -47,8 +47,7 @@ class planDAO extends baseDAO implements IPlan
                 $price,
                 $pdf_path,
                 $image_guid,
-                $created_at,
-                $is_active
+                $created_at
             );
 
             while ($stmt->fetch()) {
@@ -62,8 +61,7 @@ class planDAO extends baseDAO implements IPlan
                     $price,
                     $image_guid,
                     $pdf_path,
-                    $created_at,
-                    $is_active
+                    $created_at
                 );
             }
 
@@ -111,8 +109,7 @@ class planDAO extends baseDAO implements IPlan
                 $price,
                 $pdf_path,
                 $image_guid,
-                $created_at,
-                $is_active
+                $created_at
             );
 
             if ($stmt->fetch()) {
@@ -252,8 +249,8 @@ class planDAO extends baseDAO implements IPlan
             // Preparamos la consulta SQL para insertar el plan
             $stmt = $conn->prepare("
             INSERT INTO training_plans 
-            (trainer_id, name, description, difficulty, duration, price, image_guid, pdf_path, created_at, is_active) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (trainer_id, name, description, difficulty, duration, price, image_guid, pdf_path, created_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");         
 
             if (!$stmt) {
@@ -270,10 +267,9 @@ class planDAO extends baseDAO implements IPlan
             $image_guid = $this->realEscapeString($planDTO->getImageGuid());
             $pdf_path = $this->realEscapeString($planDTO->getPdfPath());
             $created_at = $this->realEscapeString($planDTO->getCreatedAt());
-            $is_active = $planDTO->getIsActive() ? 1 : 0;
 
             // Enlazamos los parámetros
-            $stmt->bind_param("isssdssssi", 
+            $stmt->bind_param("isssdssss", 
                 $trainer_id,    // i (integer)
                 $name,          // s (string)
                 $description,   // s (string)
@@ -282,8 +278,7 @@ class planDAO extends baseDAO implements IPlan
                 $price,         // d (double)
                 $image_guid,    // s (string)
                 $pdf_path,      // s (string)
-                $created_at,    // s (string)
-                $is_active      // i (integer)
+                $created_at    // s (string)
             );
 
             // Ejecutamos la consulta
