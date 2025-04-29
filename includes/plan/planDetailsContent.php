@@ -30,9 +30,18 @@ class planDetailsContent
                     <p><strong>Dificultad:</strong> {$this->planDTO->getDifficulty()}</p>
                     <p><strong>Duración:</strong> {$this->planDTO->getDuration()}</p>
                     <h3 class="text-success mb-4">{$this->planDTO->getPrice()} €</h3>
+EOF;
+
+        // Generar el formulario de añadir al carrito
+        $form = new planPaymentForm();
+        $htmlplanPaymentForm = $form->Manage();
+
+        $html .= <<<EOF
+                    $htmlplanPaymentForm
                 </div>
             </div>
 EOF;
+
         return $html;
     }
 }
