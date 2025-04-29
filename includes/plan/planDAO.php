@@ -140,6 +140,66 @@ class planDAO extends baseDAO implements IPlan
     }
 
     /**
+     * Obtiene la lista de pedidos de un usuario
+     * 
+     * @param int $userId ID del usuario
+     * @return array Lista de orderDTO
+     */
+    
+     public function getPlansByUserId($userId) {
+
+        $plans = array();
+    
+        try {
+            // Conexión a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+    
+            // Consulta: planes que ha comprado el cliente
+            $stmt = $conn->prepare("
+                SELECT tp.id, tp.trainer_id, tp.name, tp.description, tp.difficulty,
+                       tp.duration, tp.price, tp.pdf_path, tp.image_guid, tp.created_at
+                FROM training_plan_purchases tpp
+                INNER JOIN training_plans tp ON tpp.plan_id = tp.id
+                WHERE tpp.client_id = ?
+            ");
+    
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+    
+            // Escapar e insertar parámetro
+            $escUserId = $this->realEscapeString($userId);
+            $stmt->bind_param("i", $escUserId);
+    
+            // Ejecutar
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+    
+            // Asignar los resultados
+            $stmt->bind_result($id, $trainer_id, $name, $description, $difficulty,
+                               $duration, $price, $pdf_path, $image_guid, $created_at);
+    
+            // Construir DTOs de los resultados
+            while ($stmt->fetch()) {
+                $plan = new trainingPlanDTO($id, $trainer_id, $name, $description, $difficulty,
+                                            $duration, $price, $pdf_path, $image_guid, $created_at);
+                $plans[] = $plan;
+            }
+    
+            // Cerrar la consulta
+            $stmt->close();
+    
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+    
+        return $plans;
+    }
+    
+
+    /**
      * Obtiene la lista básica de entrenadores (id y nombre)
      * 
      * @return array Lista de entrenadores [['id' => x, 'name' => 'y'], ...]

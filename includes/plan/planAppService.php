@@ -162,6 +162,28 @@ class planAppService
         return $filename;
     }
 
+
+    /**
+     * Obtiene los planes de entrenamiento del cliente
+     * 
+     * @return array Lista de trainingPlanDTO
+     */
+    public function getClientPlans()
+    {
+        $IPlan = planFactory::CreateTrainingPlan();
+        $plansDTO = null;
+
+        $app = application::getInstance();
+
+        // Tomamos el id del cliente
+        $userId = htmlspecialchars($app->getCurrentUserId());
+
+        // Pasamos como filtro el id del cliente
+        $plansDTO = $IPlan->getPlansByUserId($userId);
+
+        return $plansDTO;
+    }
+    
     /**
      * Guarda el PDF del plan en el sistema de archivos
      * 
