@@ -63,8 +63,7 @@ else {
             $planData['price'],
             $planData['image_guid'],
             $planData['pdf_path'],
-            $planData['created_at'],
-            $planData['is_active']
+            $planData['created_at']
         );
     }, $foundedPlansJSON);
 }
