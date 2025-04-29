@@ -29,6 +29,10 @@ if ($section) {
         case 'myOrders':
             include '../account/myOrders.php'; // Cargar la vista de pedidos
             break;
+        
+        case 'myEvents':
+            include '../account/myEvents.php'; // Cargar la vista de eventos
+            break;
 
         case 'personalData':
             include '../account/personalData.php'; // Cargar la vista de datos personales

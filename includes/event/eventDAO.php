@@ -733,6 +733,59 @@ class eventDAO extends baseDAO implements IEvent
 
         return $currentAssistants;
     }
+
+    /**
+     * Obtiene los eventos a los que se ha unido un usuario
+     * 
+     * @param int $userId Id del usuario
+     * 
+     * @return array Eventos a los que se ha unido el usuario
+     */
+    public function getJoinedEvents($userId)
+    {
+        $joinedEvents = array();
+
+        try {
+            // Tomamos la conexion a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Implementar la logica de acceso a la base de datos para obtener los eventos a los que se ha unido un usuario
+            $stmt = $conn->prepare("SELECT e.*, c.name AS category_name FROM event_participants ep INNER JOIN events e ON ep.event_id = e.id INNER JOIN event_categories c ON e.category_id = c.id WHERE ep.user_id = ?");
+            if(!$stmt)
+            {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Asignamos los parametros
+            $escUserId = $this->realEscapeString($userId);
+            $stmt->bind_param("i", $escUserId);
+
+            // Ejecutamos la consulta
+            if(!$stmt->execute())
+            {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            // Asignamos los resultados a variables
+            $stmt->bind_result($Id, $Name, $Description, $Price, $Location, $Date, $Capacity, $CategoryId, $EmailProvider, $CategoryName);
+
+            // Mientras haya resultados, los guardamos en el array
+            while ($stmt->fetch())
+            {
+                $event = new eventDTO($Id, $Name, $Description, $Date, $Price, $Location, $Capacity, new eventCategoryDTO($CategoryId, $CategoryName), $EmailProvider);
+                $joinedEvents[] = $event;
+            }
+
+            // Cerramos la consulta
+            $stmt->close();
+
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+
+        return $joinedEvents;
+    }
     
     /**
      * Construye la consulta SQL para buscar eventos en función de los filtros
