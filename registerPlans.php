@@ -21,11 +21,11 @@ else
     // Comprobar si el usuario es proveedor o administrador
     if(!$app->isCurrentUserTrainer() && !$app->isCurrentUserAdmin())
     {
-        $mainContent .= utilsFactory::createAlert("No tienes permisos para registrar productos. Solo los entrenadores y administradores pueden hacerlo.", "danger");
+        $mainContent .= utilsFactory::createAlert("No tienes permisos para registrar planes. Solo los entrenadores y administradores pueden hacerlo.", "danger");
     }
     else
     {
-        // Comprobar si el producto ya ha sido registrado
+        // Comprobar si el plan ya ha sido registrado
         if (isset($_GET["registered"]) && $_GET["registered"] === "true") 
         {
             $form = new registerAnotherPlanForm();

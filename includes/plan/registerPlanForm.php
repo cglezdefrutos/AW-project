@@ -219,8 +219,7 @@ class registerPlanForm extends baseForm
                 'price' => $price,
                 'pdf_file' => $pdf,
                 'image_file' => $image,
-                'created_at' => date('Y-m-d H:i:s'),
-                'is_active' => true
+                'created_at' => date('Y-m-d H:i:s')
             ];
 
             // Obtenemos la instancia del servicio de productos

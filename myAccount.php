@@ -26,7 +26,7 @@ else
         <div class="row">
             <!-- Menú lateral -->
             <div class="col-md-3">
-                <h4>Mi Cuenta</h4>
+                <h2>Mi Cuenta</h2>
                 <ul class="list-group">
                     $options
                 </ul>
@@ -40,6 +40,7 @@ else
             <script src="/AW-project/js/manageEvents.js"></script>
             <script src="/AW-project/js/manageOrders.js"></script>
             <script src="/AW-project/js/personalData.js"></script>
+            <script src="/AW-project/js/manageUsers.js"></script>
         </div>
         
     EOS;

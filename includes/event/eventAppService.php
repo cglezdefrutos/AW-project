@@ -283,4 +283,21 @@ class eventAppService
 
         return $currentAssistants;
     }
+
+    /**
+     * Devuelve los eventos a los que se ha unido un usuario
+     * 
+     * @param string $userId ID del usuario
+     * 
+     * @return eventDTO[] Lista de eventos
+     */
+    public function getJoinedEvents($userId)
+    {
+        $IEventDAO = eventFactory::CreateEvent();
+
+        // Obtenemos los eventos a los que se ha unido el usuario
+        $joinedEventsDTO = $IEventDAO->getJoinedEvents($userId);
+
+        return $joinedEventsDTO;
+    }
 }

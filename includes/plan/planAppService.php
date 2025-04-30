@@ -120,8 +120,7 @@ class planAppService
                 $planData['price'],
                 $imageGuid,
                 $pdfPath,
-                $planData['created_at'],
-                $planData['is_active']
+                $planData['created_at']
             );
             
             // Registrar en base de datos

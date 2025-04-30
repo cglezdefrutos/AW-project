@@ -58,14 +58,9 @@ class planDTO implements \JsonSerializable
     private $created_at;
 
     /**
-     * @var bool Variable que controla si esta activo o no el producto
-     */
-    private $is_active;
-
-    /**
      * Constructor
      */
-    public function __construct($id, $trainer_id, $name, $description, $difficulty, $duration, $price, $image_guid, $pdf_path, $created_at, $is_active)
+    public function __construct($id, $trainer_id, $name, $description, $difficulty, $duration, $price, $image_guid, $pdf_path, $created_at)
     {
         $this->id = $id;
         $this->trainer_id = $trainer_id;
@@ -77,7 +72,6 @@ class planDTO implements \JsonSerializable
         $this->image_guid = $image_guid;
         $this->pdf_path = $pdf_path;
         $this->created_at = $created_at;
-        $this->is_active = $is_active;
     }
 
     /**
@@ -133,11 +127,6 @@ class planDTO implements \JsonSerializable
         return $this->created_at;
     }
 
-    public function getIsActive()
-    {
-        return $this->is_active;
-    }
-
     /**
      * Setters
      */
@@ -189,11 +178,6 @@ class planDTO implements \JsonSerializable
     public function setCreatedAt($created_at)
     {
         $this->created_at = $created_at;
-    }
-
-    public function setIsActive($is_active)
-    {
-        $this->is_active = $is_active;
     }
 
     /**

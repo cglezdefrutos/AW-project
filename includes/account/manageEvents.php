@@ -38,8 +38,10 @@ else
         $html = $eventTable->generateTable();
 
         echo <<<EOS
-            <h2>Gestión de eventos</h2>
-            $html
+            <div class="container mt-4">
+                <h2>Gestión de eventos</h2>
+                $html
+            </div>
         EOS;
 
         // Agregar el modal al contenido
