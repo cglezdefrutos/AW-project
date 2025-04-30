@@ -184,4 +184,37 @@ class planAppService
         return $filename;
     }
 
+    /**
+     * Registra la compra de un plan por parte de un cliente
+     * 
+     * @param planPurchaseDTO $purchaseData Datos de la compra (plan_id, client_id, purchase_date, status)
+     * @return int|false ID de la compra registrada o false en caso de error
+     */
+    public function createPlanPurchase(planPurchaseDTO $purchaseData)
+    {
+        try {
+            $IPurchase = planFactory::CreatePlanPurchase();
+            return $IPurchase->createPurchase($purchaseData);
+        } catch (\Exception $e) {
+            error_log("Error en createPlanPurchase: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Obtiene una compra específica de plan por su ID
+     * 
+     * @param int $id ID de la compra
+     * @return planPurchaseDTO|null
+     */
+    public function getPlanPurchaseById($id)
+    {
+        try {
+            $IPurchase = planFactory::CreatePlanPurchase();
+            return $IPurchase->getPurchaseById($id);
+        } catch (\Exception $e) {
+            error_log("Error en getPlanPurchaseById: " . $e->getMessage());
+            return null;
+        }
+    }
 }
