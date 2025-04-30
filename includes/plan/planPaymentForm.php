@@ -26,7 +26,7 @@ class planPaymentForm extends baseForm
         if ($app->isCurrentUserLogged()) {
             $html .= <<<EOF
                 <input type="hidden" name="plan_id" value="{$this->planDTO->getId()}">
-                <button type="submit" class="btn btn-primary btn-lg">
+                <button type="submit" class="btn btn-primary btn-lg w-100">
                     Contratar Plan
                 </button>
             EOF;
