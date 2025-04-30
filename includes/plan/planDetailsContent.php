@@ -33,7 +33,7 @@ class planDetailsContent
 EOF;
 
         // Generar el formulario de añadir al carrito
-        $form = new planPaymentForm();
+        $form = new planPaymentForm($this->planDTO);
         $htmlplanPaymentForm = $form->Manage();
 
         $html .= <<<EOF

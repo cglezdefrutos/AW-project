@@ -8,9 +8,11 @@ use TheBalance\utils\utilsFactory;
 
 class planPaymentForm extends baseForm
 {
-    public function __construct()
+    private $planDTO;
+
+    public function __construct($planDTO)
     {
-        parent::__construct('planPaymentForm', ['action' => 'planCheckout.php']);
+        $this->planDTO = $planDTO;
     }
 
     /**
@@ -23,6 +25,7 @@ class planPaymentForm extends baseForm
 
         if ($app->isCurrentUserLogged()) {
             $html .= <<<EOF
+                <input type="hidden" name="plan_id" value="{$this->planDTO->getId()}">
                 <button type="submit" class="btn btn-primary btn-lg">
                     Contratar Plan
                 </button>
@@ -47,6 +50,31 @@ class planPaymentForm extends baseForm
             return ["Debes iniciar sesión antes de poder pagar."];
         }
 
+        $planId = $data['plan_id'] ?? null;
+        if (!$planId || !is_numeric($planId)) {
+            return ["Error: No se proporcionó un ID de plan válido."];
+        }
+
+        
+        $planDTO = planAppService::GetSingleton()->getPlanById($planId);
+        if (!$planDTO) {
+            return ["Error: No se encontró el plan con ID $planId."];
+        }
+
+        // Inicializar si no existe
+        if (!isset($_SESSION['plan_checkout'])) 
+        {
+                $_SESSION['plan_checkout'] = [];
+        }        
+
+        $_SESSION['plan_checkout'] = [
+            'id' => $planDTO->getId(),
+            'name' => $planDTO->getName(),
+            'description' => $planDTO->getDescription(),
+            'price' => $planDTO->getPrice(),
+        ];
+
         return 'planCheckout.php';
     }
+
 }
