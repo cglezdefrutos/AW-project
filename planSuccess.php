@@ -5,7 +5,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use TheBalance\application;
 use TheBalance\plan\planAppService;
-use TheBalance\plan\planDTO;
+use TheBalance\plan\planPurchaseDTO;
 use TheBalance\utils\utilsFactory;
 
 use Stripe\Stripe;
@@ -27,18 +27,28 @@ if ($sessionId) {
     $metadata = $session->metadata;
     $planId = $metadata->id;
     $planName = $metadata->name;
-    $planDescription = $metadata->description;
-    $planPrice = $metadata->price;
     
-    // Obtener los datos del plan desde la sesión
+    // Obtener los datos  desde la sesión
     $plan = $_SESSION['plan_checkout'] ?? null;
+    $userId = application::getInstance()->getCurrentUserId();
 
-    if ($plan) {
-        //TODO meter la relación plan cliente en db
+    if ($plan && $userId && isset($planId)) {
+        
+        // Registrar la compra
+        $planAppService = planAppService::GetSingleton();
+         
+        $purchaseDate = date('Y-m-d H:i:s');
+        $status = 'activo';
 
-        if ($planId) {
-            // Limpiar sesión del plan
-            unset($_SESSION['plan_checkout']);
+        // Crear DTO de compra
+        $purchaseDTO = new planPurchaseDTO(null, $planId, $userId, $purchaseDate, $status);
+
+        $purchaseId = $planAppService->createPlanPurchase($purchaseDTO);
+
+        // Limpiar sesión del plan
+        unset($_SESSION['plan_checkout']);
+
+        if ($purchaseId) {
 
             $mainContent .= <<<EOS
                 <div class="container success-page">
@@ -54,7 +64,7 @@ if ($sessionId) {
                             <p class="text-muted">Si tienes alguna pregunta, no dudes en <a href="index.php" class="text-decoration-none">contactarnos</a>.</p>
                         </div>
                         <div class="card-footer text-center">
-                            <a href="catalog.php" class="btn btn-primary btn-lg">Volver al catálogo</a>
+                            <a href="catalogPlan.php" class="btn btn-primary btn-lg">Volver al catálogo</a>
                         </div>
                     </div>
                 </div>
