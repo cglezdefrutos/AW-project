@@ -90,4 +90,13 @@ class planPurchaseDTO implements \JsonSerializable
     {
         $this->status = $status;
     }
+
+    /**
+     * Implementación de JsonSerializable
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

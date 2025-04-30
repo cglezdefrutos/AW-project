@@ -39,7 +39,24 @@ $checkoutSession = Session::create([
     'mode' => 'payment',
     'success_url' => 'https://vm012.containers.fdi.ucm.es/AW-project/planSuccess.php?session_id={CHECKOUT_SESSION_ID}',
     'cancel_url' => 'https://vm012.containers.fdi.ucm.es/AW-project/planCancel.php',
+    'metadata' => [
+        'id' => $plan['id'],
+        'name' => $plan['name']
+    ],
 ]);
+
+// // Crear sesión de Stripe Checkout local
+// $checkoutSession = Session::create([
+//     'payment_method_types' => ['card'],
+//     'line_items' => $lineItems,
+//     'mode' => 'payment',
+//     'success_url' => 'http://localhost/AW-project/planSuccess.php?session_id={CHECKOUT_SESSION_ID}',
+//     'cancel_url' => 'http://localhost/AW-project/planCancel.php',
+//     'metadata' => [
+//         'id' => $plan['id'],
+//         'name' => $plan['name']
+//     ],
+// ]);
 
 // Redirigir a Stripe
 header('Location: ' . $checkoutSession->url);

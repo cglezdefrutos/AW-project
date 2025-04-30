@@ -187,22 +187,14 @@ class planAppService
     /**
      * Registra la compra de un plan por parte de un cliente
      * 
-     * @param array $purchaseData Datos de la compra (plan_id, client_id, purchase_date, status)
+     * @param planPurchaseDTO $purchaseData Datos de la compra (plan_id, client_id, purchase_date, status)
      * @return int|false ID de la compra registrada o false en caso de error
      */
-    public function createPlanPurchase($purchaseData)
+    public function createPlanPurchase(planPurchaseDTO $purchaseData)
     {
         try {
-            $purchaseDTO = new planPurchaseDTO(
-                null,
-                $purchaseData['plan_id'],
-                $purchaseData['client_id'],
-                $purchaseData['purchase_date'],
-                $purchaseData['status']
-            );
-
             $IPurchase = planFactory::CreatePlanPurchase();
-            return $IPurchase->createPurchase($purchaseDTO);
+            return $IPurchase->createPurchase($purchaseData);
         } catch (\Exception $e) {
             error_log("Error en createPlanPurchase: " . $e->getMessage());
             return false;
