@@ -27,28 +27,12 @@ else
 {
     // Obtenemos la instancia del servicio de pedidos
     $planAppService = planAppService::GetSingleton();
-    $plansData = $planAppService->getClientPlans();
+    $plansDTO = $planAppService->getClientPlans();
 
-    // Convertir los datos en objetos DTO
-    $plans = array_map(function($planData) {
-        return new planDTO(
-            $planData->getId(),
-            $planData->getTrainerId(),
-            $planData->getName(),  
-            $planData->getDescription(),
-            $planData->getDifficulty(),
-            $planData->getDuration(),
-            $planData->getPrice(),
-            $planData->getImageGuid(),
-            $planData->getPdfPath(),
-            $planData->getCreatedAt(),
-            $planData->getIsActive()
-        );
-    }, $plansData);
 
     // Definir las columnas de la tabla
-    $columns = ['Nombre', 'Descripcion', 'Dificultad', 'Duracion', 'Precio total', 'Fecha', 'Acciones'];
-    $plansTable = new showPlanTable($plans, $columns);
+    $columns = ['Nombre', 'Descripcion', 'Dificultad', 'Duracion', 'Precio total', 'Estado', 'Acciones'];
+    $plansTable = new showPlanTable($plansDTO, $columns);
     $html = $plansTable->generateTable();
 
     echo <<<EOS
@@ -57,5 +41,5 @@ else
     EOS;
 
     // Agregar el modal al contenido
-    echo planModal::generateDetailsModal(); 
+    echo planModal::generateStatusModal(); 
 }

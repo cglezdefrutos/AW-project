@@ -154,7 +154,7 @@ class planDAO extends baseDAO implements IPlan
             // Consulta: planes que ha comprado el cliente
             $stmt = $conn->prepare("
                 SELECT tp.id, tp.trainer_id, tp.name, tp.description, tp.difficulty,
-                       tp.duration, tp.price, tp.pdf_path, tp.image_guid, tp.created_at
+                       tp.duration, tp.price, tp.pdf_path, tp.image_guid, tpp.status
                 FROM training_plan_purchases tpp
                 INNER JOIN training_plans tp ON tpp.plan_id = tp.id
                 WHERE tpp.client_id = ?
@@ -175,12 +175,12 @@ class planDAO extends baseDAO implements IPlan
     
             // Asignar los resultados
             $stmt->bind_result($id, $trainer_id, $name, $description, $difficulty,
-                               $duration, $price, $pdf_path, $image_guid, $created_at);
+                               $duration, $price, $pdf_path, $image_guid, $status);
     
             // Construir DTOs de los resultados
             while ($stmt->fetch()) {
-                $plan = new trainingPlanDTO($id, $trainer_id, $name, $description, $difficulty,
-                                            $duration, $price, $pdf_path, $image_guid, $created_at);
+                $plan = new PlanClientDTO($id, $trainer_id, $name, $description, $difficulty,
+                                            $duration, $price, $image_guid, $pdf_path, $status);
                 $plans[] = $plan;
             }
     
