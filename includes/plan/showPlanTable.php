@@ -1,6 +1,6 @@
 <?php
 
-namespace TheBalance\order;
+namespace TheBalance\plan;
 
 use TheBalance\views\common\baseTable;
 
