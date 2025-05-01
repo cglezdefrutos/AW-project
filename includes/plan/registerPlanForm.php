@@ -116,12 +116,6 @@ class registerPlanForm extends baseForm
                     <input type="file" name="pdf" id="pdf" class="form-control" accept=".pdf" required>
                     <small class="form-text text-muted">Formato permitido: PDF.</small>
                 </div>
-        EOF;
-        
-        
-        $html .= <<<EOF
-                    </div>
-                </div>
 
                 <!-- Botón de registro -->
                 <div class="mt-3">
