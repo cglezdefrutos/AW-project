@@ -41,5 +41,5 @@ else
     EOS;
 
     // Agregar el modal al contenido
-    echo planModal::generateStatusModal(); 
+    //echo planModal::generateStatusModal(); 
 }

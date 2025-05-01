@@ -182,6 +182,22 @@ class planAppService
 
         return $plansDTO;
     }
+
+    public function getTrainerPlans()
+    {
+        $IPlan = planFactory::CreateTrainingPlan();
+        $plansDTO = null;
+
+        $app = application::getInstance();
+
+        // Tomamos el id del cliente
+        $TrainerId = htmlspecialchars($app->getCurrentUserId());
+
+        // Pasamos como filtro el id del cliente
+        $plansDTO = $IPlan->getPlansByTrainerId($TrainerId);
+
+        return $plansDTO;
+    }
     
     /**
      * Guarda el PDF del plan en el sistema de archivos
@@ -204,6 +220,25 @@ class planAppService
         }
 
         return $filename;
+    }
+
+        /**
+     * Elimina PLan de laa BBDD
+     * 
+     * @param int $id ID del plan
+     * 
+     * @return planDTO Plan encontrado
+     */
+
+    //FALTA COMPROBAR SI EL PLAAN ES DEL ENTRENADOR
+    public function deletePlan($planId)
+    {
+        $planDAO = planFactory::CreateTrainingPlan();
+
+        // Tomamos la instancia de la aplicación
+        $app = application::getInstance();
+
+        return $planDAO->deletePlan($planId);
     }
 
 }

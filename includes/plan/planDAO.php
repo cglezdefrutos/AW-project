@@ -194,6 +194,94 @@ class planDAO extends baseDAO implements IPlan
     
         return $plans;
     }
+
+    public function getPlansByTrainerId($TrainerId) {
+
+        $plans = array();
+    
+        try {
+            // Conexión a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+    
+            // Consulta: planes que ha comprado el cliente
+            $stmt = $conn->prepare("
+                SELECT *
+                FROM training_plans
+                WHERE trainer_id = ?;
+            ");
+    
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+    
+            // Escapar e insertar parámetro
+            $escTrainerId = $this->realEscapeString($TrainerId);
+            $stmt->bind_param("i", $escTrainerId);
+    
+            // Ejecutar
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+    
+            // Asignar los resultados
+            $stmt->bind_result($id, $trainer_id, $name, $description, $difficulty,
+                               $duration, $price, $pdf_path, $image_guid, $created_at);
+    
+            // Construir DTOs de los resultados
+            while ($stmt->fetch()) {
+                $plan = new PlanDTO($id, $trainer_id, $name, $description, $difficulty,
+                                            $duration, $price, $image_guid, $pdf_path, $created_at);
+                $plans[] = $plan;
+            }
+    
+            // Cerrar la consulta
+            $stmt->close();
+    
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+    
+        return $plans;
+    }
+
+    public function deletePlan($planId)
+    {
+        try {
+            // Obtener conexión a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Preparar consulta para eliminar el plan de la tabla
+            $stmt = $conn->prepare("DELETE FROM training_plans WHERE id = ?");
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Enlazar parámetro (asegúrate de que realEscapeString está definido si lo usas)
+            $planId = $this->realEscapeString($planId);
+            $stmt->bind_param('i', $planId);
+
+            // Ejecutar la eliminación
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al eliminar el plan: " . $stmt->error);
+            }
+
+            // Verificar si se eliminó algún registro
+            if ($stmt->affected_rows === 0) {
+                throw new \Exception("No se encontró el plan con ID: " . $planId);
+            }
+
+            // Cerrar statement
+            $stmt->close();
+
+            return true; // Éxito
+
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+    }
+
     
 
     /**
@@ -227,6 +315,67 @@ class planDAO extends baseDAO implements IPlan
         }
 
         return $trainers;
+    }
+
+    public function registerPlan($planDTO) 
+    {
+        $plan_id = null;
+        
+        try {
+            // Tomamos la conexión a la base de datos
+            $conn = application::getInstance()->getConnectionDb();
+
+            // Preparamos la consulta SQL para insertar el plan
+            $stmt = $conn->prepare("
+            INSERT INTO training_plans 
+            (trainer_id, name, description, difficulty, duration, price, image_guid, pdf_path, created_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ");         
+
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            // Extraer y escapar valores del DTO
+            $trainer_id = $this->realEscapeString($planDTO->getTrainerId());
+            $name = $this->realEscapeString($planDTO->getName());
+            $description = $this->realEscapeString($planDTO->getDescription());
+            $difficulty = $this->realEscapeString($planDTO->getDifficulty());
+            $duration = $this->realEscapeString($planDTO->getDuration());
+            $price = $this->realEscapeString($planDTO->getPrice());
+            $image_guid = $this->realEscapeString($planDTO->getImageGuid());
+            $pdf_path = $this->realEscapeString($planDTO->getPdfPath());
+            $created_at = $this->realEscapeString($planDTO->getCreatedAt());
+
+            // Enlazamos los parámetros
+            $stmt->bind_param("isssdssss", 
+                $trainer_id,    // i (integer)
+                $name,          // s (string)
+                $description,   // s (string)
+                $difficulty,    // s (string)
+                $duration,      // d (double)
+                $price,         // d (double)
+                $image_guid,    // s (string)
+                $pdf_path,      // s (string)
+                $created_at    // s (string)
+            );
+
+            // Ejecutamos la consulta
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al registrar el plan: " . $stmt->error);
+            }
+
+            // Obtener ID del plan insertado
+            $plan_id = $stmt->insert_id;
+
+            // Cerrar statement
+            $stmt->close();
+        } catch (\Exception $e) {
+            error_log("Error en registerPlan: " . $e->getMessage());
+            throw $e;
+        }
+
+        return $plan_id;
     }
 
     /**
@@ -298,65 +447,5 @@ class planDAO extends baseDAO implements IPlan
         return ['query' => $query, 'params' => $args, 'types' => $types];
     }
 
-    public function registerPlan($planDTO) 
-    {
-        $plan_id = null;
-        
-        try {
-            // Tomamos la conexión a la base de datos
-            $conn = application::getInstance()->getConnectionDb();
-
-            // Preparamos la consulta SQL para insertar el plan
-            $stmt = $conn->prepare("
-            INSERT INTO training_plans 
-            (trainer_id, name, description, difficulty, duration, price, image_guid, pdf_path, created_at) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ");         
-
-            if (!$stmt) {
-                throw new \Exception("Error al preparar la consulta: " . $conn->error);
-            }
-
-            // Extraer y escapar valores del DTO
-            $trainer_id = $this->realEscapeString($planDTO->getTrainerId());
-            $name = $this->realEscapeString($planDTO->getName());
-            $description = $this->realEscapeString($planDTO->getDescription());
-            $difficulty = $this->realEscapeString($planDTO->getDifficulty());
-            $duration = $this->realEscapeString($planDTO->getDuration());
-            $price = $this->realEscapeString($planDTO->getPrice());
-            $image_guid = $this->realEscapeString($planDTO->getImageGuid());
-            $pdf_path = $this->realEscapeString($planDTO->getPdfPath());
-            $created_at = $this->realEscapeString($planDTO->getCreatedAt());
-
-            // Enlazamos los parámetros
-            $stmt->bind_param("isssdssss", 
-                $trainer_id,    // i (integer)
-                $name,          // s (string)
-                $description,   // s (string)
-                $difficulty,    // s (string)
-                $duration,      // d (double)
-                $price,         // d (double)
-                $image_guid,    // s (string)
-                $pdf_path,      // s (string)
-                $created_at    // s (string)
-            );
-
-            // Ejecutamos la consulta
-            if (!$stmt->execute()) {
-                throw new \Exception("Error al registrar el plan: " . $stmt->error);
-            }
-
-            // Obtener ID del plan insertado
-            $plan_id = $stmt->insert_id;
-
-            // Cerrar statement
-            $stmt->close();
-        } catch (\Exception $e) {
-            error_log("Error en registerPlan: " . $e->getMessage());
-            throw $e;
-        }
-
-        return $plan_id;
-    }
 
 }

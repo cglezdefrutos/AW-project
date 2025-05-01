@@ -18,7 +18,7 @@ class showPlanTable extends baseTable
             $html .= '<td>' . htmlspecialchars($plan->getDifficulty()) . '</td>';
             $html .= '<td>' . htmlspecialchars($plan->getDuration()) . '</td>';
             $html .= '<td>' . htmlspecialchars($plan->getPrice()) . '</td>';
-            $html .= '<td>' . htmlspecialchars($plan->getStatus()) . '</td>';
+            $html .= '<td>' . htmlspecialchars($plan->getCrea()) . '</td>';
             $html .= '<button class="btn btn-info view-plan" data-id="' . htmlspecialchars($plan->getId()) . '">Ver Detalles</button>';
             $html .= '<button class="btn btn-primary edit-statusPlan mt-2" data-id="' . htmlspecialchars($plan->getId()) . '">Cambiar Estado</button> ';
             $html .= '</td>';
@@ -27,4 +27,6 @@ class showPlanTable extends baseTable
 
         return $html;
     }   
+
 }
+
