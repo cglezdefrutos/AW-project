@@ -94,4 +94,49 @@ class planPurchaseDAO extends baseDAO implements IPlanPurchase
 
         return $purchase;
     }
+
+    /**
+     * Obtiene una compra de plan por ID del plan y ID del cliente
+     * 
+     * @param int $planId
+     * @param int $clientId
+     * @return planPurchaseDTO|null
+     */
+    public function getPurchaseByPlanAndClient($planId, $clientId)
+    {
+        $purchase = null;
+
+        try {
+            $conn = application::getInstance()->getConnectionDb();
+            $stmt = $conn->prepare("
+                SELECT id, plan_id, client_id, purchase_date, status 
+                FROM training_plan_purchases 
+                WHERE plan_id = ? AND client_id = ?
+                LIMIT 1
+            ");
+
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            $stmt->bind_param("ii", $planId, $clientId);
+
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            $stmt->bind_result($id, $plan_id, $client_id, $purchase_date, $status);
+
+            if ($stmt->fetch()) {
+                $purchase = new planPurchaseDTO($id, $plan_id, $client_id, $purchase_date, $status);
+            }
+
+            $stmt->close();
+        } catch (\Exception $e) {
+            error_log("Error en getPurchaseByPlanAndClient: " . $e->getMessage());
+            throw $e;
+        }
+
+        return $purchase;
+    }
 }

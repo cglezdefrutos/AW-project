@@ -20,4 +20,13 @@ interface IPlanPurchase
      * @return planPurchaseDTO Datos de la compra del plan
      */
     public function getPurchaseById($id);
+
+    /**
+     * Obtiene una compra de plan por ID del plan y ID del cliente
+     * 
+     * @param int $planId
+     * @param int $clientId
+     * @return planPurchaseDTO|null
+     */
+    public function getPurchaseByPlanAndClient($planId, $clientId);
 }

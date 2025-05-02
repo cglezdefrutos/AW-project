@@ -24,14 +24,42 @@ class planPaymentForm extends baseForm
         $html = '<div class="text-center mt-4">';
 
         if ($app->isCurrentUserLogged()) {
-            $html .= <<<EOF
+
+            // Comprobar si ya tiene contratado este plan
+            $planAppService = planAppService::GetSingleton();
+            $existingPurchase = $planAppService->getPlanPurchaseByPlanAndClient($this->planDTO->getId(), $app->getCurrentUserId());
+
+            if ($existingPurchase) {
+
+                // Mostrar mensaje de error si ya lo tiene contratado
+                $html .= utilsFactory::createAlert("Ya has contratado este plan. No es necesario volver a comprarlo.", "warning");
+
+                $html .= <<<EOF
+                <button type="submit" class="btn btn-secondary btn-lg w-100" disabled>
+                    Contratar Plan
+                </button>
+            EOF;
+
+            }else{
+
+                $html .= <<<EOF
                 <input type="hidden" name="plan_id" value="{$this->planDTO->getId()}">
                 <button type="submit" class="btn btn-primary btn-lg w-100">
                     Contratar Plan
                 </button>
             EOF;
+
+            }
+
         } else {
             $html .= utilsFactory::createAlert("Debes iniciar sesión como cliente para poder contratar un plan de entrenamiento.", "warning");
+
+            $html .= <<<EOF
+            <button type="submit" class="btn btn-secondary btn-lg w-100" disabled>
+                Contratar Plan
+            </button>
+        EOF;
+
         }
 
         $html .= '</div>';
