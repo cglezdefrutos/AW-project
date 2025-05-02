@@ -217,4 +217,22 @@ class planAppService
             return null;
         }
     }
+
+    /**
+     * Obtiene una compra de plan según el ID del plan y del cliente
+     * 
+     * @param int $planId
+     * @param int $clientId
+     * @return planPurchaseDTO|null
+     */
+    public function getPlanPurchaseByPlanAndClient($planId, $clientId)
+    {
+        try {
+            $IPurchase = planFactory::CreatePlanPurchase();
+            return $IPurchase->getPurchaseByPlanAndClient($planId, $clientId);
+        } catch (\Exception $e) {
+            error_log("Error en getPlanPurchaseByPlanAndClient: " . $e->getMessage());
+            return null;
+        }
+    }
 }
