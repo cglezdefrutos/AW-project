@@ -195,55 +195,6 @@ class planDAO extends baseDAO implements IPlan
         return $plans;
     }
 
-    public function getPlansByTrainerId($TrainerId) {
-
-        $plans = array();
-    
-        try {
-            // Conexión a la base de datos
-            $conn = application::getInstance()->getConnectionDb();
-    
-            // Consulta: planes que ha comprado el cliente
-            $stmt = $conn->prepare("
-                SELECT *
-                FROM training_plans
-                WHERE trainer_id = ?;
-            ");
-    
-            if (!$stmt) {
-                throw new \Exception("Error al preparar la consulta: " . $conn->error);
-            }
-    
-            // Escapar e insertar parámetro
-            $escTrainerId = $this->realEscapeString($TrainerId);
-            $stmt->bind_param("i", $escTrainerId);
-    
-            // Ejecutar
-            if (!$stmt->execute()) {
-                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
-            }
-    
-            // Asignar los resultados
-            $stmt->bind_result($id, $trainer_id, $name, $description, $difficulty,
-                               $duration, $price, $pdf_path, $image_guid, $created_at);
-    
-            // Construir DTOs de los resultados
-            while ($stmt->fetch()) {
-                $plan = new PlanDTO($id, $trainer_id, $name, $description, $difficulty,
-                                            $duration, $price, $image_guid, $pdf_path, $created_at);
-                $plans[] = $plan;
-            }
-    
-            // Cerrar la consulta
-            $stmt->close();
-    
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            throw $e;
-        }
-    
-        return $plans;
-    }
 
     public function deletePlan($planId)
     {

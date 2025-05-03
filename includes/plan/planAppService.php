@@ -183,20 +183,29 @@ class planAppService
         return $plansDTO;
     }
 
-    public function getTrainerPlans()
+    public function getPlansByUserType()
     {
-        $IPlan = planFactory::CreateTrainingPlan();
-        $plansDTO = null;
+        $planDAO = planFactory::CreateTrainingPlan();
+        $planDTO = null;
 
         $app = application::getInstance();
 
-        // Tomamos el id del cliente
-        $TrainerId = htmlspecialchars($app->getCurrentUserId());
+        // Si es administrador, tomamos todos los eventos
+        if ($app->isCurrentUserAdmin())
+        {
+            $planDTO = $planDAO->searchTrainingPlans();
+        }
+        // Si es proveedor, tomamos SOLO los eventos del proveedor
+        else 
+        {
+            // Tomamos el email del proveedor
+            $trainerId = ($app->getCurrentUserId());
 
-        // Pasamos como filtro el id del cliente
-        $plansDTO = $IPlan->getPlansByTrainerId($TrainerId);
+            // Pasamos como filtro un array con el email (así solo traerá los eventos donde coincida ese email)
+            $planDTO = $planDAO->searchTrainingPlans(array("trainerId" => $trainerId));
+        }
 
-        return $plansDTO;
+        return $planDTO;
     }
     
     /**

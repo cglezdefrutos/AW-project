@@ -18,7 +18,7 @@ if (!$app->isCurrentUserLogged()) {
     } else {
         // Obtener los productos según el tipo de usuario
         $planAppService = planAppService::GetSingleton();
-        $planDTO = $planAppService->getTrainerPlans();
+        $planDTO = $planAppService->getPlansByUserType();
 
         // Generar la tabla de productos
         $columns = ['Imagen', 'Nombre', 'Descripción', 'Dificultad', 'Duracion', 'Precio', 'Fecha de creación', 'Acciones'];

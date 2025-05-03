@@ -36,6 +36,6 @@ interface IPlan
      * @param array $TrainerId es el Id del entrenador del que queremos los planes
      * @return array Lista de planDTO
      */
-    public function getPlansByTrainerId($TrainerId);
+
 
 }
