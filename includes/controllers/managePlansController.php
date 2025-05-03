@@ -42,7 +42,9 @@ if ($action) {
             break;
 
         case 'updatePlan':
+            $planId = $_POST['planId'];
             // Filtrado y sanitización de los datos recibidos
+            $trainerId = $app->getCurrentUserId();
             $planName = trim($_POST['name'] ?? '');
             $planName = filter_var($planName, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             if (empty($planName) || strlen($planName) > 50) {
@@ -101,18 +103,19 @@ if ($action) {
                 $imageGUID = $_POST['currentImageGUID'];
             }
         
-            $createdAt = $_POST['planCreatedAt'] ?? null;
         
             // Crear el DTO con los nuevos datos
             $updatedPlanDTO = new planDTO(
-                $idplan,
+                $planId,
+                $trainerId,
                 $planName,
                 $description,
+                $difficulty,
+                $duration,
                 $price,
                 $imageGUID,
-                $createdAt,
-                $difficulty,
-                $duration
+                null,
+                null
             );
         
             $updateResult = $planAppService->updatePlan($updatedPlanDTO);

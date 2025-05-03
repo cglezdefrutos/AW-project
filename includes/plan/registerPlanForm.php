@@ -39,7 +39,7 @@ class registerPlanForm extends baseForm
         // Definimos las dificultades disponibles
         $difficulties = ['Principiante', 'Intermedio', 'Avanzado', 'Experto'];
         
-        // Creamos el formulario de registro de productos
+        // Creamos el formulario de registro de planes
         $html = <<<EOF
             <fieldset class="border p-4 rounded">
                 <legend class="w-auto">Registro de Plan de Entrenamiento</legend>
@@ -187,7 +187,7 @@ class registerPlanForm extends baseForm
         $image = $_FILES['image'] ?? null;
 
         if (!isset($image) || $image['error'] === UPLOAD_ERR_NO_FILE) {
-            $result[] = 'La imagen del producto es obligatoria.';
+            $result[] = 'La imagen del plan es obligatoria.';
         } elseif ($image['error'] !== UPLOAD_ERR_OK) {
             $result[] = 'Error al subir la imagen: ' . $this->getUploadError($_FILES['image']['error']);
         } else {
@@ -216,10 +216,10 @@ class registerPlanForm extends baseForm
                 'created_at' => date('Y-m-d H:i:s')
             ];
 
-            // Obtenemos la instancia del servicio de productos
+            // Obtenemos la instancia del servicio de planes
             $planAppService = planAppService::GetSingleton();
 
-            // Intentamos registrar el nuevo producto
+            // Intentamos registrar el nuevo planes
             $planId = $planAppService->registerPlan($planData);
             
             if (!$planId) {

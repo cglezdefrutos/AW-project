@@ -329,6 +329,69 @@ class planDAO extends baseDAO implements IPlan
         return $plan_id;
     }
 
+
+    public function updatePlan($planDTO)
+    {
+        $conn = null;
+        $stmt = null;
+
+        try {
+            $conn = application::getInstance()->getConnectionDb();
+            $conn->begin_transaction();
+
+            // Escapar y preparar datos del DTO
+            $id = (int)$this->realEscapeString($planDTO->getId());
+            $trainer_id = (int)$this->realEscapeString($planDTO->getTrainerId());
+            $name = $this->realEscapeString($planDTO->getName());
+            $description = $this->realEscapeString($planDTO->getDescription());
+            $difficulty = $this->realEscapeString($planDTO->getDifficulty());
+            $duration = $this->realEscapeString($planDTO->getDuration());
+            $price = (float)$this->realEscapeString($planDTO->getPrice());
+            $image_guid = $this->realEscapeString($planDTO->getImageGuid());
+
+            // Query de actualización
+            $stmt = $conn->prepare("UPDATE training_plans SET 
+                                        trainer_id = ?, 
+                                        name = ?, 
+                                        description = ?, 
+                                        difficulty = ?, 
+                                        duration = ?, 
+                                        price = ?, 
+                                        image_guid = ?
+                                    WHERE id = ?");
+
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            $stmt->bind_param("issssdsi",
+                $trainer_id,
+                $name,
+                $description,
+                $difficulty,
+                $duration,
+                $price,
+                $image_guid,
+                $id
+            );
+
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al actualizar el plan: " . $stmt->error);
+            }
+
+            $conn->commit();
+            return true;
+
+        } catch (\Exception $e) {
+            if ($conn !== null) $conn->rollback();
+            error_log("Error en updatePlan: " . $e->getMessage());
+            throw $e;
+        } finally {
+            if ($stmt !== null) $stmt->close();
+        }
+    }
+
+
     /**
      * Construye la consulta SQL para buscar planes con filtros
      */

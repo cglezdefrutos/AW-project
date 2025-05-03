@@ -250,4 +250,14 @@ class planAppService
         return $planDAO->deletePlan($planId);
     }
 
+    public function updatePlan($planDTO)
+    {
+        $planDAO = planFactory::CreateTrainingPlan();
+    
+        // Actualizar el plan
+        $updateResult = $planDAO->updatePlan($planDTO);
+    
+        return $updateResult;
+    }
+
 }

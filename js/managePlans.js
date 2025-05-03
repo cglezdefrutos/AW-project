@@ -13,8 +13,8 @@ $(document).ready(function () {
                 if (result.success) {
                     const plan = result.data;
 
-                    // Llenar el formulario del modal con los datos del producto
-                    $('#planId').val(plan.planId);
+                    // Llenar el formulario del modal con los datos del plan
+                    $('#planId').val(plan.id);
                     $('#planName').val(plan.name);
                     $('#planDescription').val(plan.description);
                     $('#planDifficulty').val(plan.difficulty);
@@ -54,7 +54,7 @@ $(document).ready(function () {
                 if (result.success) {
                     showAlert('success', result.alert); // Mostrar alerta de éxito
                     $('#editPlanModal').modal('hide'); // Cerrar el modal
-                    loadProductsTable(); // Recargar la tabla de productos
+                    loadPlanTable(); // Recargar la tabla de planes
                 } else {
                     showAlert('danger', result.alert); // Mostrar alerta de error
                 }
@@ -68,10 +68,10 @@ $(document).ready(function () {
     // Delegar el evento click para el botón "Eliminar"
     $(document).on('click', '.eliminarPlan', function () {
 
-        const planId = $(this).data('id'); // Obtener el ID del producto
+        const planId = $(this).data('id'); // Obtener el ID del plan
 
         if (confirm('¿Estás seguro de que deseas eliminar este plan?')) {
-            // Realizar una solicitud AJAX para eliminar el producto
+            // Realizar una solicitud AJAX para eliminar el plan
             $.ajax({
                 url: '/AW-project/includes/controllers/managePlansController.php',
                 method: 'POST',
@@ -81,7 +81,7 @@ $(document).ready(function () {
                     const result = JSON.parse(response);
                     if (result.success) {
                         showAlert('success', result.alert); // Mostrar alerta de éxito
-                        loadPlanTable(); // Recargar la tabla de productos
+                        loadPlanTable(); // Recargar la tabla de planes
                     } else {
                         showAlert('danger', result.alert); // Mostrar alerta de error
                     }
@@ -93,7 +93,7 @@ $(document).ready(function () {
         }
     });
 
-    // Función para recargar la tabla de productos
+    // Función para recargar la tabla de planes
     function loadPlanTable() {
         $.ajax({
             url: '/AW-project/includes/account/managePlans.php',
