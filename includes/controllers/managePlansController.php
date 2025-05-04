@@ -142,6 +142,77 @@ if ($action) {
             }
             break;
 
+        case 'getPlanStatus':
+            $planId = $_POST['planId'];
+            $plan = $planAppService->getPlanPurchaseById($planId); // Método para obtener el plan por su ID
+            if ($plan) {
+                // Devolver los datos del plan como JSON, solo el estado es necesario
+                echo json_encode([
+                    'success' => true,
+                    'data' => [
+                        'id' => $plan->getId(),
+                        'status' => $plan->getStatus(), // Solo el estado
+                    ]
+                ]);
+            } else {
+                $alert = utilsFactory::createAlert('Plan no encontrado.', 'danger');
+                echo json_encode(['success' => false, 'alert' => $alert]);
+            }
+            break;
+    
+
+        case 'updatePlanStatus':
+            $planId = trim($_POST['planId'] ?? '');
+            $planId = filter_var($planId, FILTER_SANITIZE_NUMBER_INT);
+            if (!is_numeric($planId) || $planId <= 0) {
+                $alert = utilsFactory::createAlert('ID de plan inválido.', 'danger');
+                echo json_encode(['success' => false, 'alert' => $alert]);
+                exit;
+            }
+        
+            $status = trim($_POST['status'] ?? '');
+            $status = filter_var($status, FILTER_SANITIZE_STRING);
+            $validStatuses = ['Completado', 'Pausado', 'Activo']; // Estados válidos para el plan
+            if (!in_array($status, $validStatuses)) {
+                $alert = utilsFactory::createAlert('Estado seleccionado no válido.', 'danger');
+                echo json_encode(['success' => false, 'alert' => $alert]);
+                exit;
+            }
+        
+            // Actualizar el estado del plan
+            $updated = $planAppService->updatePlanStatus($planId, $status); // Método para actualizar solo el estado del plan
+        
+            if ($updated) {
+                $alert = utilsFactory::createAlert('Estado del plan actualizado correctamente.', 'success');
+                echo json_encode(['success' => true, 'alert' => $alert]);
+            } else {
+                $alert = utilsFactory::createAlert('Error al actualizar el estado del plan.', 'danger');
+                echo json_encode(['success' => false, 'alert' => $alert]);
+            }
+            break;
+
+            case 'getPdfPath':
+                $planId = $_POST['planId'];
+                $pdfPath = $planAppService->getPlanPdfPath($planId); // Método para obtener la ruta del PDF del plan
+                
+                if ($pdfPath !== false) {
+                    // Concatenar la ruta completa del servidor
+                    $fullPdfPath = 'http://localhost/AW-project/pdf/' . $pdfPath;
+                    
+                    echo json_encode([
+                        'success' => true,
+                        'data' => [
+                            'pdfPath' => $fullPdfPath,  // Devolver la ruta completa al cliente
+                        ]
+                    ]);
+                } else {
+                    $alert = utilsFactory::createAlert('PDF no encontrado.', 'danger');
+                    echo json_encode(['success' => false, 'alert' => $alert]);
+                }
+                break;
+            
+            
+            
         default:
             $alert = utilsFactory::createAlert('Acción no válida.', 'danger');
             echo json_encode(['success' => false, 'alert' => $alert]);

@@ -5,12 +5,17 @@ namespace TheBalance\plan;
 /**
  * Data Transfer Object para planes de entrenamiento
  */
-class planDTO implements \JsonSerializable
+class planClientDTO implements \JsonSerializable
 {
     /**
      * @var int Identificador del plan
      */
     private $id;
+
+    /**
+     * @var int ID de la compra asociada al plan
+     */
+    private $id_purchase;
 
     /**
      * @var int ID del entrenador propietario del plan
@@ -60,9 +65,10 @@ class planDTO implements \JsonSerializable
     /**
      * Constructor
      */
-    public function __construct($id, $trainer_id, $name, $description, $difficulty, $duration, $price, $image_guid, $pdf_path, $status)
+    public function __construct($id, $id_purchase, $trainer_id, $name, $description, $difficulty, $duration, $price, $image_guid, $pdf_path, $status)
     {
         $this->id = $id;
+        $this->id_purchase = $id_purchase;
         $this->trainer_id = $trainer_id;
         $this->name = $name;
         $this->description = $description;
@@ -82,6 +88,10 @@ class planDTO implements \JsonSerializable
         return $this->id;
     }
 
+    public function getIdPurchase()
+    {
+        return $this->id_purchase;
+    } 
     public function getTrainerId()
     {
         return $this->trainer_id;
@@ -133,6 +143,10 @@ class planDTO implements \JsonSerializable
     public function setId($id)
     {
         $this->id = $id;
+    }
+    public function setIdPurchase($id_purchase)
+    {
+        $this->id_purchase = $id_purchase;
     }
 
     public function setTrainerId($trainer_id)

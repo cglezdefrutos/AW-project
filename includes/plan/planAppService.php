@@ -311,4 +311,31 @@ class planAppService
             return null;
         }
     }
+
+    /**
+     * Actualiza el estado de un plan
+     * 
+     * @param int $planId ID del plan
+     * @param string $newStatus Nuevo estado del plan
+     * @return bool true si se actualizó correctamente, false en caso contrario
+     */
+    public function updatePlanStatus($planId, $newStatus)
+    {
+        $planPurchaseDAO = planFactory::CreatePlanPurchase();
+        return $planPurchaseDAO->updatePlanStatus($planId, $newStatus);
+    }
+
+    /**
+     * Obtiene la ruta del PDF de un plan
+     * 
+     * @param int $planId ID del plan
+     * @return string Ruta del PDF
+     */
+
+    public function getPlanPdfPath($planId)
+    {
+        $ITrainingPlan = planFactory::CreateTrainingPlan();
+        return $ITrainingPlan->getPlanPdfPath($planId);
+    }
+    
 }

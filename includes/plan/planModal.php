@@ -115,8 +115,8 @@ class planModal
                                     <label class="form-check-label" for="statusPaused">Pausado</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="status" id="statusInProgress" value="En curso" required>
-                                    <label class="form-check-label" for="statusInProgress">En curso</label>
+                                    <input class="form-check-input" type="radio" name="status" id="statusInProgress" value="Activo" required>
+                                    <label class="form-check-label" for="statusInProgress">Activo</label>
                                 </div>
                             </div>
 

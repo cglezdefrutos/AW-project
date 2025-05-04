@@ -31,7 +31,7 @@ else
 
 
     // Definir las columnas de la tabla
-    $columns = ['Nombre', 'Descripcion', 'Dificultad', 'Duracion', 'Precio total', 'Estado', 'Acciones'];
+    $columns = ['Nombre', 'Descripcion', 'Dificultad', 'Duracion', 'Estado', 'Acciones'];
     $plansTable = new showPlanTable($plansDTO, $columns);
     $html = $plansTable->generateTable();
 
@@ -41,5 +41,5 @@ else
     EOS;
 
     // Agregar el modal al contenido
-    //echo planModal::generateStatusModal(); 
+    echo planModal::generateChangeStatusModal(); 
 }

@@ -151,9 +151,9 @@ class planDAO extends baseDAO implements IPlan
             // Conexión a la base de datos
             $conn = application::getInstance()->getConnectionDb();
     
-            // Consulta: planes que ha comprado el cliente
+            // Consulta: planes que ha comprado el cliente, incluyendo el id de la compra
             $stmt = $conn->prepare("
-                SELECT tp.id, tp.trainer_id, tp.name, tp.description, tp.difficulty,
+                SELECT tp.id, tpp.id AS id_purchase, tp.trainer_id, tp.name, tp.description, tp.difficulty,
                        tp.duration, tp.price, tp.pdf_path, tp.image_guid, tpp.status
                 FROM training_plan_purchases tpp
                 INNER JOIN training_plans tp ON tpp.plan_id = tp.id
@@ -174,13 +174,14 @@ class planDAO extends baseDAO implements IPlan
             }
     
             // Asignar los resultados
-            $stmt->bind_result($id, $trainer_id, $name, $description, $difficulty,
+            $stmt->bind_result($id, $id_purchase, $trainer_id, $name, $description, $difficulty,
                                $duration, $price, $pdf_path, $image_guid, $status);
     
             // Construir DTOs de los resultados
             while ($stmt->fetch()) {
-                $plan = new PlanClientDTO($id, $trainer_id, $name, $description, $difficulty,
-                                            $duration, $price, $image_guid, $pdf_path, $status);
+                // Crear un DTO de planClientDTO con todos los datos
+                $plan = new planClientDTO($id, $id_purchase, $trainer_id, $name, $description, $difficulty,
+                                          $duration, $price, $image_guid, $pdf_path, $status);
                 $plans[] = $plan;
             }
     
@@ -194,8 +195,7 @@ class planDAO extends baseDAO implements IPlan
     
         return $plans;
     }
-
-
+    
     public function deletePlan($planId)
     {
         try {
@@ -391,6 +391,48 @@ class planDAO extends baseDAO implements IPlan
         }
     }
 
+
+    /**
+     * Obtiene la ruta del PDF de un plan
+     * 
+     * @param int $planId ID del plan
+     * @return string Ruta del PDF
+     */
+   // En tu método getPlanPdfPath
+    public function getPlanPdfPath($planId)
+    {
+        $pdfPath = null;
+
+        try {
+            $conn = application::getInstance()->getConnectionDb();
+            $query = "SELECT pdf_path FROM training_plans WHERE id = ?";
+
+            $stmt = $conn->prepare($query);
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            $stmt->bind_param('i', $planId);
+
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            $stmt->bind_result($pdfPath);
+            if ($stmt->fetch()) {
+                return $pdfPath;  
+            }
+
+            $stmt->close();
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw $e;
+        }
+
+        return false; // Si no se encuentra el PDF, devolver false
+    }
+
+    
 
     /**
      * Construye la consulta SQL para buscar planes con filtros

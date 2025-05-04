@@ -65,6 +65,7 @@ $(document).ready(function () {
         });
     });
 
+    
     // Delegar el evento click para el botón "Eliminar"
     $(document).on('click', '.eliminarPlan', function () {
 
@@ -93,10 +94,104 @@ $(document).ready(function () {
         }
     });
 
-    // Función para recargar la tabla de planes
+        // Editar estado del plan
+    $(document).on('click', '.edit-statusPlan', function () {
+        const planId = $(this).data('id'); // Obtener el ID del plan
+
+        // Realizar una solicitud AJAX para obtener los datos del plan
+        $.ajax({
+            url: '/AW-project/includes/controllers/managePlansController.php',
+            method: 'POST',
+            data: { action: 'getPlanStatus', planId: planId }, // Usar action: getPlan
+            success: function (response) {
+                const result = JSON.parse(response);
+                if (result.success) {
+                    const plan = result.data;
+
+                    // Pasar los datos del plan al modal
+                    $('#statusPlanId').val(plan.id); // ID del plan
+                    $('input[name="status"]').prop('checked', false); // Desmarcar todos los radio buttons
+                    $(`input[name="status"][value="${plan.status}"]`).prop('checked', true); // Marcar el estado actual
+
+                    // Abrir el modal
+                    $('#changeStatusModal').modal('show');
+                } else {
+                    showAlert('danger', result.alert); // Mostrar alerta de error
+                }
+            },
+            error: function () {
+                showAlert('danger', 'Error al cargar los datos del plan.');
+            }
+        });
+    });
+
+    $(document).on('submit', '#changeStatusForm', function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: '/AW-project/includes/controllers/managePlansController.php',
+            method: 'POST',
+            data: $(this).serialize() + '&action=updatePlanStatus', // Enviar el formulario con los datos y la acción de actualizar
+            success: function (response) {
+                const result = JSON.parse(response);
+                if (result.success) {
+                    showAlert('success', result.alert);
+                    $('#changeStatusModal').modal('hide');
+                    loadPlanPurchaseTable(); // Recargar la tabla de planes
+                } else {
+                    showAlert('danger', result.alert);
+                }
+            },
+            error: function () {
+                showAlert('danger', 'Error al actualizar el estado del plan.');
+            }
+        });
+    });
+
+    // Delegar el evento click para el botón "Ver detalles"
+    $(document).on('click', '.view-plan-pdf', function () {
+        const planId = $(this).data('id');
+    
+        $.ajax({
+            url: '/AW-project/includes/controllers/managePlansController.php',
+            method: 'POST',
+            data: { action: 'getPdfPath', planId: planId },
+            success: function (response) {
+                const result = JSON.parse(response);
+                if (result.success) {
+                    const pdfPath = result.data.pdfPath;
+    
+                    // Abrir el PDF en una nueva ventana
+                    window.open(pdfPath, '_blank');
+                } else {
+                    showAlert('danger', result.alert || 'No se pudo obtener el PDF.');
+                }
+            },
+            error: function () {
+                showAlert('danger', 'Error en la solicitud para descargar el PDF.');
+            }
+        });
+    });
+    
+    
+    // Función para recargar la tabla de planes 
     function loadPlanTable() {
         $.ajax({
             url: '/AW-project/includes/account/managePlans.php',
+            method: 'GET',
+            success: function (response) {
+                $('#content').html(response); // Reemplazar el contenido de la tabla
+            },
+            error: function () {
+                showAlert('danger', 'Error al recargar la tabla de planes.');
+            }
+        });
+    }
+
+    // Función para recargar la tabla de planes comprados
+    function loadPlanPurchaseTable() {
+        $.ajax({
+            url: '/AW-project/includes/account/myPlans.php',
             method: 'GET',
             success: function (response) {
                 $('#content').html(response); // Reemplazar el contenido de la tabla
