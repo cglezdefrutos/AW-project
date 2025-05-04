@@ -38,7 +38,7 @@ if ($sessionId) {
         $planAppService = planAppService::GetSingleton();
          
         $purchaseDate = date('Y-m-d H:i:s');
-        $status = 'activo';
+        $status = 'Activo';
 
         // Crear DTO de compra
         $purchaseDTO = new planPurchaseDTO(null, $planId, $userId, $purchaseDate, $status);
