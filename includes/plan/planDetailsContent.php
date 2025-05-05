@@ -28,7 +28,7 @@ class planDetailsContent
                     <h1 class="mb-3">{$this->planDTO->getName()}</h1>
                     <p class="text-muted">{$this->planDTO->getDescription()}</p>
                     <p><strong>Dificultad:</strong> {$this->planDTO->getDifficulty()}</p>
-                    <p><strong>Duración:</strong> {$this->planDTO->getDuration()}</p>
+                    <p><strong>Duración (Días):</strong> {$this->planDTO->getDuration()}</p>
                     <h3 class="text-success mb-4">{$this->planDTO->getPrice()} €</h3>
 EOF;
 

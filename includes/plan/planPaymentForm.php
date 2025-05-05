@@ -23,7 +23,7 @@ class planPaymentForm extends baseForm
         $app = application::getInstance();
         $html = '<div class="text-center mt-4">';
 
-        if ($app->isCurrentUserLogged()) {
+        if ($app->isCurrentUserLogged() && $app->isCurrentUserClient()) {
 
             // Comprobar si ya tiene contratado este plan
             $planAppService = planAppService::GetSingleton();
