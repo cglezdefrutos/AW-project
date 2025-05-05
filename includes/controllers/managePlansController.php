@@ -93,7 +93,7 @@ if ($action) {
                 finfo_close($fileInfo);
         
                 if (in_array($mimeType, $allowedTypes)) {
-                    $imageGUID = $productAppService->saveImage($image);
+                    $imageGUID = $planAppService->savePlanImage($image);
                 } else {
                     $alert = utilsFactory::createAlert('Tipo de imagen no permitido. Solo se permiten JPEG, PNG, GIF y WEBP.', 'danger');
                     echo json_encode(['success' => false, 'alert' => $alert]);

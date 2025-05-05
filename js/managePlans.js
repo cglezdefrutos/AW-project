@@ -43,20 +43,24 @@ $(document).ready(function () {
     // Interceptar el envío del formulario para guardar cambios
     $(document).on('submit', '#editPlanForm', function (e) {
         e.preventDefault(); // Evitar el envío estándar del formulario
-
-        // Enviar los datos del formulario mediante AJAX
+    
+        const formData = new FormData(this);
+        formData.append('action', 'updatePlan'); // Agregar la acción manualmente
+    
         $.ajax({
             url: '/AW-project/includes/controllers/managePlansController.php',
             method: 'POST',
-            data: $(this).serialize() + '&action=updatePlan', // Agregar la acción
+            data: formData,
+            contentType: false, // Necesario para que jQuery no modifique el Content-Type
+            processData: false, // Necesario para que no convierta formData en string
             success: function (response) {
                 const result = JSON.parse(response);
                 if (result.success) {
                     showAlert('success', result.alert); // Mostrar alerta de éxito
-                    $('#editPlanModal').modal('hide'); // Cerrar el modal
-                    loadPlanTable(); // Recargar la tabla de planes
+                    $('#editPlanModal').modal('hide');   // Cerrar el modal
+                    loadPlanTable();                     // Recargar la tabla de planes
                 } else {
-                    showAlert('danger', result.alert); // Mostrar alerta de error
+                    showAlert('danger', result.alert);   // Mostrar alerta de error
                 }
             },
             error: function () {
@@ -64,6 +68,7 @@ $(document).ready(function () {
             }
         });
     });
+    
 
     
     // Delegar el evento click para el botón "Eliminar"

@@ -21,7 +21,8 @@ class planModal
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="editPlanForm">
+                    <form id="editPlanForm" enctype="multipart/form-data">
+
                             <!-- Campo oculto para el ID del plan -->
                             <input type="hidden" id="planId" name="planId">
 
@@ -60,18 +61,18 @@ class planModal
                                 <input type="number" id="planPrice" name="price" class="form-control" step="0.01" required>
                             </div>
 
-                            <!-- Imagen actual -->
+                            <!-- Imagen -->
                             <div class="mb-3">
-                                <label class="form-label">Imagen actual:</label>
-                                <img id="currentPlanImage" src="" alt="Imagen del plan" class="img-fluid mb-2">
-                                <input type="hidden" id="currentImageGUID" name="currentImageGUID">
+                                <label for="planImage" class="form-label">Imagen del plan:</label>
+                                <input type="file" name="image" id="planImage" class="form-control" accept="image/*">
+                                <small class="form-text text-muted">Deja este campo vacío si no deseas cambiar la imagen.</small>
+                                <div class="mt-2">
+                                    <img id="currentPlanImage" src="" alt="Imagen actual" style="max-height: 200px;">
+                                </div>
+                                <!-- Campo oculto para el GUID de la imagen actual -->
+                                <input type="hidden" name="currentImageGUID" id="currentImageGUID" value="">
                             </div>
 
-                            <!-- Subir nueva imagen -->
-                            <div class="mb-3">
-                                <label for="planImage" class="form-label">Nueva Imagen:</label>
-                                <input type="file" id="planImage" name="image" class="form-control">
-                            </div>
 
                             <button type="submit" class="btn btn-primary w-100">Guardar Cambios</button>
                         </form>
