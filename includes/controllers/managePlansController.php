@@ -102,6 +102,24 @@ if ($action) {
             } else {
                 $imageGUID = $_POST['currentImageGUID'];
             }
+
+            // ✅ Procesar PDF del plan
+            $pdfGUID = null;
+            if (isset($_FILES['pdf']) && $_FILES['pdf']['error'] === UPLOAD_ERR_OK) {
+                $pdf = $_FILES['pdf'];
+                $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mimeType = finfo_file($fileInfo, $pdf['tmp_name']);
+                finfo_close($fileInfo);
+
+                if ($mimeType === 'application/pdf') {
+                    $pdfGUID = $planAppService->savePlanPdf($pdf);
+                } else {
+                    throw new Exception("Solo se permiten archivos PDF.");
+                }
+            } else {
+                $pdfGUID = $_POST['currentPdfGUID'] ?? null;
+            }
+
         
         
             // Crear el DTO con los nuevos datos
@@ -114,7 +132,7 @@ if ($action) {
                 $duration,
                 $price,
                 $imageGUID,
-                null,
+                $pdfGUID,
                 null
             );
         

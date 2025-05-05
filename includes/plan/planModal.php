@@ -73,6 +73,19 @@ class planModal
                                 <input type="hidden" name="currentImageGUID" id="currentImageGUID" value="">
                             </div>
 
+                            <!-- PDF del plan -->
+                            <div class="mb-3">
+                                <label for="planPdf" class="form-label">Archivo PDF del plan:</label>
+                                <input type="file" name="pdf" id="planPdf" class="form-control" accept="application/pdf">
+                                <small class="form-text text-muted">Deja este campo vacío si no deseas cambiar el PDF.</small>
+                                <div class="mt-2" id="currentPdfContainer" style="display: none;">
+                                    <p class="mb-0">Archivo actual: <span id="currentPdfName"></span></p>
+                                </div>
+                                <!-- Campo oculto para el GUID del PDF actual -->
+                                <input type="hidden" name="currentPdfGUID" id="currentPdfGUID" value="">
+                            </div>
+
+
 
                             <button type="submit" class="btn btn-primary w-100">Guardar Cambios</button>
                         </form>

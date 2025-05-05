@@ -348,6 +348,7 @@ class planDAO extends baseDAO implements IPlan
             $duration = $this->realEscapeString($planDTO->getDuration());
             $price = (float)$this->realEscapeString($planDTO->getPrice());
             $image_guid = $this->realEscapeString($planDTO->getImageGuid());
+            $pdf_guid = $this->realEscapeString($planDTO->getPdfPath());
 
             // Query de actualización
             $stmt = $conn->prepare("UPDATE training_plans SET 
@@ -357,14 +358,15 @@ class planDAO extends baseDAO implements IPlan
                                         difficulty = ?, 
                                         duration = ?, 
                                         price = ?, 
-                                        image_guid = ?
+                                        image_guid = ?,
+                                        pdf_path = ?
                                     WHERE id = ?");
 
             if (!$stmt) {
                 throw new \Exception("Error al preparar la consulta: " . $conn->error);
             }
 
-            $stmt->bind_param("issssdsi",
+            $stmt->bind_param("issssdssi",
                 $trainer_id,
                 $name,
                 $description,
@@ -372,6 +374,7 @@ class planDAO extends baseDAO implements IPlan
                 $duration,
                 $price,
                 $image_guid,
+                $pdf_guid,
                 $id
             );
 
