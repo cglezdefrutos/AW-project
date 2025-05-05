@@ -33,7 +33,7 @@ class planDTO implements \JsonSerializable
     private $difficulty;
 
     /**
-     * @var string Duración estimada del plan
+     * @var int Duración estimada del plan
      */
     private $duration;
 
