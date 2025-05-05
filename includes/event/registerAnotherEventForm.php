@@ -32,6 +32,13 @@ class registerAnotherEventForm extends baseForm
                     <button type="submit" name="registerAnother" class="btn btn-primary w-100">Registrar otro evento</button>
                 </div>
 
+                <!-- Botón para ver mis eventos -->
+                <div class="mb-3">
+                    <a href="myAccount.php" class="btn btn-info w-100">
+                        <i class="bi bi-list-ul"></i> Ver mis eventos
+                    </a>
+                </div>
+
                 <!-- Botón para volver al inicio -->
                 <div class="mb-3">
                     <a href="index.php" class="btn btn-secondary w-100">Volver a inicio</a>

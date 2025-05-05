@@ -139,4 +139,42 @@ class planPurchaseDAO extends baseDAO implements IPlanPurchase
 
         return $purchase;
     }
+
+    /**
+     * Actualiza el estado de una compra de plan
+     * 
+     * @param int $purchaseId
+     * @param string $status
+     * @return bool
+     */
+    public function updatePlanStatus($purchaseId, $status)
+    {
+        $result = false;
+
+        try {
+            $conn = application::getInstance()->getConnectionDb();
+            $stmt = $conn->prepare("
+                UPDATE training_plan_purchases 
+                SET status = ? 
+                WHERE id = ?
+            ");
+
+            if (!$stmt) {
+                throw new \Exception("Error al preparar la consulta: " . $conn->error);
+            }
+
+            $stmt->bind_param("si", $status, $purchaseId);
+
+            if (!$stmt->execute()) {
+                throw new \Exception("Error al actualizar el estado de la compra: " . $stmt->error);
+            }
+
+            $result = true;
+            $stmt->close();
+        } catch (\Exception $e) {
+            error_log("Error en updatePurchaseStatus: " . $e->getMessage());
+        }
+
+        return $result;
+    }
 }

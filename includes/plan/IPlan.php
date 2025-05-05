@@ -29,4 +29,13 @@ interface IPlan
      * @return array Lista de trainerDTO
      */
     public function getTrainers();
+
+    /**
+     * Busca planes de entrenamiento aplicando filtros
+     * 
+     * @param array $TrainerId es el Id del entrenador del que queremos los planes
+     * @return array Lista de planDTO
+     */
+
+
 }

@@ -38,6 +38,10 @@ if ($section) {
             include '../account/personalData.php'; // Cargar la vista de datos personales
             break;
 
+        case 'myPlans':
+            include '../account/myPlans.php'; // Cargar la vista de planes
+            break;
+            
         default:
             echo '<p>Sección no válida.</p>';
             break;
