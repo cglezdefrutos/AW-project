@@ -32,10 +32,16 @@ function mostrarLogin()
         <!-- Menú desplegable -->
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
-                <!-- Opción Catálogo -->
-                <li class="nav-item">
-                    <a class="nav-link" href="catalog.php">Catálogo</a>
-                </li>
+                <!-- Dropdown Productos -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="productosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Productos
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="productosDropdown">
+                        <li><a class="dropdown-item" href="catalog.php">Catalogo</a></li>
+                        <li><a class="dropdown-item" href="registerProducts.php">Registrar</a></li>
+                    </ul>
+                </li>                
 
                 <!-- Dropdown Eventos -->
                 <li class="nav-item dropdown">
@@ -45,29 +51,6 @@ function mostrarLogin()
                     <ul class="dropdown-menu" aria-labelledby="eventosDropdown">
                         <li><a class="dropdown-item" href="searchEvents.php">Apuntarse</a></li>
                         <li><a class="dropdown-item" href="registerEvents.php">Registrar</a></li>
-                        <li><a class="dropdown-item" href="manageEvents.php">Gestionar</a></li>
-                    </ul>
-                </li>
-
-                <!-- Dropdown Pedidos -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="pedidosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Pedidos
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="pedidosDropdown">
-                        <li><a class="dropdown-item" href="showOrders.php">Mis Pedidos</a></li>
-                        <li><a class="dropdown-item" href="manageOrders.php">Gestionar</a></li>
-                    </ul>
-                </li>
-
-                 <!-- Dropdown Productos -->
-                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="productosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Productos
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="productosDropdown">
-                        <li><a class="dropdown-item" href="manageProducts.php">Gestionar</a></li>
-                        <li><a class="dropdown-item" href="registerProducts.php">Registrar</a></li>
                     </ul>
                 </li>
 

@@ -9,8 +9,8 @@ $titlePage = 'Inicio - The Balance';
 $carousel = utilsFactory::createCarousel();
 $card1 = utilsFactory::createCard(IMG_PATH . "/catalogo.jpg", 'Tienda', 'Tienda', 'Descubre los mejores suplementos y equipamiento deportivo para mejorar tu rendimiento.', 'catalog.php');
 $card2 = utilsFactory::createCard(IMG_PATH . "/eventos.png", 'Eventos', 'Eventos', 'Descubre y participa en los mejores eventos organizados por nuestra comunidad.', 'searchEvents.php');
-$card3 = utilsFactory::createCard(IMG_PATH . "/trainer.jpg", 'Planes de entrenamiento', 'Planes de entrenamiento', 'Accede a planes de entrenamiento personalizados para alcanzar tus objetivos.', 'index.php');    
-$card4 = utilsFactory::createCard(IMG_PATH . "/workwithus.jpg", 'Trabaja con nosotros', 'Trabaja con nosotros', 'Descubre las oportunidades laborales que tenemos para ti. Únete a nuestro equipo.', 'index.php');
+$card3 = utilsFactory::createCard(IMG_PATH . "/trainer.jpg", 'Planes de entrenamiento', 'Planes de entrenamiento', 'Accede a planes de entrenamiento personalizados para alcanzar tus objetivos.', 'catalogPlan.php');    
+$card4 = utilsFactory::createCard(IMG_PATH . "/workwithus.jpg", 'Trabaja con nosotros', 'Trabaja con nosotros', 'Descubre las oportunidades laborales que tenemos para ti. Únete a nuestro equipo.', 'register.php');
 
 $imgPath = IMG_PATH;
 

@@ -4,7 +4,7 @@ namespace TheBalance\plan;
 
 use TheBalance\views\common\baseTable;
 
-class showManagePlanTable extends baseTable
+class managePlanTable extends baseTable
 {
     protected function generateTableContent()
     {
@@ -30,14 +30,12 @@ class showManagePlanTable extends baseTable
 
             //Celda de acciones
             $html .= '<td>';
-            $html .= '<div class="d-flex gap-2">';
+            $html .= '<div class="d-flex flex-column gap-2">';
             $html .= '<button class="btn btn-info managePlan" data-id="' . htmlspecialchars($plan->getId()) . '">Editar</button>';
             $html .= '<button class="btn btn-danger eliminarPlan" data-id="' . htmlspecialchars($plan->getId()) . '">Borrar</button>';
-            $html .= '<button class="btn btn-info view-plan-pdf mb-1" data-id="' . htmlspecialchars($plan->getId()) . '">Ver Detalles</button><br>';
+            $html .= '<button class="btn btn-warning view-plan-pdf" data-id="' . htmlspecialchars($plan->getId()) . '">Ver Detalles</button><br>';
             $html .= '</div>';
             $html .= '</td>';
-
-
         }
 
         return $html;

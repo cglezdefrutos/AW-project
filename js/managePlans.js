@@ -28,6 +28,9 @@ $(document).ready(function () {
                     // Llenar el campo oculto con el GUID de la imagen actual
                     $('#currentImageGUID').val(plan.imageGUID);
 
+                    // Llenar el campo oculto con el GUID del PDF actual
+                    $('#currentPdfPath').val(plan.pdfPath);                    
+
                     // Abrir el modal
                     $('#editPlanModal').modal('show');
                 } else {
@@ -68,9 +71,7 @@ $(document).ready(function () {
             }
         });
     });
-    
 
-    
     // Delegar el evento click para el botón "Eliminar"
     $(document).on('click', '.eliminarPlan', function () {
 
@@ -99,7 +100,7 @@ $(document).ready(function () {
         }
     });
 
-        // Editar estado del plan
+    // Editar estado del plan
     $(document).on('click', '.edit-statusPlan', function () {
         const planId = $(this).data('id'); // Obtener el ID del plan
 
@@ -177,7 +178,6 @@ $(document).ready(function () {
             }
         });
     });
-    
     
     // Función para recargar la tabla de planes 
     function loadPlanTable() {

@@ -32,6 +32,7 @@ if ($action) {
                         'price' => $plan->getPrice(),
                         'image' => $imageUrl,
                         'imageGUID' => $plan->getImageGuid(),
+                        'pdfPath' => $plan->getPdfPath(),
                         'createdAt' => $plan->getCreatedAt()
                     ]
                 ]);
@@ -103,8 +104,8 @@ if ($action) {
                 $imageGUID = $_POST['currentImageGUID'];
             }
 
-            // ✅ Procesar PDF del plan
-            $pdfGUID = null;
+            // Procesar PDF del plan
+            $pdfPath = null;
             if (isset($_FILES['pdf']) && $_FILES['pdf']['error'] === UPLOAD_ERR_OK) {
                 $pdf = $_FILES['pdf'];
                 $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -112,16 +113,14 @@ if ($action) {
                 finfo_close($fileInfo);
 
                 if ($mimeType === 'application/pdf') {
-                    $pdfGUID = $planAppService->savePlanPdf($pdf);
+                    $pdfPath = $planAppService->savePlanPdf($pdf);
                 } else {
                     throw new Exception("Solo se permiten archivos PDF.");
                 }
             } else {
-                $pdfGUID = $_POST['currentPdfGUID'] ?? null;
+                $pdfPath = $_POST['currentPdfPath'];
             }
 
-        
-        
             // Crear el DTO con los nuevos datos
             $updatedPlanDTO = new planDTO(
                 $planId,
@@ -132,7 +131,7 @@ if ($action) {
                 $duration,
                 $price,
                 $imageGUID,
-                $pdfGUID,
+                $pdfPath,
                 null
             );
         
@@ -145,8 +144,7 @@ if ($action) {
                 $alert = utilsFactory::createAlert('Error al actualizar el plan.', 'danger');
                 echo json_encode(['success' => false, 'alert' => $alert]);
             }
-            break;
-        
+            break;     
 
         case 'deletePlan':
             $planId = $_POST['planId'];
@@ -178,7 +176,6 @@ if ($action) {
             }
             break;
     
-
         case 'updatePlanStatus':
             $planId = trim($_POST['planId'] ?? '');
             $planId = filter_var($planId, FILTER_SANITIZE_NUMBER_INT);
@@ -228,9 +225,7 @@ if ($action) {
                     echo json_encode(['success' => false, 'alert' => $alert]);
                 }
                 break;
-            
-            
-            
+
         default:
             $alert = utilsFactory::createAlert('Acción no válida.', 'danger');
             echo json_encode(['success' => false, 'alert' => $alert]);

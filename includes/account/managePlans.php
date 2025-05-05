@@ -6,7 +6,7 @@ use TheBalance\plan\planAppService;
 use TheBalance\plan\planModal;
 use TheBalance\application;
 use TheBalance\utils\utilsFactory;
-use TheBalance\plan\showManagePlanTable;
+use TheBalance\plan\managePlanTable;
 
 $app = application::getInstance();
 
@@ -22,7 +22,7 @@ if (!$app->isCurrentUserLogged()) {
 
         // Generar la tabla de productos
         $columns = ['Imagen', 'Nombre', 'Descripción', 'Dificultad', 'Duracion', 'Precio', 'Fecha de creación', 'Acciones'];
-        $planTable = new showManagePlanTable($planDTO, $columns);
+        $planTable = new managePlanTable($planDTO, $columns);
         $html = $planTable->generateTable();
 
         echo <<<EOS
