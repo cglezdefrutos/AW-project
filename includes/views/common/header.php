@@ -8,7 +8,7 @@
 <!-- Barra de búsqueda -->
 <div class="col-12 col-md-7">
     <form class="d-flex" role="search" method="GET" action="catalog.php">
-        <input class="form-control me-2" type="search" name="name" placeholder="Buscar..." aria-label="Buscar" style="font-size: 1.2rem;">
+        <input class="form-control me-2" type="search" name="name" placeholder="Buscar productos..." aria-label="Buscar" style="font-size: 1.2rem;">
         <input type="hidden" name="search" value="true">
         <button class="btn btn-outline-success btn-lg" type="submit">Buscar</button>
     </form>

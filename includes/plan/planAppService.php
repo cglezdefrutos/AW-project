@@ -161,6 +161,53 @@ class planAppService
         return $filename;
     }
 
+
+    /**
+     * Obtiene los planes de entrenamiento del cliente
+     * 
+     * @return array Lista de trainingPlanDTO
+     */
+    public function getClientPlans()
+    {
+        $IPlan = planFactory::CreateTrainingPlan();
+        $plansDTO = null;
+
+        $app = application::getInstance();
+
+        // Tomamos el id del cliente
+        $userId = htmlspecialchars($app->getCurrentUserId());
+
+        // Pasamos como filtro el id del cliente
+        $plansDTO = $IPlan->getPlansByUserId($userId);
+
+        return $plansDTO;
+    }
+
+    public function getPlansByUserType()
+    {
+        $planDAO = planFactory::CreateTrainingPlan();
+        $planDTO = null;
+
+        $app = application::getInstance();
+
+        // Si es administrador, tomamos todos los eventos
+        if ($app->isCurrentUserAdmin())
+        {
+            $planDTO = $planDAO->searchTrainingPlans();
+        }
+        // Si es proveedor, tomamos SOLO los eventos del proveedor
+        else 
+        {
+            // Tomamos el email del proveedor
+            $trainerId = ($app->getCurrentUserId());
+
+            // Pasamos como filtro un array con el email (así solo traerá los eventos donde coincida ese email)
+            $planDTO = $planDAO->searchTrainingPlans(array("trainerId" => $trainerId));
+        }
+
+        return $planDTO;
+    }
+    
     /**
      * Guarda el PDF del plan en el sistema de archivos
      * 
@@ -184,4 +231,111 @@ class planAppService
         return $filename;
     }
 
+        /**
+     * Elimina PLan de laa BBDD
+     * 
+     * @param int $id ID del plan
+     * 
+     * @return planDTO Plan encontrado
+     */
+
+    //FALTA COMPROBAR SI EL PLAAN ES DEL ENTRENADOR
+    public function deletePlan($planId)
+    {
+        $planDAO = planFactory::CreateTrainingPlan();
+
+        // Tomamos la instancia de la aplicación
+        $app = application::getInstance();
+
+        return $planDAO->deletePlan($planId);
+    }
+
+    public function updatePlan($planDTO)
+    {
+        $planDAO = planFactory::CreateTrainingPlan();
+    
+        // Actualizar el plan
+        $updateResult = $planDAO->updatePlan($planDTO);
+    
+        return $updateResult;
+    }
+
+    /**
+     * Registra la compra de un plan por parte de un cliente
+     * 
+     * @param planPurchaseDTO $purchaseData Datos de la compra (plan_id, client_id, purchase_date, status)
+     * @return int|false ID de la compra registrada o false en caso de error
+     */
+    public function createPlanPurchase(planPurchaseDTO $purchaseData)
+    {
+        try {
+            $IPurchase = planFactory::CreatePlanPurchase();
+            return $IPurchase->createPurchase($purchaseData);
+        } catch (\Exception $e) {
+            error_log("Error en createPlanPurchase: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Obtiene una compra específica de plan por su ID
+     * 
+     * @param int $id ID de la compra
+     * @return planPurchaseDTO|null
+     */
+    public function getPlanPurchaseById($id)
+    {
+        try {
+            $IPurchase = planFactory::CreatePlanPurchase();
+            return $IPurchase->getPurchaseById($id);
+        } catch (\Exception $e) {
+            error_log("Error en getPlanPurchaseById: " . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Obtiene una compra de plan según el ID del plan y del cliente
+     * 
+     * @param int $planId
+     * @param int $clientId
+     * @return planPurchaseDTO|null
+     */
+    public function getPlanPurchaseByPlanAndClient($planId, $clientId)
+    {
+        try {
+            $IPurchase = planFactory::CreatePlanPurchase();
+            return $IPurchase->getPurchaseByPlanAndClient($planId, $clientId);
+        } catch (\Exception $e) {
+            error_log("Error en getPlanPurchaseByPlanAndClient: " . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Actualiza el estado de un plan
+     * 
+     * @param int $planId ID del plan
+     * @param string $newStatus Nuevo estado del plan
+     * @return bool true si se actualizó correctamente, false en caso contrario
+     */
+    public function updatePlanStatus($planId, $newStatus)
+    {
+        $planPurchaseDAO = planFactory::CreatePlanPurchase();
+        return $planPurchaseDAO->updatePlanStatus($planId, $newStatus);
+    }
+
+    /**
+     * Obtiene la ruta del PDF de un plan
+     * 
+     * @param int $planId ID del plan
+     * @return string Ruta del PDF
+     */
+
+    public function getPlanPdfPath($planId)
+    {
+        $ITrainingPlan = planFactory::CreateTrainingPlan();
+        return $ITrainingPlan->getPlanPdfPath($planId);
+    }
+    
 }

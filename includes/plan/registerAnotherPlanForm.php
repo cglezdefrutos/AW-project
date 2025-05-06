@@ -37,7 +37,7 @@ class registerAnotherPlanForm extends baseForm
 
                     <!-- Botón para ver mis planes de entrenamiento -->
                     <div class="mb-3">
-                        <a href="managePlans.php" class="btn btn-info w-100">
+                        <a href="myAccount.php" class="btn btn-info w-100">
                             <i class="bi bi-list-ul"></i> Ver mis planes de entrenamiento
                         </a>
                     </div>

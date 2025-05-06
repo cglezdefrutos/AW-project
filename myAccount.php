@@ -41,6 +41,7 @@ else
             <script src="/AW-project/js/manageOrders.js"></script>
             <script src="/AW-project/js/personalData.js"></script>
             <script src="/AW-project/js/manageUsers.js"></script>
+            <script src="/AW-project/js/managePlans.js"></script>
         </div>
         
     EOS;

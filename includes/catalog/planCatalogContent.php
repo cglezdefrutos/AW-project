@@ -53,7 +53,7 @@ class planCatalogContent
                             
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="text-success fw-bold">{$formattedPrice} €</span>
-                                <a href="planDetail.php?id={$plan->getId()}" class="btn btn-primary btn-sm">Ver Plan</a>
+                                <a href="showPlanDetails.php?id={$plan->getId()}" class="btn btn-primary btn-sm">Ver Plan</a>
                             </div>
                         </div>
                     </div>

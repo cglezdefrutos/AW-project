@@ -96,6 +96,16 @@ if ($action) {
             // Si se ha subido una nueva imagen, procesarla
             if(isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                 $image = $_FILES['image'];
+
+                // Validar el tamaño de la imagen (máximo 2MB)
+                $maxFileSize = 2 * 1024 * 1024; // 2 MB en bytes
+                if ($image['size'] > $maxFileSize) {
+                    $alert = utilsFactory::createAlert('El tamaño de la imagen no debe exceder los 2 MB.', 'danger');
+                    echo json_encode(['success' => false, 'alert' => $alert]);
+                    exit;
+                }
+
+                // Validar tipo de archivo
                 $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webp'];
                 $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
                 $mimeType = finfo_file($fileInfo, $image['tmp_name']);

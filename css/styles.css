@@ -285,3 +285,20 @@ footer p {
     object-fit: cover; /* Recorta la imagen para que se ajuste al contenedor sin deformarse */
     border-radius: 5px; /* Opcional: bordes redondeados */
 }
+
+/* Resaltar opción al pasar el cursor */
+.menu-item:hover {
+    background-color: #f0f0f0; /* Cambia el color de fondo */
+    cursor: pointer;
+}
+
+/* Resaltar opción seleccionada */
+.menu-item.active {
+    background-color: #007bff; /* Color de fondo para la opción activa */
+    color: white; /* Cambia el color del texto */
+    font-weight: bold; /* Resalta el texto */
+}
+
+#content {
+    display: none; /* Oculta el contenido inicialmente */
+}

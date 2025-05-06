@@ -26,4 +26,25 @@ class planFactory
 
         return $planDAO;
     }
+
+    /**
+     * Crea un DAO para compras de planes
+     * 
+     * @return IPlanPurchase DAO de compras creado
+     */
+    public static function CreatePlanPurchase(): IPlanPurchase
+    {
+
+        $planPurchaseDAO = false;
+        $config = "DAO"; // Puedes cambiar esto por configuración si lo necesitas
+
+        if ($config === "DAO") {
+            $planPurchaseDAO = new planPurchaseDAO(); // Implementación real con base de datos
+        } else {
+            // $planDAO = new planPurchaseMock(); // Opcional: Implementación mock para testing
+            throw new \Exception("Implementación mock no disponible");
+        }
+
+        return $planPurchaseDAO;
+    }
 }

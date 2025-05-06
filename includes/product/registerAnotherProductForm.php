@@ -37,7 +37,7 @@ class registerAnotherProductForm extends baseForm
 
                     <!-- Botón para ver mis productos -->
                     <div class="mb-3">
-                        <a href="manageProducts.php" class="btn btn-info w-100">
+                        <a href="myAccount.php" class="btn btn-info w-100">
                             <i class="bi bi-list-ul"></i> Ver mis productos
                         </a>
                     </div>

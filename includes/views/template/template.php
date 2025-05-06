@@ -3,13 +3,21 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <!-- Bootstrap + FontAwesome -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">    
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+        
+        <!-- CSS personalizado -->
         <link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH ?>/styles.css">
+        
+        <!-- Scripts JS -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        
+        <!-- Icono -->
         <link rel="icon" type="image/png" href="<?php echo IMG_PATH ?>/logo_thebalance.png">
         <title><?=$titlePage?></title>
     </head>
@@ -40,7 +48,17 @@
             </footer>
         </div>
 
+         <!-- Bootstrap bundle final -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        
+        <!-- Eliminar sección activa si no estás en myAccount.php -->
+        <?php 
+        if (basename($_SERVER['PHP_SELF']) !== 'myAccount.php'): ?>
+            <script>
+                localStorage.removeItem('activeSection');
+            </script>
+        <?php endif; ?>
+
     </body>
 </html>
 
