@@ -202,7 +202,7 @@ class planAppService
             $trainerId = ($app->getCurrentUserId());
 
             // Pasamos como filtro un array con el email (así solo traerá los eventos donde coincida ese email)
-            $planDTO = $planDAO->searchTrainingPlans(array("trainerId" => $trainerId));
+            $planDTO = $planDAO->searchTrainingPlans(array("trainer_id" => $trainerId));
         }
 
         return $planDTO;
