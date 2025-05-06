@@ -88,6 +88,16 @@ if ($action) {
             $imageGUID = null;
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                 $image = $_FILES['image'];
+
+                // Validar tamaño máximo del archivo
+                $maxFileSize = 2 * 1024 * 1024; // 2 MB en bytes
+                if ($image['size'] > $maxFileSize) {
+                    $alert = utilsFactory::createAlert('El tamaño de la imagen no debe exceder los 2 MB.', 'danger');
+                    echo json_encode(['success' => false, 'alert' => $alert]);
+                    exit;
+                }
+
+                // Validar tipo de archivo
                 $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webp'];
                 $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
                 $mimeType = finfo_file($fileInfo, $image['tmp_name']);
@@ -108,6 +118,16 @@ if ($action) {
             $pdfPath = null;
             if (isset($_FILES['pdf']) && $_FILES['pdf']['error'] === UPLOAD_ERR_OK) {
                 $pdf = $_FILES['pdf'];
+
+                // Validar tamaño máximo del archivo
+                $maxFileSize = 5 * 1024 * 1024; // 5 MB en bytes
+                if ($pdf['size'] > $maxFileSize) {
+                    $alert = utilsFactory::createAlert('El tamaño del archivo PDF no debe exceder los 5 MB.', 'danger');
+                    echo json_encode(['success' => false, 'alert' => $alert]);
+                    exit;
+                }
+
+                // Validar tipo de archivo
                 $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
                 $mimeType = finfo_file($fileInfo, $pdf['tmp_name']);
                 finfo_close($fileInfo);
@@ -115,7 +135,9 @@ if ($action) {
                 if ($mimeType === 'application/pdf') {
                     $pdfPath = $planAppService->savePlanPdf($pdf);
                 } else {
-                    throw new Exception("Solo se permiten archivos PDF.");
+                    $alert = utilsFactory::createAlert('Solo se permiten archivos PDF.', 'danger');
+                    echo json_encode(['success' => false, 'alert' => $alert]);
+                    exit;
                 }
             } else {
                 $pdfPath = $_POST['currentPdfPath'];
@@ -212,7 +234,8 @@ if ($action) {
                 
                 if ($pdfPath !== false) {
                     // Concatenar la ruta completa del servidor
-                    $fullPdfPath = 'http://localhost/AW-project/pdf/' . $pdfPath;
+                    //$fullPdfPath = 'http://localhost/AW-project/pdf/' . $pdfPath;
+                    $fullPdfPath = 'https://vm012.containers.fdi.ucm.es/AW-project/pdf/' . $pdfPath;
                     
                     echo json_encode([
                         'success' => true,

@@ -169,6 +169,13 @@ class registerPlanForm extends baseForm
         } elseif ($pdf['error'] !== UPLOAD_ERR_OK) {
             $result[] = 'Error al subir el PDF: ' . $this->getUploadError($pdf['error']);
         } else {
+            // Validar tamaño máximo del archivo (5 MB en este caso)
+            $maxFileSize = 5 * 1024 * 1024; // 5 MB en bytes
+            if ($pdf['size'] > $maxFileSize) {
+                $result[] = 'El tamaño del archivo PDF no debe exceder los 5 MB.';
+            }
+
+            // Validar tipo de archivo
             $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
             $mimeType = finfo_file($fileInfo, $pdf['tmp_name']);
             finfo_close($fileInfo);
@@ -191,6 +198,12 @@ class registerPlanForm extends baseForm
         } elseif ($image['error'] !== UPLOAD_ERR_OK) {
             $result[] = 'Error al subir la imagen: ' . $this->getUploadError($_FILES['image']['error']);
         } else {
+            // Validar tamaño máximo del archivo (2 MB en este caso)
+            $maxFileSize = 2 * 1024 * 1024; // 2 MB en bytes
+            if ($image['size'] > $maxFileSize) {
+                $result[] = 'El tamaño de la imagen no debe exceder los 2 MB.';
+            }
+
             // Validar tipo de archivo
             $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
             $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
